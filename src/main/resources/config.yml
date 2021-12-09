@@ -1,0 +1,100 @@
+# ----------------------------------------------
+# |               ClaireBot v3.0               |
+# |                Config file                 |
+# ----------------------------------------------
+
+# ----------------- MAIN CONFIG ----------------
+# This section contains values that are
+
+# Discord bot token, get one at https://discord.com/developers/applications
+token:
+
+# Name of bot to be used in logs and
+botName: ClaireBot
+
+# URL of the YouTube video ClaireBot claims to be streaming
+video_url: https://www.youtube.com/watch?v=AeZRYhLDLeU
+
+# ----------------- SHARD CONFIG ---------------
+# It is assumed that only one shard will be running by default.
+# You probably don't need to change this.
+
+# The shard the bot should log in to
+current_shard: 0
+
+# The total number of shards.
+total_shards: 1
+
+# --------------- DATABASE CONFIG --------------
+# NYI
+
+# ------------------- ZERFAS -------------------
+# https://reddit.com/r/Zerfas
+
+# List of things to react to with the Zerfas emote
+zerfas:
+  - "YOU NEVER WIN"
+  - "THE SWEETEST PART"
+  - "I DON'T UNDERSTAND"
+  - "I NEED IT HIGHER"
+  - "STONEY WELLITZ"
+  - "HOPE"
+  - "FOOL'S PARADE"
+  - "THE PIPER"
+  - "CERTAIN KIND OF LADY"
+  - "SHAKE UP YOUR MIND"
+  - "ZERFAS"
+  - "GOOD MUSIC"
+
+zerfas_emote_name: Zerfas
+zerfas_emote_id: 822591272295596032
+
+# -------------------- 8ball -------------------
+# Controls various options pertaining to 8ball/8b
+
+# List of responses to 8ball
+8bResponses:
+  - "*Hell yes!*"
+  - "*Fuck no*"
+  - "*Maybe*"
+  - "*Yes*"
+  - "*No*"
+  - "*No way*"
+
+8bRiggedResponses:
+  - "*Hell yeah!*"
+  - "*FUCK YEAH*"
+  - "*You know it!*"
+  - "*Do you really need to ask question you already know answer for? Obviously yes.*"
+  - "*Doesn't even need to be said, everyone knows ClaireBot is on top.*"
+
+ClaireBotOnTopResponses:
+  - "*You know it!*"
+  - "*I am... inevitable. -ClaireBot*"
+  - "*Approved.*"
+  - "*Factual.*"
+  - "*Better than Mee6*"
+  - "*No stop!*"
+  - "*Can't be beat!*"
+  - "*Based*"
+  - "*pot no toBerialC*"
+  - "*Better than Groovy*"
+
+# Defines what triggers a response from the ClaireBotOnTopResponses
+OnTopTriggers:
+  - "ClaireBot on top"
+  - "ClaireBot based"
+  - "ClaireBot pogchamp"
+  - "ClaireBot always right"
+
+# -------------------- MISC --------------------
+# This section contains values that don't fit in the main categories
+
+# Controls whether the bot should check for updates
+checkForUpdates: true
+
+# Do not change this, this is automatically changed when needed
+configRevsion: 4
+
+# ---------- ADDED AFTER INITIAL USE -----------
+# Parameters that were added to the config file after it was initially generated
