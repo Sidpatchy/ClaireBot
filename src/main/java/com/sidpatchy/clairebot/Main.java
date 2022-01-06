@@ -7,8 +7,10 @@ import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
+import java.io.FileNotFoundException;
+
 /**
- * RomeBot - The only discord bot dedicated to the Roman Republic (and Empire)
+ * ClaireBot - Simply the best.
  * Copyright (C) 2021  Sidpatchy
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,11 +33,11 @@ import org.javacord.api.DiscordApiBuilder;
 public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
-    public static void main(String[] args) {
-        logger.info("ClaireBot loading...");
+    private static String configFile = "config.yml";
+    private static String commandsFile = "commands.yml";
 
-        String configFile = "config.yml";
-        String commandsFile = "commands.yml";
+    public static void main(String[] args) throws FileNotFoundException {
+        logger.info("ClaireBot loading...");
 
         // Make sure require resources are loaded
         ResourceLoader loader = new ResourceLoader();
@@ -60,6 +62,9 @@ public class Main {
 
         // Set the bot's activity
         api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
+
+        // Register slash commands
+        RegisterSlashCommands.RegisterSlashCommand(api);
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
@@ -87,5 +92,17 @@ public class Main {
             logger.fatal("Unable to log in to Discord. Aborting startup!");
         }
         return null;
+    }
+
+    public static String getConfigFile() {
+        return configFile;
+    }
+
+    public static String getCommandsFile() {
+        return commandsFile;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

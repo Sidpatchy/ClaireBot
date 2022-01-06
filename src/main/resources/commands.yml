@@ -1,0 +1,97 @@
+# ----------------------------------------------
+# |             ClaireBot v3.0.0               |
+# |           Commands Config file             |
+# ----------------------------------------------
+# Allows for changing how the help command displays commands.
+# Additionally allows for changing command names during runtime.
+# The bot's host or delegated administrators may reload the
+# list of commands (and config) using /reload.
+
+# ------------------ COMMANDS ------------------
+commands:
+  8ball:
+    name: "8ball"
+    usage: "/8ball <query>"
+    help: "ClaireBot only speaks in absolute truth. Flesh betrays, silicon will not."
+
+  avatar:
+    name: "avatar"
+    usage: "/avatar <optional: user>"
+    help: "Gets a user's avatar."
+
+  leaderboard:
+    name: "leaderboard"
+    usage: "/leaderboard <optional boolean: global>"
+    help: "Reports the server or global leaderboard."
+
+  level:
+    name: "level"
+    usage: "/level <optional: @user>"
+    help: "Reports a user's level."
+
+  poll:
+    name: "poll"
+    usage: "/poll <question>, <optional: queries>..."
+    help: "Creates a poll. If no queries are added, it will behave similar to the request function."
+
+  servers:
+    name: "servers"
+    usage: "/servers"
+    help: "Reports how many servers ClaireBot is in."
+
+  user:
+    name: "user"
+    usage: "/user <optional: @user>"
+    help: "Reports various bits of info on a user."
+
+# -------------------- MUSIC -------------------
+
+  connect:
+    name: "connect"
+    usage: "/connect"
+    help: "Makes the bot join (or move to) your current channel."
+
+  leave:
+    name: "leave"
+    usage: "/leave"
+    help: "Makes ClaireBot leave the call."
+
+  pause:
+    name: "pause"
+    usage: "/pause"
+    help: "Pauses the currently playing audio."
+
+  play:
+    name: "play"
+    usage: "/play <search term or URL>"
+    help: "Streams audio from a selected source."
+
+  previous:
+    name: "previous"
+    usage: "/previous"
+    help: "Plays the previously played track."
+
+  queue:
+    name: "queue"
+    usage: "/queue"
+    help: "Shows the first ten (or specified amount of) tracks in the queue."
+
+  repeat:
+    name: "repeat"
+    usage: "/repeat none \n/repeat one \n/repeat all"
+    help: "Repeats the contents of the queue. Valid options: none, one, all"
+
+  shuffle:
+    name: "shuffle"
+    usage: "/shuffle"
+    help: "Plays the contents of the queue in a pseudo-random order."
+
+  skip:
+    name: "skip"
+    usage: "/skip"
+    help: "Moves to the next track in the queue."
+
+  stop:
+    name: "stop"
+    usage: "/stop"
+    help: "Moves to the next track in the queue."

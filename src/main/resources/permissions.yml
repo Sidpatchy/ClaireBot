@@ -1,0 +1,14 @@
+# ----------------------------------------------
+# |               ClaireBot v3.0               |
+# |              Permissions file              |
+# ----------------------------------------------
+# The purpose of this file is to grant Discord users access to
+# ClaireBot's administrative commands.
+#
+# NOTE: Granting untrusted users permissions to ClaireBot's administrative
+# feature set is quite frankly stupid and will only lead to issues.
+# You have been warned!
+#
+# For a full list of permissions and a guide on how to use this file
+# please consult the wiki page: https://github.com/Sidpatchy/ClaireBot/wiki/Administrator-Permissions
+
