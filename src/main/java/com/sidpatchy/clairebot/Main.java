@@ -8,6 +8,8 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * ClaireBot - Simply the best.
@@ -35,6 +37,8 @@ public class Main {
 
     private static String configFile = "config.yml";
     private static String commandsFile = "commands.yml";
+
+    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
 
     public static void main(String[] args) throws FileNotFoundException {
         logger.info("ClaireBot loading...");

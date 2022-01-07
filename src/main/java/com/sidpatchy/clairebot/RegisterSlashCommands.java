@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Also delete them too!
+ */
 public class RegisterSlashCommands {
 
     public static void DeleteSlashCommands (DiscordApi api) {
@@ -18,23 +21,48 @@ public class RegisterSlashCommands {
     /**
      * Register slash commands while feeling like you're doing it wrong no matter how you do it!
      *
+     * Only called on startup.
+     *
      * @param api pass API into function
      */
     public static void RegisterSlashCommand(DiscordApi api) throws FileNotFoundException {
 
-        // Create the command list in the help command without repeating the same thing 50 million times.
-        List<String> commandList = Arrays.asList("8ball", "avatar", "leaderboard", "level", "poll", "servers", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
-        ArrayList<SlashCommandOptionChoice> helpCommandOptions = new ArrayList<>();
+        List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
 
-        for (String s : commandList) {
+        // Create the command list in the help command without repeating the same thing 50 million times.
+        ArrayList<SlashCommandOptionChoice> helpCommandOptions = new ArrayList<>();
+        for (String s : Main.commandList) {
             helpCommandOptions.add(SlashCommandOptionChoice.create(ParseCommands.getCommandName(s), ParseCommands.getCommandName(s)));
         }
 
         api.bulkOverwriteGlobalSlashCommands(Arrays.asList(
                 // Regular commands
-                new SlashCommandBuilder().setName("info").setDescription("Learn more about ClaireBot"),
-                new SlashCommandBuilder().setName("help").setDescription("Help command").addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "command-name", "Command to get more info on", false, helpCommandOptions))
-                
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("8ball")).setDescription(ParseCommands.getCommandHelp("8ball")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "The question you wish to ask.", true)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("avatar")).setDescription(ParseCommands.getCommandHelp("avatar")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("help")).setDescription(ParseCommands.getCommandHelp("help"))
+                        .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "command-name", "Command to get more info on", false, helpCommandOptions)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("info")).setDescription(ParseCommands.getCommandHelp("info")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("leaderboard")).setDescription(ParseCommands.getCommandHelp("leaderboard")).addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "global", "Get the global leaderboard?", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("level")).setDescription(ParseCommands.getCommandHelp("level")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("poll")).setDescription(ParseCommands.getCommandName("poll"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "question", "Question to ask", true))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "allow-multiple-choices", "Whether multiple choices should be enabled.", false))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-1", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-2", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-3", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-4", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-5", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-6", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-7", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-8", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-10", "Custom choice")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("servers")).setDescription(ParseCommands.getCommandHelp("servers")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("user")).setDescription(ParseCommands.getCommandHelp("user")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("connect")).setDescription(ParseCommands.getCommandHelp("connect")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("leave")).setDescription(ParseCommands.getCommandHelp("leave")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("pause")).setDescription(ParseCommands.getCommandHelp("pause")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("play")).setDescription(ParseCommands.getCommandHelp("play")).addOption()
         )).join();
     }
 }

@@ -19,6 +19,16 @@ commands:
     usage: "/avatar <optional: user>"
     help: "Gets a user's avatar."
 
+  help:
+    name: "help"
+    usage: "/help <optional: command-name>"
+    help: "Learn how to use ClaireBot's commands and various features."
+
+  info:
+    name: "info"
+    usage: "/info"
+    help: "Learn more about ClaireBot."
+
   leaderboard:
     name: "leaderboard"
     usage: "/leaderboard <optional boolean: global>"
