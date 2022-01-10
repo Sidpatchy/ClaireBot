@@ -93,6 +93,9 @@ OnTopTriggers:
 # Controls whether the bot should check for updates
 checkForUpdates: true
 
+# Whether the bot should attempt to update or fix broken configuration files on startup or reloads.
+UpdateOutdatedConfigs: true
+
 # Do not change this, this is automatically changed when needed
 configRevsion: 4
 

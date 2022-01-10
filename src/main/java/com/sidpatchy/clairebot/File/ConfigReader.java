@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 public class ConfigReader {
@@ -35,6 +36,12 @@ public class ConfigReader {
     public Float getFloat(String file, String parameter) throws FileNotFoundException {
         Map<String, Object> config = GetConfig(file);
         return (Float) config.get(parameter);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> getList(String file, String parameter) throws FileNotFoundException {
+        Map<String, Object> config = GetConfig(file);
+        return (List<String>) config.get(parameter);
     }
 
     public Object getObj(String file, String parameter) throws FileNotFoundException {

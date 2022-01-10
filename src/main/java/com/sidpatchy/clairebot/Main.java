@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot;
 
 import com.sidpatchy.clairebot.File.ConfigReader;
+import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,10 +34,22 @@ import java.util.List;
  * @author Sidpatchy
  */
 public class Main {
+
+    // Various parameters extracted from config files
+    private String botName;
+    private List<String> zerfas;
+    private String zerfasEmote;
+    private List<String> eightBall;
+    private List<String> eightBallRigged;
+    private List<String> claireBotOnTopResponses;
+    private List<String> onTopTriggers;
+
     private static final Logger logger = LogManager.getLogger(Main.class);
 
-    private static String configFile = "config.yml";
-    private static String commandsFile = "commands.yml";
+    // Related to configuration files
+    private static final ConfigReader config = new ConfigReader();
+    private static final String configFile = "config.yml";
+    private static final String commandsFile = "commands.yml";
 
     public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
 
@@ -49,7 +62,6 @@ public class Main {
         loader.saveResource(commandsFile, false);
 
         // Read data from config file
-        ConfigReader config = new ConfigReader();
         String token = config.getString(configFile, "token");
         Integer current_shard = config.getInt(configFile, "current_shard");
         Integer total_shards = config.getInt(configFile, "total_shards");
@@ -68,7 +80,23 @@ public class Main {
         api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
 
         // Register slash commands
-        RegisterSlashCommands.RegisterSlashCommand(api);
+        try {
+            RegisterSlashCommands.RegisterSlashCommand(api);
+        }
+        catch (NullPointerException e) {
+            logger.fatal(e.toString());
+            logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file, trying to read all commands and printing out results.");
+            for (String s : Main.commandList) {
+                logger.fatal(ParseCommands.getCommandName(s));
+            }
+            logger.fatal("If the above list looks incomplete or generates another error, check your commands.yml file!");
+            System.exit(4);
+        }
+        catch (Exception e) {
+            logger.fatal(e.toString());
+            logger.fatal("There was an error while registering slash commands.");
+            System.exit(5);
+        }
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
@@ -96,6 +124,29 @@ public class Main {
             logger.fatal("Unable to log in to Discord. Aborting startup!");
         }
         return null;
+    }
+
+    public boolean extractParametersFromConfig(boolean UpdateOutdatedConfigs) {
+        logger.info("Loading configuration files...");
+
+        boolean extractionSuccessful = true;
+
+        try {
+            botName = config.getString(configFile, "botName");
+            zerfas = config.getList(configFile, "zerfas");
+            zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getString(configFile, "zerfas_emote_id") + ">";
+            eightBall = config.getList(configFile, "8bResponses");
+            eightBallRigged = config.getList(configFile, "8bRiggedResponses");
+            claireBotOnTopResponses = config.getList(configFile, "ClaireBotOnTopResponses");
+            onTopTriggers = config.getList(configFile, "OnTopTriggers");
+        }
+        catch (Exception e) {
+            logger.error(e.toString());
+            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be broken.");
+            extractionSuccessful = false;
+        }
+
+        return extractionSuccessful;
     }
 
     public static String getConfigFile() {

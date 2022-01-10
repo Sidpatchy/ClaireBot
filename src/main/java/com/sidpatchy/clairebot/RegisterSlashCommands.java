@@ -27,11 +27,10 @@ public class RegisterSlashCommands {
      */
     public static void RegisterSlashCommand(DiscordApi api) throws FileNotFoundException {
 
-        List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
-
         // Create the command list in the help command without repeating the same thing 50 million times.
         ArrayList<SlashCommandOptionChoice> helpCommandOptions = new ArrayList<>();
         for (String s : Main.commandList) {
+            Main.getLogger().info(ParseCommands.getCommandName(s));
             helpCommandOptions.add(SlashCommandOptionChoice.create(ParseCommands.getCommandName(s), ParseCommands.getCommandName(s)));
         }
 
@@ -59,10 +58,23 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-10", "Custom choice")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("servers")).setDescription(ParseCommands.getCommandHelp("servers")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("user")).setDescription(ParseCommands.getCommandHelp("user")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+
+                // Music commands
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("connect")).setDescription(ParseCommands.getCommandHelp("connect")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("leave")).setDescription(ParseCommands.getCommandHelp("leave")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("pause")).setDescription(ParseCommands.getCommandHelp("pause")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("play")).setDescription(ParseCommands.getCommandHelp("play")).addOption()
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("play")).setDescription(ParseCommands.getCommandHelp("play")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "A link or name to search for.", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("previous")).setDescription(ParseCommands.getCommandHelp("previous")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("queue")).setDescription(ParseCommands.getCommandHelp("queue")).addOption(SlashCommandOption.create(SlashCommandOptionType.INTEGER, "number-of-tracks", "The number of tracks to show", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("repeat")).setDescription(ParseCommands.getCommandHelp("repeat"))
+                        .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "repeat-mode", "Which repeat mode the bot should use", true,
+                        Arrays.asList(
+                                SlashCommandOptionChoice.create("OFF", "OFF"),
+                                SlashCommandOptionChoice.create("CURRENT-TRACK", "CURRENT"),
+                                SlashCommandOptionChoice.create("ALL", "ALL")
+                        ))),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("skip")).setDescription(ParseCommands.getCommandHelp("skip")),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("stop")).setDescription(ParseCommands.getCommandHelp("stop"))
         )).join();
     }
 }
