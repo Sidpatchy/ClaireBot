@@ -3,6 +3,9 @@ package com.sidpatchy.clairebot;
 import com.sidpatchy.clairebot.File.ConfigReader;
 import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
+import com.sidpatchy.clairebot.SlashCommand.Avatar;
+import com.sidpatchy.clairebot.SlashCommand.EightBall;
+import com.sidpatchy.clairebot.SlashCommand.Help;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -35,14 +38,18 @@ import java.util.List;
  */
 public class Main {
 
+    // Discord API
+    private static DiscordApi api;
+
     // Various parameters extracted from config files
-    private String botName;
-    private List<String> zerfas;
-    private String zerfasEmote;
-    private List<String> eightBall;
-    private List<String> eightBallRigged;
-    private List<String> claireBotOnTopResponses;
-    private List<String> onTopTriggers;
+    private static String botName;
+    private static List<String> errorGifs;
+    private static List<String> zerfas;
+    private static String zerfasEmote;
+    private static List<String> eightBall;
+    private static List<String> eightBallRigged;
+    private static List<String> claireBotOnTopResponses;
+    private static List<String> onTopTriggers;
 
     private static final Logger logger = LogManager.getLogger(Main.class);
 
@@ -67,7 +74,9 @@ public class Main {
         Integer total_shards = config.getInt(configFile, "total_shards");
         String video_url = config.getString(configFile, "video_url");
 
-        DiscordApi api = DiscordLogin(token, current_shard, total_shards);
+        extractParametersFromConfig(true);
+
+        api = DiscordLogin(token, current_shard, total_shards);
 
         if (api == null) {
             System.exit(2);
@@ -80,23 +89,12 @@ public class Main {
         api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
 
         // Register slash commands
-        try {
-            RegisterSlashCommands.RegisterSlashCommand(api);
-        }
-        catch (NullPointerException e) {
-            logger.fatal(e.toString());
-            logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file, trying to read all commands and printing out results.");
-            for (String s : Main.commandList) {
-                logger.fatal(ParseCommands.getCommandName(s));
-            }
-            logger.fatal("If the above list looks incomplete or generates another error, check your commands.yml file!");
-            System.exit(4);
-        }
-        catch (Exception e) {
-            logger.fatal(e.toString());
-            logger.fatal("There was an error while registering slash commands.");
-            System.exit(5);
-        }
+        registerSlashCommands();
+
+        // Register SlashCommand listeners
+        api.addSlashCommandCreateListener(new EightBall());
+        api.addSlashCommandCreateListener(new Avatar());
+        api.addSlashCommandCreateListener(new Help());
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
@@ -126,15 +124,14 @@ public class Main {
         return null;
     }
 
-    public boolean extractParametersFromConfig(boolean UpdateOutdatedConfigs) {
+    public static void extractParametersFromConfig(boolean updateOutdatedConfigs) {
         logger.info("Loading configuration files...");
-
-        boolean extractionSuccessful = true;
 
         try {
             botName = config.getString(configFile, "botName");
+            errorGifs = config.getList(configFile, "error_gifs");
             zerfas = config.getList(configFile, "zerfas");
-            zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getString(configFile, "zerfas_emote_id") + ">";
+            zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getLong(configFile, "zerfas_emote_id") + ">";
             eightBall = config.getList(configFile, "8bResponses");
             eightBallRigged = config.getList(configFile, "8bRiggedResponses");
             claireBotOnTopResponses = config.getList(configFile, "ClaireBotOnTopResponses");
@@ -143,10 +140,43 @@ public class Main {
         catch (Exception e) {
             logger.error(e.toString());
             logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be broken.");
-            extractionSuccessful = false;
         }
 
-        return extractionSuccessful;
+    }
+
+    public static void registerSlashCommands() throws FileNotFoundException {
+        try {
+            RegisterSlashCommands.RegisterSlashCommand(api);
+            logger.info("Slash commands registered successfully!");
+        }
+        catch (NullPointerException e) {
+            logger.fatal(e.toString());
+            logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file, trying to read all commands and printing out results.");
+            for (String s : Main.commandList) {
+                logger.fatal(ParseCommands.getCommandName(s));
+            }
+            logger.fatal("If the above list looks incomplete or generates another error, check your commands.yml file!");
+            System.exit(4);
+        }
+        catch (Exception e) {
+            logger.fatal(e.toString());
+            logger.fatal("There was an error while registering slash commands.");
+            System.exit(5);
+        }
+    }
+
+    public static List<String> getErrorGifs() { return errorGifs; }
+
+    public static List<String> getEightBall() {
+        return eightBall;
+    }
+
+    public static List<String> getEightBallRigged() {
+        return eightBallRigged;
+    }
+
+    public static List<String> getOnTopTriggers() {
+        return onTopTriggers;
     }
 
     public static String getConfigFile() {
@@ -159,5 +189,9 @@ public class Main {
 
     public static Logger getLogger() {
         return logger;
+    }
+
+    public static String getErrorCode(String descriptor) {
+        return descriptor + ":" + api.getCurrentShard() + ":" + api.getTotalShards() + ":" + api.getClientId() + ":" + System.currentTimeMillis() / 1000L;
     }
 }

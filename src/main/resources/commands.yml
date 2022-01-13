@@ -12,7 +12,7 @@ commands:
   8ball:
     name: "8ball"
     usage: "/8ball <query>"
-    help: "ClaireBot only speaks in absolute truth. Flesh betrays, silicon will not."
+    help: "ClaireBot only speaks in absolute truth. Flesh betrays, ClaireBot will not."
 
   avatar:
     name: "avatar"

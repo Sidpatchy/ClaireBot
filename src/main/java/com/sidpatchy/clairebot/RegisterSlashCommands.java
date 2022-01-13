@@ -30,7 +30,6 @@ public class RegisterSlashCommands {
         // Create the command list in the help command without repeating the same thing 50 million times.
         ArrayList<SlashCommandOptionChoice> helpCommandOptions = new ArrayList<>();
         for (String s : Main.commandList) {
-            Main.getLogger().info(ParseCommands.getCommandName(s));
             helpCommandOptions.add(SlashCommandOptionChoice.create(ParseCommands.getCommandName(s), ParseCommands.getCommandName(s)));
         }
 

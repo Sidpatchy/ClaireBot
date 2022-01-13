@@ -1,11 +1,13 @@
 package com.sidpatchy.clairebot.File;
 
+import com.sidpatchy.clairebot.Main;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,10 +40,14 @@ public class ConfigReader {
         return (Float) config.get(parameter);
     }
 
+    public long getLong(String file, String parameter) throws FileNotFoundException {
+        Map<String, Object> config = GetConfig(file);
+        return (long) config.get(parameter);
+    }
+
     @SuppressWarnings("unchecked")
     public List<String> getList(String file, String parameter) throws FileNotFoundException {
-        Map<String, Object> config = GetConfig(file);
-        return (List<String>) config.get(parameter);
+        return (List<String>) GetConfig(file).get(parameter);
     }
 
     public Object getObj(String file, String parameter) throws FileNotFoundException {
