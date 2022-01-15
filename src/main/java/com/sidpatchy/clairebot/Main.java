@@ -6,6 +6,7 @@ import com.sidpatchy.clairebot.File.ResourceLoader;
 import com.sidpatchy.clairebot.SlashCommand.Avatar;
 import com.sidpatchy.clairebot.SlashCommand.EightBall;
 import com.sidpatchy.clairebot.SlashCommand.Help;
+import com.sidpatchy.clairebot.SlashCommand.UserInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -89,12 +90,14 @@ public class Main {
         api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
 
         // Register slash commands
-        registerSlashCommands();
+        //registerSlashCommands();
 
         // Register SlashCommand listeners
         api.addSlashCommandCreateListener(new EightBall());
         api.addSlashCommandCreateListener(new Avatar());
         api.addSlashCommandCreateListener(new Help());
+
+        api.addSlashCommandCreateListener(new UserInfo());
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
