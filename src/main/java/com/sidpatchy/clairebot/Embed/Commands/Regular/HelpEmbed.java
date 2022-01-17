@@ -1,10 +1,10 @@
-package com.sidpatchy.clairebot.Embed;
+package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
@@ -15,15 +15,19 @@ public class HelpEmbed {
         List<String> musicCommandsList = Arrays.asList("connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
 
         // Create HashMaps for help command
-        HashMap<String, List<String>> regularCommands = new HashMap<String, List<String>>();
-        HashMap<String, List<String>> musicCommands = new HashMap<String, List<String>>();
+        HashMap<String, HashMap<String, String>> allCommands = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap<String, String>> regularCommands = new HashMap<String, HashMap<String, String>>();
+        HashMap<String, HashMap<String, String>> musicCommands = new HashMap<String, HashMap<String, String>>();
 
         for (String s : regularCommandsList) {
-            regularCommands.put(ParseCommands.getCommandName(s), Arrays.asList(ParseCommands.getCommandUsage(s), ParseCommands.getCommandHelp(s)));
+            regularCommands.put(s, ParseCommands.get(s));
         }
         for (String s : musicCommandsList) {
-            musicCommands.put(ParseCommands.getCommandName(s), Arrays.asList(ParseCommands.getCommandUsage(s), ParseCommands.getCommandHelp(s)));
+            musicCommands.put(s, ParseCommands.get(s));
         }
+
+        allCommands.putAll(regularCommands);
+        allCommands.putAll(musicCommands);
 
         // Commands list
         if (commandName.equalsIgnoreCase("help")) {
@@ -52,31 +56,23 @@ public class HelpEmbed {
             mus.append("```");
 
             return new EmbedBuilder()
-                    .setColor(Color.decode("#3498db"))
+                    .setColor(Main.getColor())
                     .addField("Commands", glob.toString(), false)
                     .addField("Music", mus.toString(), false);
         }
         // Command details
         else {
-            List<String> info;
-            try {
-                info = regularCommands.get(commandName);
-            }
-            catch (Exception ignored) {
-                info = musicCommands.get(commandName);
-            }
-
-            if (info == null) {
+            if (allCommands.get(commandName) == null) {
                 String errorCode = Main.getErrorCode("help_command");
                 Main.getLogger().error("Unable to locate command \"" + commandName + "\" for help command. Error code: " + errorCode);
                 return ErrorEmbed.getError(errorCode);
             }
             else {
                 return new EmbedBuilder()
-                        .setColor(Color.decode("#3498db"))
+                        .setColor(Main.getColor())
                         .setAuthor(commandName)
-                        .setDescription(info.get(1))
-                        .addField("Command", "Usage\n" + "```" + info.get(0) + "```");
+                        .setDescription(allCommands.get(commandName).get("help"))
+                        .addField("Command", "Usage\n" + "```" + allCommands.get(commandName).get("usage") + "```");
             }
         }
     }

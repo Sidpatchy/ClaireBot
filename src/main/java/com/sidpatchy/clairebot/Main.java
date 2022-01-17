@@ -3,6 +3,7 @@ package com.sidpatchy.clairebot;
 import com.sidpatchy.clairebot.File.ConfigReader;
 import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
+import com.sidpatchy.clairebot.Listener.ServerJoin;
 import com.sidpatchy.clairebot.SlashCommand.Avatar;
 import com.sidpatchy.clairebot.SlashCommand.EightBall;
 import com.sidpatchy.clairebot.SlashCommand.Help;
@@ -12,8 +13,10 @@ import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -44,6 +47,7 @@ public class Main {
 
     // Various parameters extracted from config files
     private static String botName;
+    private static String color;
     private static List<String> errorGifs;
     private static List<String> zerfas;
     private static String zerfasEmote;
@@ -51,6 +55,9 @@ public class Main {
     private static List<String> eightBallRigged;
     private static List<String> claireBotOnTopResponses;
     private static List<String> onTopTriggers;
+
+    // Commands
+    private static HashMap<String, String> helpCommand;
 
     private static final Logger logger = LogManager.getLogger(Main.class);
 
@@ -98,6 +105,9 @@ public class Main {
         api.addSlashCommandCreateListener(new Help());
 
         api.addSlashCommandCreateListener(new UserInfo());
+
+        // Misc. Events
+        api.addServerJoinListener(new ServerJoin());
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
@@ -121,6 +131,7 @@ public class Main {
                     .login().join();
         }
         catch (Exception e) {
+            e.printStackTrace();
             logger.fatal(e.toString());
             logger.fatal("Unable to log in to Discord. Aborting startup!");
         }
@@ -132,6 +143,7 @@ public class Main {
 
         try {
             botName = config.getString(configFile, "botName");
+            color = config.getString(configFile, "color");
             errorGifs = config.getList(configFile, "error_gifs");
             zerfas = config.getList(configFile, "zerfas");
             zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getLong(configFile, "zerfas_emote_id") + ">";
@@ -139,10 +151,13 @@ public class Main {
             eightBallRigged = config.getList(configFile, "8bRiggedResponses");
             claireBotOnTopResponses = config.getList(configFile, "ClaireBotOnTopResponses");
             onTopTriggers = config.getList(configFile, "OnTopTriggers");
+
+            // commands
+            helpCommand = ParseCommands.get("help");
         }
         catch (Exception e) {
             logger.error(e.toString());
-            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be broken.");
+            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be very broken.");
         }
 
     }
@@ -168,33 +183,28 @@ public class Main {
         }
     }
 
+    public static Color getColor() { return Color.decode(color); }
+
     public static List<String> getErrorGifs() { return errorGifs; }
 
-    public static List<String> getEightBall() {
-        return eightBall;
-    }
+    public static List<String> getEightBall() { return eightBall; }
 
-    public static List<String> getEightBallRigged() {
-        return eightBallRigged;
-    }
+    public static List<String> getEightBallRigged() { return eightBallRigged; }
 
-    public static List<String> getOnTopTriggers() {
-        return onTopTriggers;
-    }
+    public static List<String> getOnTopTriggers() { return onTopTriggers; }
 
-    public static String getConfigFile() {
-        return configFile;
-    }
+    public static String getConfigFile() { return configFile; }
 
-    public static String getCommandsFile() {
-        return commandsFile;
-    }
+    public static String getCommandsFile() { return commandsFile; }
 
-    public static Logger getLogger() {
-        return logger;
-    }
+    public static Logger getLogger() { return logger; }
 
     public static String getErrorCode(String descriptor) {
         return descriptor + ":" + api.getCurrentShard() + ":" + api.getTotalShards() + ":" + api.getClientId() + ":" + System.currentTimeMillis() / 1000L;
     }
+
+    public static DiscordApi getApi() { return api; }
+
+    // Commands
+    public static HashMap<String, String> getHelpCommand() { return helpCommand; }
 }

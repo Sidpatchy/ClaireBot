@@ -1,6 +1,6 @@
 package com.sidpatchy.clairebot.SlashCommand;
 
-import com.sidpatchy.clairebot.Embed.AvatarEmbed;
+import com.sidpatchy.clairebot.Embed.Commands.Regular.AvatarEmbed;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;

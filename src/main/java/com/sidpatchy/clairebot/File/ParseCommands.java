@@ -3,6 +3,9 @@ package com.sidpatchy.clairebot.File;
 import com.sidpatchy.clairebot.Main;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,5 +34,13 @@ public class ParseCommands {
 
     public static String getCommandHelp(String command) throws FileNotFoundException {
         return (String) getCommand(command).get("help");
+    }
+
+    public static HashMap<String, String> get(String command) throws FileNotFoundException {
+        return new HashMap<String, String>() {{
+            put("name", getCommandName(command));
+            put("usage", getCommandUsage(command));
+            put("help", getCommandHelp(command));
+        }};
     }
 }

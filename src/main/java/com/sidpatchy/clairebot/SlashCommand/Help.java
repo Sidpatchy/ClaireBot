@@ -1,6 +1,6 @@
 package com.sidpatchy.clairebot.SlashCommand;
 
-import com.sidpatchy.clairebot.Embed.HelpEmbed;
+import com.sidpatchy.clairebot.Embed.Commands.Regular.HelpEmbed;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;

@@ -1,5 +1,6 @@
-package com.sidpatchy.clairebot.Embed;
+package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Main;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -24,7 +25,7 @@ public class UserInfoEmbed {
         }
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Color.decode("#3498db"))
+                .setColor(Main.getColor())
                 .setThumbnail(user.getAvatar())
                 .setAuthor("User\n" + user.getDiscriminatedName())
                 .addField("Discord ID", user.getIdAsString(), false);

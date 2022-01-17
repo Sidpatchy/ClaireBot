@@ -1,4 +1,4 @@
-package com.sidpatchy.clairebot.Embed;
+package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -28,7 +28,7 @@ public class EightBallEmbed {
             }
         }
         return new EmbedBuilder()
-                .setColor(Color.decode("#3498db"))
+                .setColor(Main.getColor())
                 .setAuthor("8ball")
                 .addField(query, response)
                 .setFooter(author.getDiscriminatedName(), author.getAvatar());

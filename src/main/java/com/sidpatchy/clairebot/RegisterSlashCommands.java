@@ -42,7 +42,7 @@ public class RegisterSlashCommands {
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("info")).setDescription(ParseCommands.getCommandHelp("info")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("leaderboard")).setDescription(ParseCommands.getCommandHelp("leaderboard")).addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "global", "Get the global leaderboard?", false)),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("level")).setDescription(ParseCommands.getCommandHelp("level")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("poll")).setDescription(ParseCommands.getCommandName("poll"))
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("poll")).setDescription(ParseCommands.getCommandHelp("poll"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "question", "Question to ask", true))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "allow-multiple-choices", "Whether multiple choices should be enabled.", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-1", "Custom choice"))
