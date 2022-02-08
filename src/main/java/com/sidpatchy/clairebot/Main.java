@@ -94,6 +94,8 @@ public class Main {
             logger.info("Successfully connected to Discord on shard " + current_shard + " with a total shard count of " + total_shards);
         }
 
+        Clockwork.initClockwork();
+
         // Set the bot's activity
         api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
 
