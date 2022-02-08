@@ -3,6 +3,7 @@ package com.sidpatchy.clairebot;
 import com.sidpatchy.clairebot.File.ConfigReader;
 import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
+import com.sidpatchy.clairebot.Listener.AntiPhish;
 import com.sidpatchy.clairebot.Listener.ServerJoin;
 import com.sidpatchy.clairebot.SlashCommand.Avatar;
 import com.sidpatchy.clairebot.SlashCommand.EightBall;
@@ -108,6 +109,7 @@ public class Main {
 
         // Misc. Events
         api.addServerJoinListener(new ServerJoin());
+        api.addMessageCreateListener(new AntiPhish());
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
