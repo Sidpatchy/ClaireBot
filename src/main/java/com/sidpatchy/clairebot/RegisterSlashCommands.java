@@ -64,7 +64,7 @@ public class RegisterSlashCommands {
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("pause")).setDescription(ParseCommands.getCommandHelp("pause")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("play")).setDescription(ParseCommands.getCommandHelp("play")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "A link or name to search for.", false)),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("previous")).setDescription(ParseCommands.getCommandHelp("previous")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("queue")).setDescription(ParseCommands.getCommandHelp("queue")).addOption(SlashCommandOption.create(SlashCommandOptionType.INTEGER, "number-of-tracks", "The number of tracks to show", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("queue")).setDescription(ParseCommands.getCommandHelp("queue")).addOption(SlashCommandOption.create(SlashCommandOptionType.DECIMAL, "number-of-tracks", "The number of tracks to show", false)),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("repeat")).setDescription(ParseCommands.getCommandHelp("repeat"))
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "repeat-mode", "Which repeat mode the bot should use", true,
                         Arrays.asList(
