@@ -15,7 +15,7 @@ import java.util.List;
 public class RegisterSlashCommands {
 
     public static void DeleteSlashCommands (DiscordApi api) {
-        api.bulkOverwriteGlobalSlashCommands(List.of()).join();
+        api.bulkOverwriteGlobalApplicationCommands(List.of()).join();
     }
 
     /**
@@ -33,7 +33,7 @@ public class RegisterSlashCommands {
             helpCommandOptions.add(SlashCommandOptionChoice.create(ParseCommands.getCommandName(s), ParseCommands.getCommandName(s)));
         }
 
-        api.bulkOverwriteGlobalSlashCommands(Arrays.asList(
+        api.bulkOverwriteGlobalApplicationCommands(Arrays.asList(
                 // Regular commands
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("8ball")).setDescription(ParseCommands.getCommandHelp("8ball")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "The question you wish to ask.", true)),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("avatar")).setDescription(ParseCommands.getCommandHelp("avatar")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
