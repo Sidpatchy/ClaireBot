@@ -3,7 +3,6 @@ package com.sidpatchy.clairebot.Embed;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 

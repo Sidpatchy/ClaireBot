@@ -5,10 +5,9 @@ import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
 import com.sidpatchy.clairebot.Listener.AntiPhish;
 import com.sidpatchy.clairebot.Listener.ServerJoin;
-import com.sidpatchy.clairebot.SlashCommand.Avatar;
-import com.sidpatchy.clairebot.SlashCommand.EightBall;
-import com.sidpatchy.clairebot.SlashCommand.Help;
-import com.sidpatchy.clairebot.SlashCommand.UserInfo;
+import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
+import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
+import com.sidpatchy.clairebot.SlashCommand.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -100,14 +99,20 @@ public class Main {
         api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
 
         // Register slash commands
-        //registerSlashCommands();
+        registerSlashCommands();
 
         // Register SlashCommand listeners
         api.addSlashCommandCreateListener(new EightBall());
         api.addSlashCommandCreateListener(new Avatar());
         api.addSlashCommandCreateListener(new Help());
 
+        api.addSlashCommandCreateListener(new Poll());
+
         api.addSlashCommandCreateListener(new UserInfo());
+
+        // Related to Voting Functions
+        api.addMessageCreateListener(new AddReactions());
+        api.addReactionAddListener(new ModerateReactions());
 
         // Misc. Events
         api.addServerJoinListener(new ServerJoin());
@@ -208,6 +213,8 @@ public class Main {
     }
 
     public static DiscordApi getApi() { return api; }
+
+    public static List<String> getVoteEmoji() { return Arrays.asList("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "\uD83D\uDC4D", "\uD83D\uDC4E"); }
 
     // Commands
     public static HashMap<String, String> getHelpCommand() { return helpCommand; }

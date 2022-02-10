@@ -20,7 +20,7 @@ public class Clockwork {
         Timer timer = new Timer();
         TimerTask task = new Helper();
 
-        timer.schedule(task, 1000, 60000);
+        timer.schedule(task, 1000, 120000);
     }
 
     public static void setPhishingDomains(List<String> value) {phishingDomains = value;}
@@ -36,6 +36,6 @@ class Helper extends TimerTask {
     @Override
     public void run() {
         Clockwork.setPhishingDomains(config.readYAMLFromURL("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json"));
-        Main.getLogger().info("Clockwork update");
+        Main.getLogger().debug("Clockwork ticked");
     }
 }

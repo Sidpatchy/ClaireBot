@@ -11,4 +11,9 @@ public class ChannelUtils {
                 .orElse(server.getSystemChannel()
                         .orElse(server.getTextChannels().get(1)));
     }
+
+    // Eventually allow for user defined requests channel
+    public static TextChannel getRequestsChannel(Server server) {
+        return server.getTextChannelsByName("requests").get(0);
+    }
 }

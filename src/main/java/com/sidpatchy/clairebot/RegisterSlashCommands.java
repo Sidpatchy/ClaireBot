@@ -53,8 +53,7 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-6", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-7", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-8", "Custom choice"))
-                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice"))
-                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-10", "Custom choice")),
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("servers")).setDescription(ParseCommands.getCommandHelp("servers")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("user")).setDescription(ParseCommands.getCommandHelp("user")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
 
