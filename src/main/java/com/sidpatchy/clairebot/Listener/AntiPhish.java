@@ -11,11 +11,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Attempt to block phishing attacks on Discord using several open
+ * Attempt to block phishing attacks on Discord.
+ * Disabling this is not and will not be supported.
  */
 public class AntiPhish implements MessageCreateListener {
-
-
 
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
