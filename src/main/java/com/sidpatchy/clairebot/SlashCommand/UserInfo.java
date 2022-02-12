@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.SlashCommand;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.UserInfoEmbed;
+import com.sidpatchy.clairebot.File.ParseCommands;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
@@ -17,7 +18,7 @@ public class UserInfo implements SlashCommandCreateListener {
         User user = slashCommandInteraction.getFirstOptionUserValue().orElse(author);
         Server server = slashCommandInteraction.getServer().orElse(null);
 
-        if (commandName.equalsIgnoreCase("user")) {
+        if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("user"))) {
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(UserInfoEmbed.getUser(user, author, server))
                     .respond();

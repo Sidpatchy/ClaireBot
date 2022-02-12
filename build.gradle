@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
 
     implementation 'org.yaml:snakeyaml:1.29'
+    implementation 'redis.clients:jedis:4.1.0'
 }
 
 test {

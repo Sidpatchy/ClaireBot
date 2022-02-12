@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.SlashCommand;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.VotingEmbed;
+import com.sidpatchy.clairebot.File.ParseCommands;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
@@ -19,7 +20,7 @@ public class Poll implements SlashCommandCreateListener {
         String commandName = slashCommandInteraction.getCommandName();
         Server server = slashCommandInteraction.getServer().orElse(null);
 
-        if (commandName.equalsIgnoreCase("poll") && server != null) {
+        if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("poll")) && server != null) {
             User author = slashCommandInteraction.getUser();
 
             String question = slashCommandInteraction.getFirstOptionStringValue().orElse(null);

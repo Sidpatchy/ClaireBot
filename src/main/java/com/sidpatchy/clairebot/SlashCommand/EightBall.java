@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.SlashCommand;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.EightBallEmbed;
+import com.sidpatchy.clairebot.File.ParseCommands;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
@@ -14,7 +15,7 @@ public class EightBall implements SlashCommandCreateListener {
         String commandName = slashCommandInteraction.getCommandName();
         User author = slashCommandInteraction.getUser();
 
-        if (commandName.equalsIgnoreCase("8ball")) {
+        if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("8ball"))) {
             String query = slashCommandInteraction.getFirstOptionStringValue().orElse(null);
 
             if (query == null) {return;}

@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.SlashCommand;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.HelpEmbed;
+import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
@@ -16,7 +17,7 @@ public class Help implements SlashCommandCreateListener {
         String commandName = slashCommandInteraction.getCommandName();
         String command = slashCommandInteraction.getFirstOptionStringValue().orElse("help");
 
-        if (commandName.equalsIgnoreCase("help")) {
+        if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("help"))) {
             try {
                 slashCommandInteraction.createImmediateResponder()
                         .addEmbed(HelpEmbed.getHelp(command))

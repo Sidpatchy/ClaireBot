@@ -25,7 +25,7 @@ public class RegisterSlashCommands {
      *
      * @param api pass API into function
      */
-    public static void RegisterSlashCommand(DiscordApi api) throws FileNotFoundException {
+    public static void RegisterSlashCommand(DiscordApi api) {
 
         // Create the command list in the help command without repeating the same thing 50 million times.
         ArrayList<SlashCommandOptionChoice> helpCommandOptions = new ArrayList<>();
