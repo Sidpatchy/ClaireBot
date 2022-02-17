@@ -68,8 +68,8 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "repeat-mode", "Which repeat mode the bot should use", true,
                         Arrays.asList(
                                 SlashCommandOptionChoice.create("OFF", "OFF"),
-                                SlashCommandOptionChoice.create("CURRENT-TRACK", "CURRENT"),
-                                SlashCommandOptionChoice.create("ALL", "ALL")
+                                SlashCommandOptionChoice.create("CURRENT-TRACK", "CURRENT-TRACK"),
+                                SlashCommandOptionChoice.create("QUEUE", "QUEUE")
                         ))),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("skip")).setDescription(ParseCommands.getCommandHelp("skip")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("stop")).setDescription(ParseCommands.getCommandHelp("stop"))

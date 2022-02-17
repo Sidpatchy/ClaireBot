@@ -70,7 +70,7 @@ public class HelpEmbed {
             else {
                 return new EmbedBuilder()
                         .setColor(Main.getColor())
-                        .setAuthor(commandName)
+                        .setAuthor(commandName.toUpperCase())
                         .setDescription(allCommands.get(commandName).get("help"))
                         .addField("Command", "Usage\n" + "```" + allCommands.get(commandName).get("usage") + "```");
             }

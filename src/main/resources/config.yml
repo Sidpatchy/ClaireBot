@@ -16,6 +16,7 @@ botName: ClaireBot
 video_url: https://www.youtube.com/watch?v=AeZRYhLDLeU
 
 color: "#3498db"
+errorColor: "#e74d3c"
 
 # URLs for GIFS to randomly use in the error embed.
 error_gifs:

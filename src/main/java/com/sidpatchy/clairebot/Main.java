@@ -7,7 +7,12 @@ import com.sidpatchy.clairebot.Listener.AntiPhish;
 import com.sidpatchy.clairebot.Listener.ServerJoin;
 import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
-import com.sidpatchy.clairebot.SlashCommand.*;
+import com.sidpatchy.clairebot.SlashCommand.Music.Connect;
+import com.sidpatchy.clairebot.SlashCommand.Music.Leave;
+import com.sidpatchy.clairebot.SlashCommand.Music.Pause;
+import com.sidpatchy.clairebot.SlashCommand.Music.Play;
+import com.sidpatchy.clairebot.SlashCommand.Regular.*;
+import com.sidpatchy.clairebot.Util.Music.PlayerManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -37,7 +42,7 @@ import java.util.List;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @since April 2020
- * @version 3.0-PRE-ALPHA
+ * @version 3.0.0-alpha
  * @author Sidpatchy
  */
 public class Main {
@@ -48,6 +53,7 @@ public class Main {
     // Various parameters extracted from config files
     private static String botName;
     private static String color;
+    private static String errorColor;
     private static List<String> errorGifs;
     private static List<String> zerfas;
     private static String zerfasEmote;
@@ -94,18 +100,24 @@ public class Main {
         }
 
         Clockwork.initClockwork();
+        PlayerManager.initManager();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.0-PRE-ALPHA", video_url);
+        api.updateActivity("ClaireBot v3.0.0-alpha", video_url);
 
         // Register slash commands
-        registerSlashCommands();
+        //registerSlashCommands();
 
         // Register SlashCommand listeners
         api.addSlashCommandCreateListener(new EightBall());
         api.addSlashCommandCreateListener(new Avatar());
+        api.addSlashCommandCreateListener(new Connect());
         api.addSlashCommandCreateListener(new Help());
 
+        api.addSlashCommandCreateListener(new Leave());
+
+        api.addSlashCommandCreateListener(new Pause());
+        api.addSlashCommandCreateListener(new Play());
         api.addSlashCommandCreateListener(new Poll());
 
         api.addSlashCommandCreateListener(new UserInfo());
@@ -153,6 +165,7 @@ public class Main {
         try {
             botName = config.getString(configFile, "botName");
             color = config.getString(configFile, "color");
+            errorColor = config.getString(configFile, "errorColor");
             errorGifs = config.getList(configFile, "error_gifs");
             zerfas = config.getList(configFile, "zerfas");
             zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getLong(configFile, "zerfas_emote_id") + ">";
@@ -193,6 +206,8 @@ public class Main {
     }
 
     public static Color getColor() { return Color.decode(color); }
+
+    public static Color getErrorColor() { return Color.decode(errorColor); }
 
     public static List<String> getErrorGifs() { return errorGifs; }
 

@@ -5,7 +5,7 @@
 # Allows for changing how the help command displays commands.
 # Additionally allows for changing command names during runtime.
 # The bot's host or delegated administrators may reload the
-# list of commands (and config) using /reload.
+# list of commands (and config) using /reload. (NYI)
 
 # ------------------ COMMANDS ------------------
 commands:
@@ -61,10 +61,20 @@ commands:
     usage: "/connect"
     help: "Makes the bot join (or move to) your current channel."
 
+  controls:
+    name: "controls"
+    usage: "/controls"
+    help: "Displays control buttons."
+
   leave:
     name: "leave"
     usage: "/leave"
-    help: "Makes ClaireBot leave the call."
+    help: "Clears the queue and leaves the call."
+
+  nowplaying:
+    name: "now-playing"
+    usage: "/nowplaying"
+    help: "Displays the currently playing track"
 
   pause:
     name: "pause"
@@ -89,7 +99,7 @@ commands:
   repeat:
     name: "repeat"
     usage: "/repeat none \n/repeat one \n/repeat all"
-    help: "Repeats the contents of the queue. Valid options: none, one, all"
+    help: "Repeats the contents of the queue. Valid options: OFF, CURRENT-TRACK, QUEUE"
 
   shuffle:
     name: "shuffle"
@@ -104,4 +114,7 @@ commands:
   stop:
     name: "stop"
     usage: "/stop"
-    help: "Moves to the next track in the queue."
+    help: "Clears the queue and leaves the call."
+
+# Do not change this, this is automatically changed if needed
+config-revision: 1

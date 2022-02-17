@@ -15,42 +15,49 @@ public class ConfigReader {
 
     Yaml yaml = new Yaml();
 
-    public Map<String, Object> GetConfig(String file) throws FileNotFoundException {
-        InputStream inputStream = new FileInputStream(new File("config/" + file));
-        return yaml.load(inputStream);
+    public Map<String, Object> GetConfig(String file) {
+        try {
+            InputStream inputStream = new FileInputStream(new File("config/" + file));
+            return yaml.load(inputStream);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Main.getLogger().error("Unable to read from file " + file + ". More errors will follow.");
+            return null;
+        }
     }
 
-    public boolean getBool(String file, String parameter) throws FileNotFoundException {
+    public boolean getBool(String file, String parameter) {
         Map<String, Object> config = GetConfig(file);
         return (boolean) config.get(parameter);
     }
 
-    public String getString(String file, String parameter) throws FileNotFoundException {
+    public String getString(String file, String parameter) {
         Map<String, Object> config = GetConfig(file);
         return (String) config.get(parameter);
     }
 
-    public Integer getInt(String file, String parameter) throws FileNotFoundException {
+    public Integer getInt(String file, String parameter) {
         Map<String, Object> config = GetConfig(file);
         return (Integer) config.get(parameter);
     }
 
-    public Float getFloat(String file, String parameter) throws FileNotFoundException {
+    public Float getFloat(String file, String parameter) {
         Map<String, Object> config = GetConfig(file);
         return (Float) config.get(parameter);
     }
 
-    public long getLong(String file, String parameter) throws FileNotFoundException {
+    public long getLong(String file, String parameter) {
         Map<String, Object> config = GetConfig(file);
         return (long) config.get(parameter);
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getList(String file, String parameter) throws FileNotFoundException {
+    public List<String> getList(String file, String parameter) {
         return (List<String>) GetConfig(file).get(parameter);
     }
 
-    public Object getObj(String file, String parameter) throws FileNotFoundException {
+    public Object getObj(String file, String parameter) {
         Map<String, Object> config = GetConfig(file);
         return config.get(parameter);
     }

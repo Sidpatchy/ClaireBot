@@ -1,4 +1,4 @@
-package com.sidpatchy.clairebot.SlashCommand;
+package com.sidpatchy.clairebot.SlashCommand.Regular;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.VotingEmbed;
 import com.sidpatchy.clairebot.File.ParseCommands;
