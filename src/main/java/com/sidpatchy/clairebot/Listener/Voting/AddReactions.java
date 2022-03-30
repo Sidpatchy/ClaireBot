@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.message.embed.EmbedFooter;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -19,11 +20,16 @@ public class AddReactions implements MessageCreateListener {
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
         List<String> reactions = Main.getVoteEmoji();
-
         Message message = event.getMessage();
-        Embed embed = message.getEmbeds().get(0);
+        Embed embed = null;
+        try {
+            embed = message.getEmbeds().get(0);
+        }
+        catch (Exception ignored) {
+            return;
+        }
+        if (embed == null) { return; }
         EmbedFooter footer = embed.getFooter().orElse(null);
-        assert footer != null;
         String footerText = footer.getText().orElse(null);
 
         if (footerText != null && footerText.contains("Poll ID")) {
