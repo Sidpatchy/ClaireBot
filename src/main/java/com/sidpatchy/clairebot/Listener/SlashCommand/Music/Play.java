@@ -1,4 +1,4 @@
-package com.sidpatchy.clairebot.SlashCommand.Music;
+package com.sidpatchy.clairebot.Listener.SlashCommand.Music;
 
 import com.sidpatchy.clairebot.Embed.Commands.Music.PauseEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Music.PlayEmbed;

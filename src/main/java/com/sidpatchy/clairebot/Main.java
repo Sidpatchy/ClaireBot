@@ -5,13 +5,13 @@ import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
 import com.sidpatchy.clairebot.Listener.AntiPhish;
 import com.sidpatchy.clairebot.Listener.ServerJoin;
+import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Connect;
+import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Leave;
+import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Pause;
+import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Play;
+import com.sidpatchy.clairebot.Listener.SlashCommand.Regular.*;
 import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
-import com.sidpatchy.clairebot.SlashCommand.Music.Connect;
-import com.sidpatchy.clairebot.SlashCommand.Music.Leave;
-import com.sidpatchy.clairebot.SlashCommand.Music.Pause;
-import com.sidpatchy.clairebot.SlashCommand.Music.Play;
-import com.sidpatchy.clairebot.SlashCommand.Regular.*;
 import com.sidpatchy.clairebot.Util.Music.PlayerManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -72,7 +72,7 @@ public class Main {
     private static final String configFile = "config.yml";
     private static final String commandsFile = "commands.yml";
 
-    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
+    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "server", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
 
     public static void main(String[] args) throws FileNotFoundException {
         logger.info("ClaireBot loading...");
@@ -119,6 +119,7 @@ public class Main {
         api.addSlashCommandCreateListener(new Pause());
         api.addSlashCommandCreateListener(new Play());
         api.addSlashCommandCreateListener(new Poll());
+        api.addSlashCommandCreateListener(new ServerInfo());
 
         api.addSlashCommandCreateListener(new UserInfo());
 

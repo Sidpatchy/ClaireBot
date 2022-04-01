@@ -1,26 +1,26 @@
-package com.sidpatchy.clairebot.SlashCommand.Regular;
+package com.sidpatchy.clairebot.Listener.SlashCommand.Regular;
 
-import com.sidpatchy.clairebot.Embed.Commands.Regular.EightBallEmbed;
+import com.sidpatchy.clairebot.Embed.Commands.Regular.UserInfoEmbed;
 import com.sidpatchy.clairebot.File.ParseCommands;
+import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 
-public class EightBall implements SlashCommandCreateListener {
+public class UserInfo implements SlashCommandCreateListener {
 
     @Override
     public void onSlashCommandCreate(SlashCommandCreateEvent event) {
         SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
         String commandName = slashCommandInteraction.getCommandName();
         User author = slashCommandInteraction.getUser();
+        User user = slashCommandInteraction.getFirstOptionUserValue().orElse(author);
+        Server server = slashCommandInteraction.getServer().orElse(null);
 
-        if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("8ball"))) {
-            String query = slashCommandInteraction.getFirstOptionStringValue().orElse(null);
-
-            if (query == null) {return;}
+        if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("user"))) {
             slashCommandInteraction.createImmediateResponder()
-                    .addEmbed(EightBallEmbed.getEightBall(query, author))
+                    .addEmbed(UserInfoEmbed.getUser(user, author, server))
                     .respond();
         }
     }

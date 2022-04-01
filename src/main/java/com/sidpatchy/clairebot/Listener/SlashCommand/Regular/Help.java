@@ -1,4 +1,4 @@
-package com.sidpatchy.clairebot.SlashCommand.Regular;
+package com.sidpatchy.clairebot.Listener.SlashCommand.Regular;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.HelpEmbed;
 import com.sidpatchy.clairebot.File.ParseCommands;

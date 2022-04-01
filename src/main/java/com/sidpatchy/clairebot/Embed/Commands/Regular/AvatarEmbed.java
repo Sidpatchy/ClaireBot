@@ -15,7 +15,7 @@ public class AvatarEmbed {
                 .setColor(Main.getColor())
                 .setTimestampToNow()
                 .setAuthor(user.getDiscriminatedName(), "", user.getAvatar())
-                .setImage(user.getAvatar().getUrl().toString() + "?size=1024")
+                .setImage(user.getAvatar().getUrl().toString() + "?size=4096")
                 .setFooter(String.valueOf(user.getId()));
     }
 }
