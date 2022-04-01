@@ -23,8 +23,8 @@ public class ServerInfoEmbed {
         embed.addField("Role Count", String.valueOf(server.getRoles().size()), false);
         embed.addField("Member Count", String.valueOf(server.getMemberCount()), false);
         embed.addField("Channel Counts", "⦁ Categories: " + server.getChannelCategories().size() +
-                                                "\n ⦁ Text Channels: " + server.getTextChannels().size() +
-                                                "\n ⦁ Voice Channels: " + server.getVoiceChannels().size(), false);
+                                                "\n⦁ Text Channels: " + server.getTextChannels().size() +
+                                                "\n⦁ Voice Channels: " + server.getVoiceChannels().size(), false);
 
 
         return embed;
