@@ -4,3 +4,9 @@
 ![Last Commit](https://img.shields.io/github/last-commit/Sidpatchy/ClaireBot?style=flat-square)
 
 ClaireBot is a feature-packed Discord bot (being re-)written in Java/Kotlin.
+
+Currently the audio-streaming functionality is very buggy. If you plan on hosting this for personal use I recommend disabling it.
+
+As of now, ClaireBot 3 alpha releases are being hosted on the main ClaireBot which you can invite using https://invite.clairebot.net/
+
+ClaireBot 2 is still available and will slowly be shutting down as features are ported to ClaireBot 3, you can invite the legacy bot using https://legacy.clairebot.net/
