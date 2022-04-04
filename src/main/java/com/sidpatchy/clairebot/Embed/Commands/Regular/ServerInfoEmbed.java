@@ -10,7 +10,7 @@ public class ServerInfoEmbed {
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor())
                 .setAuthor(server.getName())
-                .setFooter(server.getIdAsString());
+                .setFooter("Server ID: " + server.getIdAsString());
 
         server.getIcon().ifPresent(embed::setThumbnail);
 
