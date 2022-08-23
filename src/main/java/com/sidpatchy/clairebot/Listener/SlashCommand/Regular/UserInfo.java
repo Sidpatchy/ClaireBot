@@ -15,7 +15,7 @@ public class UserInfo implements SlashCommandCreateListener {
         SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
         String commandName = slashCommandInteraction.getCommandName();
         User author = slashCommandInteraction.getUser();
-        User user = slashCommandInteraction.getFirstOptionUserValue().orElse(author);
+        User user = slashCommandInteraction.getOptionUserValueByIndex(0).orElse(author);
         Server server = slashCommandInteraction.getServer().orElse(null);
 
         if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("user"))) {

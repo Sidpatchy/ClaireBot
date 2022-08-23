@@ -15,7 +15,7 @@ public class Help implements SlashCommandCreateListener {
     public void onSlashCommandCreate(SlashCommandCreateEvent event) {
         SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
         String commandName = slashCommandInteraction.getCommandName();
-        String command = slashCommandInteraction.getFirstOptionStringValue().orElse("help");
+        String command = slashCommandInteraction.getOptionStringValueByIndex(0).orElse("help");
 
         if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("help"))) {
             try {

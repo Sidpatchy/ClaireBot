@@ -16,7 +16,7 @@ public class EightBall implements SlashCommandCreateListener {
         User author = slashCommandInteraction.getUser();
 
         if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("8ball"))) {
-            String query = slashCommandInteraction.getFirstOptionStringValue().orElse(null);
+            String query = slashCommandInteraction.getOptionStringValueByIndex(0).orElse(null);
 
             if (query == null) {return;}
             slashCommandInteraction.createImmediateResponder()

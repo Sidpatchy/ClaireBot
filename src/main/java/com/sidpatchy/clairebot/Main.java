@@ -54,6 +54,7 @@ public class Main {
     private static String botName;
     private static String color;
     private static String errorColor;
+    private static boolean musicBotEnabled;
     private static List<String> errorGifs;
     private static List<String> zerfas;
     private static String zerfasEmote;
@@ -100,7 +101,8 @@ public class Main {
         }
 
         Clockwork.initClockwork();
-        PlayerManager.initManager();
+
+        if (musicBotEnabled()) { PlayerManager.initManager(); }
 
         // Set the bot's activity
         api.updateActivity("ClaireBot v3.0.0-alpha", video_url);
@@ -111,17 +113,19 @@ public class Main {
         // Register SlashCommand listeners
         api.addSlashCommandCreateListener(new EightBall());
         api.addSlashCommandCreateListener(new Avatar());
-        api.addSlashCommandCreateListener(new Connect());
         api.addSlashCommandCreateListener(new Help());
-
-        api.addSlashCommandCreateListener(new Leave());
-
-        api.addSlashCommandCreateListener(new Pause());
-        api.addSlashCommandCreateListener(new Play());
         api.addSlashCommandCreateListener(new Poll());
         api.addSlashCommandCreateListener(new ServerInfo());
 
         api.addSlashCommandCreateListener(new UserInfo());
+
+        // Related to music commands
+        if (musicBotEnabled()) {
+            api.addSlashCommandCreateListener(new Connect());
+            api.addSlashCommandCreateListener(new Leave());
+            api.addSlashCommandCreateListener(new Pause());
+            api.addSlashCommandCreateListener(new Play());
+        }
 
         // Related to Voting Functions
         api.addMessageCreateListener(new AddReactions());
@@ -167,6 +171,7 @@ public class Main {
             botName = config.getString(configFile, "botName");
             color = config.getString(configFile, "color");
             errorColor = config.getString(configFile, "errorColor");
+            musicBotEnabled = config.getBool(configFile, "music_bot_enabled");
             errorGifs = config.getList(configFile, "error_gifs");
             zerfas = config.getList(configFile, "zerfas");
             zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getLong(configFile, "zerfas_emote_id") + ">";
@@ -179,7 +184,7 @@ public class Main {
             helpCommand = ParseCommands.get("help");
         }
         catch (Exception e) {
-            logger.error(e.toString());
+            e.printStackTrace();
             logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be very broken.");
         }
 
@@ -209,6 +214,8 @@ public class Main {
     public static Color getColor() { return Color.decode(color); }
 
     public static Color getErrorColor() { return Color.decode(errorColor); }
+
+    public static boolean musicBotEnabled() { return musicBotEnabled; }
 
     public static List<String> getErrorGifs() { return errorGifs; }
 

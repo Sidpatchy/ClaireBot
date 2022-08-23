@@ -14,7 +14,7 @@ public class Avatar implements SlashCommandCreateListener {
         SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
         String commandName = slashCommandInteraction.getCommandName();
         User author = slashCommandInteraction.getUser();
-        User user = slashCommandInteraction.getFirstOptionUserValue().orElse(null);
+        User user = slashCommandInteraction.getOptionUserValueByIndex(0).orElse(null);
 
         if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("avatar"))) {
             slashCommandInteraction.createImmediateResponder()

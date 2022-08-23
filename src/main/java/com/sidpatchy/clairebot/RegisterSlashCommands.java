@@ -33,7 +33,7 @@ public class RegisterSlashCommands {
             helpCommandOptions.add(SlashCommandOptionChoice.create(ParseCommands.getCommandName(s), ParseCommands.getCommandName(s)));
         }
 
-        api.bulkOverwriteGlobalApplicationCommands(Arrays.asList(
+        List<SlashCommandBuilder> commandsList = Arrays.asList(
                 // Regular commands
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("8ball")).setDescription(ParseCommands.getCommandHelp("8ball")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "The question you wish to ask.", true)),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("avatar")).setDescription(ParseCommands.getCommandHelp("avatar")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
@@ -55,24 +55,30 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-8", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")),
                 new SlashCommandBuilder().setName(ParseCommands.getCommandName("server")).setDescription(ParseCommands.getCommandHelp("server")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "guildID", "Optionally specify a guild by ID.", false)),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("user")).setDescription(ParseCommands.getCommandHelp("user")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+                new SlashCommandBuilder().setName(ParseCommands.getCommandName("user")).setDescription(ParseCommands.getCommandHelp("user")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false))
+        );
 
-                // Music commands
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("connect")).setDescription(ParseCommands.getCommandHelp("connect")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("leave")).setDescription(ParseCommands.getCommandHelp("leave")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("pause")).setDescription(ParseCommands.getCommandHelp("pause")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("play")).setDescription(ParseCommands.getCommandHelp("play")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "A link or name to search for.", false)),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("previous")).setDescription(ParseCommands.getCommandHelp("previous")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("queue")).setDescription(ParseCommands.getCommandHelp("queue")).addOption(SlashCommandOption.create(SlashCommandOptionType.DECIMAL, "number-of-tracks", "The number of tracks to show", false)),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("repeat")).setDescription(ParseCommands.getCommandHelp("repeat"))
-                        .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "repeat-mode", "Which repeat mode the bot should use", true,
-                        Arrays.asList(
-                                SlashCommandOptionChoice.create("OFF", "OFF"),
-                                SlashCommandOptionChoice.create("CURRENT-TRACK", "CURRENT-TRACK"),
-                                SlashCommandOptionChoice.create("QUEUE", "QUEUE")
-                        ))),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("skip")).setDescription(ParseCommands.getCommandHelp("skip")),
-                new SlashCommandBuilder().setName(ParseCommands.getCommandName("stop")).setDescription(ParseCommands.getCommandHelp("stop"))
-        )).join();
+        if (Main.musicBotEnabled()) {
+            commandsList.addAll(Arrays.asList(
+                    // Music commands
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("connect")).setDescription(ParseCommands.getCommandHelp("connect")),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("leave")).setDescription(ParseCommands.getCommandHelp("leave")),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("pause")).setDescription(ParseCommands.getCommandHelp("pause")),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("play")).setDescription(ParseCommands.getCommandHelp("play")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "A link or name to search for.", false)),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("previous")).setDescription(ParseCommands.getCommandHelp("previous")),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("queue")).setDescription(ParseCommands.getCommandHelp("queue")).addOption(SlashCommandOption.create(SlashCommandOptionType.DECIMAL, "number-of-tracks", "The number of tracks to show", false)),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("repeat")).setDescription(ParseCommands.getCommandHelp("repeat"))
+                            .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "repeat-mode", "Which repeat mode the bot should use", true,
+                                    Arrays.asList(
+                                            SlashCommandOptionChoice.create("OFF", "OFF"),
+                                            SlashCommandOptionChoice.create("CURRENT-TRACK", "CURRENT-TRACK"),
+                                            SlashCommandOptionChoice.create("QUEUE", "QUEUE")
+                                    ))),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("skip")).setDescription(ParseCommands.getCommandHelp("skip")),
+                    new SlashCommandBuilder().setName(ParseCommands.getCommandName("stop")).setDescription(ParseCommands.getCommandHelp("stop"))
+            ));
+        }
+
+        api.bulkOverwriteGlobalApplicationCommands(commandsList).join();
     }
 }

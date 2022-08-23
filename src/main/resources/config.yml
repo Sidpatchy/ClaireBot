@@ -15,8 +15,12 @@ botName: ClaireBot
 # URL of the YouTube video ClaireBot claims to be streaming
 video_url: https://www.youtube.com/watch?v=AeZRYhLDLeU
 
+# Colours to use in the bot's embeds
 color: "#3498db"
 errorColor: "#e74d3c"
+
+# Enables or disables music-related features.
+music_bot_enabled: false
 
 # URLs for GIFS to randomly use in the error embed.
 error_gifs:

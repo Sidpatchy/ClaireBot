@@ -12,7 +12,11 @@ import java.util.List;
 public class HelpEmbed {
     public static EmbedBuilder getHelp(String commandName) throws FileNotFoundException {
         List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user");
-        List<String> musicCommandsList = Arrays.asList("connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
+
+        List<String> musicCommandsList = null;
+        if (Main.musicBotEnabled()) {
+            musicCommandsList = Arrays.asList("connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
+        }
 
         // Create HashMaps for help command
         HashMap<String, HashMap<String, String>> allCommands = new HashMap<String, HashMap<String, String>>();
@@ -22,8 +26,10 @@ public class HelpEmbed {
         for (String s : regularCommandsList) {
             regularCommands.put(s, ParseCommands.get(s));
         }
-        for (String s : musicCommandsList) {
-            musicCommands.put(s, ParseCommands.get(s));
+        if (Main.musicBotEnabled()) {
+            for (String s : musicCommandsList) {
+                musicCommands.put(s, ParseCommands.get(s));
+            }
         }
 
         allCommands.putAll(regularCommands);
@@ -35,30 +41,34 @@ public class HelpEmbed {
             for (String s : regularCommandsList) {
                 if (glob.toString().equalsIgnoreCase("```")) {
                     glob.append(ParseCommands.getCommandName(s));
-                }
-                else {
+                } else {
                     glob.append(", ")
                             .append(ParseCommands.getCommandName(s));
                 }
             }
             glob.append("```");
 
-            StringBuilder mus = new StringBuilder("```");
-            for (String s : musicCommandsList) {
-                if (mus.toString().equalsIgnoreCase("```")) {
-                    mus.append(ParseCommands.getCommandName(s));
+            StringBuilder mus = null;
+            if (Main.musicBotEnabled()) {
+                mus = new StringBuilder("```");
+                for (String s : musicCommandsList) {
+                    if (mus.toString().equalsIgnoreCase("```")) {
+                        mus.append(ParseCommands.getCommandName(s));
+                    } else {
+                        mus.append(", ")
+                                .append(ParseCommands.getCommandName(s));
+                    }
                 }
-                else {
-                    mus.append(", ")
-                            .append(ParseCommands.getCommandName(s));
-                }
+                mus.append("```");
             }
-            mus.append("```");
 
-            return new EmbedBuilder()
+            EmbedBuilder embed = new EmbedBuilder()
                     .setColor(Main.getColor())
-                    .addField("Commands", glob.toString(), false)
-                    .addField("Music", mus.toString(), false);
+                    .addField("Commands", glob.toString(), false);
+            if (Main.musicBotEnabled()) {
+                embed.addField("Music", mus.toString(), false);
+            }
+            return embed;
         }
         // Command details
         else {
@@ -66,8 +76,7 @@ public class HelpEmbed {
                 String errorCode = Main.getErrorCode("help_command");
                 Main.getLogger().error("Unable to locate command \"" + commandName + "\" for help command. Error code: " + errorCode);
                 return ErrorEmbed.getError(errorCode);
-            }
-            else {
+            } else {
                 return new EmbedBuilder()
                         .setColor(Main.getColor())
                         .setAuthor(commandName.toUpperCase())

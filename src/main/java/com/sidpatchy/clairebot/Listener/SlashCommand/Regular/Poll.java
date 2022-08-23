@@ -23,8 +23,8 @@ public class Poll implements SlashCommandCreateListener {
         if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("poll")) && server != null) {
             User author = slashCommandInteraction.getUser();
 
-            String question = slashCommandInteraction.getFirstOptionStringValue().orElse(null);
-            boolean allowMultipleChoices = slashCommandInteraction.getSecondOptionBooleanValue().orElse(false);
+            String question = slashCommandInteraction.getOptionStringValueByIndex(0).orElse(null);
+            boolean allowMultipleChoices = slashCommandInteraction.getOptionBooleanValueByIndex(1).orElse(false);
             List<String> choices = new ArrayList<>();
 
             // Populate choices
