@@ -14,7 +14,7 @@ public class PauseEmbed {
 
     public static EmbedBuilder getPauseEmbed(Server server, User author) {
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(author.getIdAsString()))
                 .setFooter(author.getDiscriminatedName(), author.getAvatar());
 
         server.getAudioConnection().ifPresentOrElse(audioConnection -> {

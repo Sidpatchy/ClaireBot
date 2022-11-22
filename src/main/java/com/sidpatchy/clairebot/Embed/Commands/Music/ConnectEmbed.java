@@ -28,7 +28,7 @@ public class ConnectEmbed {
         }
         else {
             return new EmbedBuilder()
-                    .setColor(Main.getColor())
+                    .setColor(Main.getColor(author.getIdAsString()))
                     .setDescription("Connected to <#" + channel.getIdAsString() + ">")
                     .setFooter(author.getDiscriminatedName(), author.getAvatar());
         }

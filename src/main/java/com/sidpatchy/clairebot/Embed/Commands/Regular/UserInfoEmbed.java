@@ -25,7 +25,7 @@ public class UserInfoEmbed {
         }
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(user.getIdAsString()))
                 .setThumbnail(user.getAvatar())
                 .setAuthor("User\n" + user.getDiscriminatedName())
                 .addField("Discord ID", user.getIdAsString(), false);

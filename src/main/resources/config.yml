@@ -9,6 +9,20 @@
 # Discord bot token, get one at https://discord.com/developers/applications
 token:
 
+# ClaireData's login information
+apiPath: https://api.example.com/
+apiUser: clairedata
+apiPassword: examplePassword
+
+userDefaults:
+  accentColour: "#3498db"
+  language: "eng"
+
+guildDefaults:
+  requestsChannelID: null
+  moderatorMessagesChannelID: null
+  enforceServerLanguage: false
+
 # Name of bot to be used in logs and
 botName: ClaireBot
 

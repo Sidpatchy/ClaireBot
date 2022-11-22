@@ -12,7 +12,7 @@ public class AvatarEmbed {
         if (user == null) { user = author; }
 
         return new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(user.getIdAsString()))
                 .setTimestampToNow()
                 .setAuthor(user.getDiscriminatedName(), "", user.getAvatar())
                 .setImage(user.getAvatar().getUrl().toString() + "?size=4096")

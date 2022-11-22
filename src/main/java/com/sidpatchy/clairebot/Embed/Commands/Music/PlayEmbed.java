@@ -79,7 +79,7 @@ public class PlayEmbed {
         }
         else {
             return new EmbedBuilder()
-                    .setColor(Main.getColor())
+                    .setColor(Main.getColor(author.getIdAsString()))
                     .setAuthor("Added to Queue")
                     .setDescription(trackName.get())
                     .setFooter(author.getDiscriminatedName(), author.getAvatar());

@@ -6,9 +6,9 @@ import org.javacord.api.entity.server.Server;
 
 public class ServerInfoEmbed {
 
-    public static EmbedBuilder getServerInfo(Server server) {
+    public static EmbedBuilder getServerInfo(Server server, String userID) {
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(userID))
                 .setAuthor(server.getName())
                 .setFooter("Server ID: " + server.getIdAsString());
 

@@ -2,7 +2,7 @@
 <Configuration status="WARN">
     <Properties>
         <Property name="logPath">logs</Property>
-        <Property name="rollingFileName">romebot</Property>
+        <Property name="rollingFileName">clairebot</Property>
     </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">

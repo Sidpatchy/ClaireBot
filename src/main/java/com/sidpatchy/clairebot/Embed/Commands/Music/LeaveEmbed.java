@@ -18,7 +18,7 @@ public class LeaveEmbed {
         if (channel == null) { return ErrorEmbed.getCustomError(Main.getErrorCode("disconnect_NullChannel"), "It looks like you're not in a voice channel. Please join my voice channel and try again."); }
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(author.getIdAsString()))
                 .setFooter(author.getDiscriminatedName(), author.getAvatar());
 
         server.getAudioConnection().ifPresentOrElse(audioConnection -> {

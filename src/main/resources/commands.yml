@@ -61,6 +61,11 @@ commands:
     usage: "/user <optional: @user>"
     help: "Reports various bits of info on a user."
 
+  config:
+    name: "config"
+    usage: "/config"
+    help: "Opens up settings menu for modifying user or server settings."
+
 # -------------------- MUSIC -------------------
 
   connect:

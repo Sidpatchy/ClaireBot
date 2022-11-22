@@ -6,6 +6,7 @@ import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.listener.interaction.SlashCommandCreateListener;
@@ -18,6 +19,7 @@ public class ServerInfo implements SlashCommandCreateListener {
     public void onSlashCommandCreate(SlashCommandCreateEvent event) {
         SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
         String commandName = slashCommandInteraction.getCommandName();
+        User user = slashCommandInteraction.getUser();
 
         if (!commandName.equalsIgnoreCase(ParseCommands.getCommandName("server"))) { return; }
 
@@ -33,14 +35,14 @@ public class ServerInfo implements SlashCommandCreateListener {
         if (guildID != null) {
             Server fromGuildID = event.getApi().getServerById(guildID).orElse(null);
             if (fromGuildID != null) {
-                embed = ServerInfoEmbed.getServerInfo(fromGuildID);
+                embed = ServerInfoEmbed.getServerInfo(fromGuildID, user.getIdAsString());
             }
             else {
                 embed = ErrorEmbed.getCustomError(Main.getErrorCode("guildID-invalid"), "Either that guild ID is invalid or I'm not a member of the server.");
             }
         }
         else if (server != null) {
-            embed = ServerInfoEmbed.getServerInfo(server);
+            embed = ServerInfoEmbed.getServerInfo(server, user.getIdAsString());
         }
 
         slashCommandInteraction.createImmediateResponder()

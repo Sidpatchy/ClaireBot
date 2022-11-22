@@ -10,8 +10,8 @@ import java.util.*;
 import java.util.List;
 
 public class HelpEmbed {
-    public static EmbedBuilder getHelp(String commandName) throws FileNotFoundException {
-        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "servers", "user");
+    public static EmbedBuilder getHelp(String commandName, String userID) throws FileNotFoundException {
+        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "server", "user", "config");
 
         List<String> musicCommandsList = null;
         if (Main.musicBotEnabled()) {
@@ -63,7 +63,7 @@ public class HelpEmbed {
             }
 
             EmbedBuilder embed = new EmbedBuilder()
-                    .setColor(Main.getColor())
+                    .setColor(Main.getColor(userID))
                     .addField("Commands", glob.toString(), false);
             if (Main.musicBotEnabled()) {
                 embed.addField("Music", mus.toString(), false);
@@ -78,7 +78,7 @@ public class HelpEmbed {
                 return ErrorEmbed.getError(errorCode);
             } else {
                 return new EmbedBuilder()
-                        .setColor(Main.getColor())
+                        .setColor(Main.getColor(userID))
                         .setAuthor(commandName.toUpperCase())
                         .setDescription(allCommands.get(commandName).get("help"))
                         .addField("Command", "Usage\n" + "```" + allCommands.get(commandName).get("usage") + "```");

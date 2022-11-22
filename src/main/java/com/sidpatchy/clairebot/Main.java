@@ -1,10 +1,10 @@
 package com.sidpatchy.clairebot;
 
+import com.sidpatchy.clairebot.API.User;
 import com.sidpatchy.clairebot.File.ConfigReader;
 import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.File.ResourceLoader;
-import com.sidpatchy.clairebot.Listener.AntiPhish;
-import com.sidpatchy.clairebot.Listener.ServerJoin;
+import com.sidpatchy.clairebot.Listener.*;
 import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Connect;
 import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Leave;
 import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Pause;
@@ -19,10 +19,10 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ClaireBot - Simply the best.
@@ -50,6 +50,15 @@ public class Main {
     // Discord API
     private static DiscordApi api;
 
+    // Related to ClaireData API
+    private static String apiPath;
+    private static String apiUser;
+    private static String apiPassword;
+
+    // Default values for users and guilds when creating them
+    private static Map<String, Object> userDefaults;
+    private static Map<String, Object> guildDefaults;
+
     // Various parameters extracted from config files
     private static String botName;
     private static String color;
@@ -73,9 +82,9 @@ public class Main {
     private static final String configFile = "config.yml";
     private static final String commandsFile = "commands.yml";
 
-    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "server", "user", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
+    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "server", "user", "config", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         logger.info("ClaireBot loading...");
 
         // Make sure require resources are loaded
@@ -111,6 +120,12 @@ public class Main {
         //registerSlashCommands();
 
         // Register SlashCommand listeners
+        api.addSlashCommandCreateListener(new SlashCommandCreate());
+        api.addSelectMenuChooseListener(new SelectMenuChoose());
+
+        // uhhh
+        api.addModalSubmitListener(new ModalSubmit());
+
         api.addSlashCommandCreateListener(new EightBall());
         api.addSlashCommandCreateListener(new Avatar());
         api.addSlashCommandCreateListener(new Help());
@@ -164,11 +179,17 @@ public class Main {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public static void extractParametersFromConfig(boolean updateOutdatedConfigs) {
         logger.info("Loading configuration files...");
 
         try {
             botName = config.getString(configFile, "botName");
+            apiPath = config.getString(configFile, "apiPath");
+            apiUser = config.getString(configFile, "apiUser");
+            apiPassword = config.getString(configFile, "apiPassword");
+            userDefaults = ((Map<String, Object>) config.getObj(configFile, "userDefaults"));
+            guildDefaults = ((Map<String, Object>) config.getObj(configFile, "guildDefaults"));
             color = config.getString(configFile, "color");
             errorColor = config.getString(configFile, "errorColor");
             musicBotEnabled = config.getBool(configFile, "music_bot_enabled");
@@ -190,7 +211,7 @@ public class Main {
 
     }
 
-    public static void registerSlashCommands() throws FileNotFoundException {
+    public static void registerSlashCommands() {
         try {
             RegisterSlashCommands.RegisterSlashCommand(api);
             logger.info("Slash commands registered successfully!");
@@ -205,13 +226,35 @@ public class Main {
             System.exit(4);
         }
         catch (Exception e) {
+            e.printStackTrace();
             logger.fatal(e.toString());
             logger.fatal("There was an error while registering slash commands.");
             System.exit(5);
         }
     }
 
-    public static Color getColor() { return Color.decode(color); }
+    public static String getApiPath() { return apiPath; }
+
+    public static String getApiUser() { return apiUser; }
+
+    public static String getApiPassword() { return apiPassword; }
+
+    public static Map<String, Object> getUserDefaults() { return userDefaults; }
+
+    public static Map<String, Object> getGuildDefaults() { return guildDefaults; }
+
+    public static Color getColor(String userID) {
+        if (userID == null) { return Color.decode(color); }
+
+        User user = new User(userID);
+        try {
+            user.getUser();
+            return Color.decode(user.getAccentColour());
+        }
+        catch (Exception exception) {
+            return Color.decode(color);
+        }
+    }
 
     public static Color getErrorColor() { return Color.decode(errorColor); }
 

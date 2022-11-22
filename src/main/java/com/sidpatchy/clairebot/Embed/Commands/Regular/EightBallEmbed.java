@@ -28,7 +28,7 @@ public class EightBallEmbed {
             }
         }
         return new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(author.getIdAsString()))
                 .setAuthor("8ball")
                 .addField(query, response)
                 .setFooter(author.getDiscriminatedName(), author.getAvatar());

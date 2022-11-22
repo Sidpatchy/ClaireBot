@@ -3,6 +3,7 @@ package com.sidpatchy.clairebot.Listener.SlashCommand.Regular;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.HelpEmbed;
 import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.Main;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.listener.interaction.SlashCommandCreateListener;
@@ -16,11 +17,12 @@ public class Help implements SlashCommandCreateListener {
         SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
         String commandName = slashCommandInteraction.getCommandName();
         String command = slashCommandInteraction.getOptionStringValueByIndex(0).orElse("help");
+        User user = slashCommandInteraction.getUser();
 
         if (commandName.equalsIgnoreCase(ParseCommands.getCommandName("help"))) {
             try {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(HelpEmbed.getHelp(command))
+                        .addEmbed(HelpEmbed.getHelp(command, user.getIdAsString()))
                         .respond();
             } catch (FileNotFoundException e) {
                 Main.getLogger().error(e);

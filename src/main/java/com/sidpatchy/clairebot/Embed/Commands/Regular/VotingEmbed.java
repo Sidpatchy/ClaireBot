@@ -25,7 +25,7 @@ public class VotingEmbed {
         List<String> emoji = Arrays.asList("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "\uD83D\uDC4D", "\uD83D\uDC4E");
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor())
+                .setColor(Main.getColor(author.getIdAsString()))
                 .setDescription(question);
 
         StringBuilder choiceBuilder = new StringBuilder();

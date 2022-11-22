@@ -1,7 +1,8 @@
 package com.sidpatchy.clairebot;
 
-import com.sidpatchy.clairebot.Util.GetYAMLFromURL;
+import com.sidpatchy.Robin.Util.GetYAMLFromURL;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,14 +29,18 @@ public class Clockwork {
 
 }
 
-
+@SuppressWarnings("unchecked")
 class Helper extends TimerTask {
 
     GetYAMLFromURL config = new GetYAMLFromURL();
 
     @Override
     public void run() {
-        Clockwork.setPhishingDomains(config.readYAMLFromURL("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json"));
+        try {
+            Clockwork.setPhishingDomains((List<String>) config.getYAMLFromURL("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json").get("domains"));
+        } catch (IOException e) {
+            Main.getLogger().error("Unable to reach phishing domains database.");
+        }
         Main.getLogger().debug("Clockwork ticked");
     }
 }
