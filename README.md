@@ -5,7 +5,7 @@
 
 ClaireBot is a feature-packed Discord bot (being re-)written in Java/Kotlin.
 
-Currently the audio-streaming functionality is very buggy. If you plan on hosting this for personal use I recommend disabling it.
+The audio-streaming functionality will be removed in the near future, I no longer have interest in maintaining it. It has been buggy and thus disabled by default for quite some time anyways...
 
 As of now, ClaireBot 3 alpha releases are being hosted on the main ClaireBot which you can invite using https://invite.clairebot.net/
 
