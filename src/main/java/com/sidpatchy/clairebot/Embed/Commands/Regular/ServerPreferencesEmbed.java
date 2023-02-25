@@ -20,11 +20,13 @@ public class ServerPreferencesEmbed {
     }
 
     public static EmbedBuilder getRequestsChannelMenu(User author) {
-        return createGenericMenuEmbed(author, "Requests Channel");
+        return createGenericMenuEmbed(author, "Requests Channel")
+                .setDescription("Only lists the first 25 channels in the server.");
     }
 
     public static EmbedBuilder getModeratorChannelMenu(User author) {
-        return createGenericMenuEmbed(author, "Moderator Messages Channel");
+        return createGenericMenuEmbed(author, "Moderator Messages Channel")
+                .setDescription("Only lists the first 25 channels in the server.");
     }
 
     public static EmbedBuilder getEnforceServerLangMenu(User author) {

@@ -1,5 +1,6 @@
 package com.sidpatchy.clairebot.MessageComponents.Regular;
 
+import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.ActionRowBuilder;
@@ -52,8 +53,17 @@ public class ServerPreferencesComponents {
     private static ActionRow getChannelListActionRow(Server server, String customId) {
         List<ServerTextChannel> channels = server.getTextChannels();
         List<SelectMenuOption> options = new ArrayList<>();
+        int count = 0;
         for (ServerTextChannel channel : channels) {
-            options.add(SelectMenuOption.create(channel.getName(), channel.getIdAsString()));
+            String channelName = channel.getName().replaceAll("[^\\p{ASCII}]", ""); // Remove non-ASCII characters
+            if (channelName.length() > 25) {
+                channelName = channelName.substring(0, 25); // Truncate channel name to 25 characters
+            }
+            if (count < 25) {
+                options.add(SelectMenuOption.create(channelName, channel.getIdAsString()));
+                Main.getLogger().info("Added option with label: " + channelName);
+                count++;
+            }
         }
 
         return new ActionRowBuilder()
@@ -61,4 +71,5 @@ public class ServerPreferencesComponents {
                         SelectMenu.create(customId, "Click to select a channel", 1, 1, options)
                 ).build();
     }
+
 }

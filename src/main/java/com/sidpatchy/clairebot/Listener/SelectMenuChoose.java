@@ -34,6 +34,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
         if (embedAuthor != null && channel != null) {
             String menuName = embedAuthor.getName();
             String label = selectMenuInteraction.getChosenOptions().get(0).getLabel();
+            String id = selectMenuInteraction.getChosenOptions().get(0).getValue();
 
             // User preferences menu
             if (menuName.equalsIgnoreCase("User Preferences Editor")) {
