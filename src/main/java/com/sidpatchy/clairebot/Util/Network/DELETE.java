@@ -14,8 +14,6 @@ public class DELETE {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         String json = "{}";
 
-        Main.getLogger().info(link);
-
         // Authentication
         String userpass = Main.getApiUser() + ":" + Main.getApiPassword();
         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
@@ -33,7 +31,7 @@ public class DELETE {
             os.write( input, 0, input.length );
         }
 
-        Main.getLogger().info(json);
+        Main.getLogger().debug(json);
 
         // Read response
         try(BufferedReader br = new BufferedReader(

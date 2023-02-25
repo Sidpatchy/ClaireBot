@@ -1,18 +1,12 @@
 package com.sidpatchy.clairebot;
 
-import com.sidpatchy.clairebot.API.User;
-import com.sidpatchy.clairebot.File.ConfigReader;
-import com.sidpatchy.clairebot.File.ParseCommands;
-import com.sidpatchy.clairebot.File.ResourceLoader;
+import com.sidpatchy.Robin.Discord.ParseCommands;
+import com.sidpatchy.Robin.File.ConfigReader;
+import com.sidpatchy.Robin.File.ResourceLoader;
+import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Listener.*;
-import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Connect;
-import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Leave;
-import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Pause;
-import com.sidpatchy.clairebot.Listener.SlashCommand.Music.Play;
-import com.sidpatchy.clairebot.Listener.SlashCommand.Regular.*;
 import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
-import com.sidpatchy.clairebot.Util.Music.PlayerManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -50,6 +44,8 @@ public class Main {
     // Discord API
     private static DiscordApi api;
 
+    private static final long startMillis = System.currentTimeMillis();
+
     // Related to ClaireData API
     private static String apiPath;
     private static String apiUser;
@@ -63,7 +59,6 @@ public class Main {
     private static String botName;
     private static String color;
     private static String errorColor;
-    private static boolean musicBotEnabled;
     private static List<String> errorGifs;
     private static List<String> zerfas;
     private static String zerfasEmote;
@@ -81,8 +76,9 @@ public class Main {
     private static final ConfigReader config = new ConfigReader();
     private static final String configFile = "config.yml";
     private static final String commandsFile = "commands.yml";
+    private static final ParseCommands commands = new ParseCommands(commandsFile);
 
-    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "server", "user", "config", "connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
+    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "request", "server", "user", "config");
 
     public static void main(String[] args) {
         logger.info("ClaireBot loading...");
@@ -111,36 +107,16 @@ public class Main {
 
         Clockwork.initClockwork();
 
-        if (musicBotEnabled()) { PlayerManager.initManager(); }
-
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.0.0-alpha", video_url);
+        api.updateActivity("ClaireBot v3.0.0-alpha.3", video_url);
 
         // Register slash commands
-        //registerSlashCommands();
+        registerSlashCommands();
 
-        // Register SlashCommand listeners
+        // Register Command-related listeners
         api.addSlashCommandCreateListener(new SlashCommandCreate());
         api.addSelectMenuChooseListener(new SelectMenuChoose());
-
-        // uhhh
         api.addModalSubmitListener(new ModalSubmit());
-
-        api.addSlashCommandCreateListener(new EightBall());
-        api.addSlashCommandCreateListener(new Avatar());
-        api.addSlashCommandCreateListener(new Help());
-        api.addSlashCommandCreateListener(new Poll());
-        api.addSlashCommandCreateListener(new ServerInfo());
-
-        api.addSlashCommandCreateListener(new UserInfo());
-
-        // Related to music commands
-        if (musicBotEnabled()) {
-            api.addSlashCommandCreateListener(new Connect());
-            api.addSlashCommandCreateListener(new Leave());
-            api.addSlashCommandCreateListener(new Pause());
-            api.addSlashCommandCreateListener(new Play());
-        }
 
         // Related to Voting Functions
         api.addMessageCreateListener(new AddReactions());
@@ -192,7 +168,6 @@ public class Main {
             guildDefaults = ((Map<String, Object>) config.getObj(configFile, "guildDefaults"));
             color = config.getString(configFile, "color");
             errorColor = config.getString(configFile, "errorColor");
-            musicBotEnabled = config.getBool(configFile, "music_bot_enabled");
             errorGifs = config.getList(configFile, "error_gifs");
             zerfas = config.getList(configFile, "zerfas");
             zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getLong(configFile, "zerfas_emote_id") + ">";
@@ -202,7 +177,7 @@ public class Main {
             onTopTriggers = config.getList(configFile, "OnTopTriggers");
 
             // commands
-            helpCommand = ParseCommands.get("help");
+            helpCommand = commands.get("help");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -220,7 +195,7 @@ public class Main {
             logger.fatal(e.toString());
             logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file, trying to read all commands and printing out results.");
             for (String s : Main.commandList) {
-                logger.fatal(ParseCommands.getCommandName(s));
+                logger.fatal(commands.getCommandName(s));
             }
             logger.fatal("If the above list looks incomplete or generates another error, check your commands.yml file!");
             System.exit(4);
@@ -246,7 +221,7 @@ public class Main {
     public static Color getColor(String userID) {
         if (userID == null) { return Color.decode(color); }
 
-        User user = new User(userID);
+        APIUser user = new APIUser(userID);
         try {
             user.getUser();
             return Color.decode(user.getAccentColour());
@@ -257,8 +232,6 @@ public class Main {
     }
 
     public static Color getErrorColor() { return Color.decode(errorColor); }
-
-    public static boolean musicBotEnabled() { return musicBotEnabled; }
 
     public static List<String> getErrorGifs() { return errorGifs; }
 
@@ -284,4 +257,6 @@ public class Main {
 
     // Commands
     public static HashMap<String, String> getHelpCommand() { return helpCommand; }
+
+    public static long getStartMillis() { return startMillis; }
 }

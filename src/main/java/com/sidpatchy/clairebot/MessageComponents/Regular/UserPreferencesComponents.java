@@ -1,8 +1,6 @@
 package com.sidpatchy.clairebot.MessageComponents.Regular;
 
 import org.javacord.api.entity.message.component.*;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
 
 import java.util.*;
 
@@ -44,8 +42,8 @@ public class UserPreferencesComponents {
             put("Lime", "cddc39");
             put("Yellow", "ffeb3b");
             put("Amber", "ffc107");
-            put("Orange", "ff9800");
-            put("Deep Orange", "ff5722");
+            put("NRAX Orange", "fb7101");
+            put("Deep Orange", "b6580b");
             put("White", "ffffff");
             put("Grey", "808080");
             put("Black", "0a0a0a");

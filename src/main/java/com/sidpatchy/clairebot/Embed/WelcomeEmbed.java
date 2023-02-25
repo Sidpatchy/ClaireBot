@@ -1,12 +1,22 @@
 package com.sidpatchy.clairebot.Embed;
 
+import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 
+import java.io.IOException;
+
 public class WelcomeEmbed {
 
     public static EmbedBuilder getWelcome(Server server) {
+
+        // Initialize the Guild in the database
+        Guild guild = new Guild(server.getIdAsString());
+        try {
+            guild.getGuild();
+        } catch (IOException ignored) {}
+
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(null))
                 .addField("\uD83C\uDF89 Welcome to ClaireBot 3!", "How can you rise, if you have not burned?", true)

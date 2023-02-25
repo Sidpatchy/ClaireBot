@@ -4,24 +4,10 @@
 # ----------------------------------------------
 
 # ----------------- MAIN CONFIG ----------------
-# This section contains values that are
+# General config options
 
 # Discord bot token, get one at https://discord.com/developers/applications
 token:
-
-# ClaireData's login information
-apiPath: https://api.example.com/
-apiUser: clairedata
-apiPassword: examplePassword
-
-userDefaults:
-  accentColour: "#3498db"
-  language: "eng"
-
-guildDefaults:
-  requestsChannelID: null
-  moderatorMessagesChannelID: null
-  enforceServerLanguage: false
 
 # Name of bot to be used in logs and
 botName: ClaireBot
@@ -32,9 +18,6 @@ video_url: https://www.youtube.com/watch?v=AeZRYhLDLeU
 # Colours to use in the bot's embeds
 color: "#3498db"
 errorColor: "#e74d3c"
-
-# Enables or disables music-related features.
-music_bot_enabled: false
 
 # URLs for GIFS to randomly use in the error embed.
 error_gifs:
@@ -60,7 +43,25 @@ current_shard: 0
 total_shards: 1
 
 # --------------- DATABASE CONFIG --------------
-# NYI
+# Config options related to ClaireData.
+# https://github.com/Sidpatchy/ClaireData
+
+# ClaireData's login information
+apiPath: https://api.example.com/
+apiUser: clairedata
+apiPassword: examplePassword
+
+userDefaults:
+  accentColour: "#3498db"
+  language: "eng"
+  pointsGuildID: [global]
+  pointsMessages: [0]
+  pointsVoiceChat: [0]
+
+guildDefaults:
+  requestsChannelID: null
+  moderatorMessagesChannelID: null
+  enforceServerLanguage: false
 
 # ------------------- ZERFAS -------------------
 # https://reddit.com/r/Zerfas

@@ -4,7 +4,6 @@ import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 

@@ -1,73 +1,48 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.Robin.Discord.ParseCommands;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
-import com.sidpatchy.clairebot.File.ParseCommands;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class HelpEmbed {
-    public static EmbedBuilder getHelp(String commandName, String userID) throws FileNotFoundException {
-        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "server", "user", "config");
 
-        List<String> musicCommandsList = null;
-        if (Main.musicBotEnabled()) {
-            musicCommandsList = Arrays.asList("connect", "leave", "pause", "play", "previous", "queue", "repeat", "skip", "stop");
-        }
+    private static final ParseCommands commands = new ParseCommands(Main.getCommandsFile());
+    public static EmbedBuilder getHelp(String commandName, String userID) throws FileNotFoundException {
+        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "request", "server", "user", "config");
 
         // Create HashMaps for help command
         HashMap<String, HashMap<String, String>> allCommands = new HashMap<String, HashMap<String, String>>();
         HashMap<String, HashMap<String, String>> regularCommands = new HashMap<String, HashMap<String, String>>();
-        HashMap<String, HashMap<String, String>> musicCommands = new HashMap<String, HashMap<String, String>>();
 
         for (String s : regularCommandsList) {
-            regularCommands.put(s, ParseCommands.get(s));
-        }
-        if (Main.musicBotEnabled()) {
-            for (String s : musicCommandsList) {
-                musicCommands.put(s, ParseCommands.get(s));
-            }
+            regularCommands.put(s, commands.get(s));
         }
 
         allCommands.putAll(regularCommands);
-        allCommands.putAll(musicCommands);
 
         // Commands list
         if (commandName.equalsIgnoreCase("help")) {
             StringBuilder glob = new StringBuilder("```");
             for (String s : regularCommandsList) {
                 if (glob.toString().equalsIgnoreCase("```")) {
-                    glob.append(ParseCommands.getCommandName(s));
+                    glob.append(commands.getCommandName(s));
                 } else {
                     glob.append(", ")
-                            .append(ParseCommands.getCommandName(s));
+                            .append(commands.getCommandName(s));
                 }
             }
             glob.append("```");
 
-            StringBuilder mus = null;
-            if (Main.musicBotEnabled()) {
-                mus = new StringBuilder("```");
-                for (String s : musicCommandsList) {
-                    if (mus.toString().equalsIgnoreCase("```")) {
-                        mus.append(ParseCommands.getCommandName(s));
-                    } else {
-                        mus.append(", ")
-                                .append(ParseCommands.getCommandName(s));
-                    }
-                }
-                mus.append("```");
-            }
-
             EmbedBuilder embed = new EmbedBuilder()
                     .setColor(Main.getColor(userID))
                     .addField("Commands", glob.toString(), false);
-            if (Main.musicBotEnabled()) {
-                embed.addField("Music", mus.toString(), false);
-            }
+
             return embed;
         }
         // Command details

@@ -1,5 +1,6 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -43,9 +44,9 @@ public class UserPreferencesEmbed {
         Color color = Color.decode(colourCode);
 
         try {
-            com.sidpatchy.clairebot.API.User user = new com.sidpatchy.clairebot.API.User(author.getIdAsString());
+            APIUser user = new APIUser(author.getIdAsString());
             user.getUser();
-            user.updateUser(colourCode, user.getLanguage());
+            user.updateUserColour(colourCode);
 
             return new EmbedBuilder()
                     .setColor(color)
@@ -53,6 +54,7 @@ public class UserPreferencesEmbed {
                     .setDescription("Your accent colour has been changed to " + colourCode);
         }
         catch (Exception e){
+            e.printStackTrace();
             return ErrorEmbed.getError(Main.getErrorCode("updateAccentColour"));
         }
 

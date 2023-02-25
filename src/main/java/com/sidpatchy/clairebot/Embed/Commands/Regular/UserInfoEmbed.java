@@ -7,7 +7,6 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
-import java.awt.*;
 import java.time.Instant;
 
 public class UserInfoEmbed {

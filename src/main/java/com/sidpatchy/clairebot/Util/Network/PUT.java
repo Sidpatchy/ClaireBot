@@ -13,8 +13,6 @@ public class PUT {
         URL url = new URL(link);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        Main.getLogger().info(link);
-
         // Authentication
         String userpass = Main.getApiUser() + ":" + Main.getApiPassword();
         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
@@ -32,7 +30,7 @@ public class PUT {
             os.write( input, 0, input.length );
         }
 
-        Main.getLogger().info(json);
+        Main.getLogger().debug(json);
 
         // Read response
         try(BufferedReader br = new BufferedReader(

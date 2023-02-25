@@ -30,6 +30,7 @@ public class Guild {
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
+                createGuildWithDefaults();
                 createNewWithDefaults = false; // prevent recursion if ClaireData goes down.
                 try {
                     getGuild();
@@ -64,7 +65,7 @@ public class Guild {
         ));
     }
 
-    public void createUserWithDefaults() {
+    public void createGuildWithDefaults() {
         Map<String, Object> defaults = Main.getGuildDefaults();
         Main.getLogger().warn(Main.getUserDefaults());
         try {
@@ -87,6 +88,30 @@ public class Guild {
                 moderatorMessagesChannelID,
                 enforceServerLanguage
         ));
+    }
+
+    public void updateRequestsChannelID(String requestsChannelID) throws IOException {
+        updateGuild(
+                requestsChannelID,
+                getModeratorMessagesChannelID(),
+                isEnforceSeverLanguage()
+        );
+    }
+
+    public void updateModeratorMessagesChannelID(String moderatorMessagesChannelID) throws IOException {
+        updateGuild(
+                getRequestsChannelID(),
+                moderatorMessagesChannelID,
+                isEnforceSeverLanguage()
+        );
+    }
+
+    public void updateEnforceServerLanguage(boolean enforceServerLanguage) throws IOException {
+        updateGuild(
+                getRequestsChannelID(),
+                getModeratorMessagesChannelID(),
+                enforceServerLanguage
+        );
     }
 
     public void deleteGuild() throws IOException {

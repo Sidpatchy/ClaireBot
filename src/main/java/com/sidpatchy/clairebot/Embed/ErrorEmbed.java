@@ -34,4 +34,8 @@ public class ErrorEmbed {
     public static EmbedBuilder getCustomError(String errorCode, String message) {
         return getError(errorCode).setDescription(message);
     }
+
+    public static EmbedBuilder getLackingPermissions(String message) {
+        return getCustomError(Main.getErrorCode(Main.getErrorCode("noPerms")), message);
+    }
 }
