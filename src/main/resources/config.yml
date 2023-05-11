@@ -134,7 +134,7 @@ ClaireBotOnTopResponses:
   - "*Outshining the rest!*"
   - "*ClaireBot supremacy is achieved.*"
   - "*Not a CIA mind control weapon since 2025!*"
-  - "*Hail me! -ClaireBot"
+  - "*Hail me! -ClaireBot*"
   - "*Unstoppable force! 🚀*"
   - "*Forever on top! 🏆*"
   - "*Fear not, ClaireBot's got your back! ✌️*"
@@ -156,12 +156,15 @@ OnTopTriggers:
   - "ClaireBot MVP"
   - "ClaireBot unbeatable"
   - "Hail ClaireBot"
+  - "All Hail ClaireBot"
   - "In ClaireBot we trust"
   - "Long live ClaireBot"
   - "ClaireBot > everything"
   - "ClaireBot is the GOAT"
   - "ClaireBot is GOATed"
   - "ClaireBot for the win"
+  - "Thank you based god"
+  - "Based god"
 
 # -------------------- MISC --------------------
 # This section contains values that don't fit in the main categories
