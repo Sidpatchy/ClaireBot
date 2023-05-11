@@ -27,7 +27,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 
-    implementation 'com.github.Sidpatchy:Robin:1.1.1'
+    implementation 'com.github.Sidpatchy:Robin:2.0.0'
 
     implementation 'org.javacord:javacord:3.6.0'
     implementation 'com.sedmelluq:lavaplayer:1.3.78'

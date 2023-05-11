@@ -1,11 +1,13 @@
 package com.sidpatchy.clairebot;
 
-import com.sidpatchy.Robin.Util.GetYAMLFromURL;
+import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
+import com.sidpatchy.Robin.File.RobinConfiguration;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 /**
  * Class to schedule out tasks that need to occur at regular intervals
@@ -32,13 +34,17 @@ public class Clockwork {
 @SuppressWarnings("unchecked")
 class Helper extends TimerTask {
 
-    GetYAMLFromURL config = new GetYAMLFromURL();
+    RobinConfiguration config = new RobinConfiguration();
 
     @Override
     public void run() {
         try {
-            Clockwork.setPhishingDomains((List<String>) config.getYAMLFromURL("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json").get("domains"));
-        } catch (IOException e) {
+            config.loadFromURL("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
+            Clockwork.setPhishingDomains(config.getList("domains")
+                    .stream()
+                    .map(Object::toString)
+                    .collect(Collectors.toList()));
+        } catch (IOException | InvalidConfigurationException e) {
             Main.getLogger().error("Unable to reach phishing domains database.");
         }
         Main.getLogger().debug("Clockwork ticked");

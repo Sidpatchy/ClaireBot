@@ -8,153 +8,78 @@
 # list of commands (and config) using /reload. (NYI)
 
 # ------------------ COMMANDS ------------------
-commands:
-  8ball:
-    name: "8ball"
-    usage: "/8ball <query>"
-    help: "ClaireBot only speaks in absolute truth. Flesh betrays, ClaireBot will not."
-    overview: ""
+8ball:
+  name: "8ball"
+  usage: "/8ball <query>"
+  help: "ClaireBot only speaks in absolute truth. Flesh betrays, ClaireBot will not."
+  overview: ""
 
-  avatar:
-    name: "avatar"
-    usage: "/avatar <optional: user>"
-    help: "Gets a user's avatar."
-    overview: ""
+avatar:
+  name: "avatar"
+  usage: "/avatar <optional: user>"
+  help: "Gets a user's avatar."
+  overview: ""
 
-  help:
-    name: "help"
-    usage: "/help <optional: command-name>"
-    help: "Learn how to use ClaireBot's commands and various features."
-    overview: ""
+help:
+  name: "help"
+  usage: "/help <optional: command-name>"
+  help: "Learn how to use ClaireBot's commands and various features."
+  overview: ""
 
-  # Integrate "servers"
-  info:
-    name: "info"
-    usage: "/info"
-    help: "Learn more about ClaireBot."
-    overview: ""
+# Integrate "servers"
+info:
+  name: "info"
+  usage: "/info"
+  help: "Learn more about ClaireBot."
+  overview: ""
 
-  leaderboard:
-    name: "leaderboard"
-    usage: "/leaderboard <optional boolean: global>"
-    help: "Reports the server or global leaderboard."
-    overview: ""
+leaderboard:
+  name: "leaderboard"
+  usage: "/leaderboard <optional boolean: global>"
+  help: "Reports the server or global leaderboard."
+  overview: ""
 
-  level:
-    name: "level"
-    usage: "/level <optional: @user>"
-    help: "Reports a user's level."
-    overview: ""
+level:
+  name: "level"
+  usage: "/level <optional: @user>"
+  help: "Reports a user's level."
+  overview: ""
 
-  poll:
-    name: "poll"
-    usage: "/poll <question>, <optional: queries>..."
-    help: "Creates a poll. If no queries are added, it will behave similar to the request function."
-    overview: ""
+poll:
+  name: "poll"
+  usage: "/poll <question>, <optional: queries>..."
+  help: "Creates a poll. If no queries are added, it will behave similar to the request function."
+  overview: ""
 
-  request:
-    name: "request"
-    usage: "/request <question>, <optional: allow-multiple-choices>, <optional: queries>..."
-    help: "Creates a request in the server's designated requests channel.\nIf allow-multiple-choices is set to true, ClaireBot will allow multiple options to be selected. This defaults to false if it isn't specified."
-    overview: "Creates a request."
+request:
+  name: "request"
+  usage: "/request <question>, <optional: allow-multiple-choices>, <optional: queries>..."
+  help: "Creates a request in the server's designated requests channel.\nIf allow-multiple-choices is set to true, ClaireBot will allow multiple options to be selected. This defaults to false if it isn't specified."
+  overview: "Creates a request."
 
-  # TO BE REMOVED and integrated into /info.
-  # servers:
-  #   name: "servers"
-  #   usage: "/servers"
-  #   help: "Reports how many servers ClaireBot is in."
+# TO BE REMOVED and integrated into /info.
+# servers:
+#   name: "servers"
+#   usage: "/servers"
+#   help: "Reports how many servers ClaireBot is in."
 
-  server:
-    name: "server"
-    usage: "/server <optional: guildID>"
-    help: "Reports various bits of info about a server/guild."
-    overview: ""
+server:
+  name: "server"
+  usage: "/server <optional: guildID>"
+  help: "Reports various bits of info about a server/guild."
+  overview: ""
 
-  user:
-    name: "user"
-    usage: "/user <optional: @user>"
-    help: "Reports various bits of info on a user."
-    overview: ""
+user:
+  name: "user"
+  usage: "/user <optional: @user>"
+  help: "Reports various bits of info on a user."
+  overview: ""
 
-  config:
-    name: "config"
-    usage: "/config"
-    help: "Opens up settings menu for modifying user or server settings."
-    overview: ""
-
-# -------------------- MUSIC -------------------
-
-  connect:
-    name: "connect"
-    usage: "/connect"
-    help: "Makes the bot join (or move to) your current channel."
-    overview: ""
-
-  controls:
-    name: "controls"
-    usage: "/controls"
-    help: "Displays control buttons."
-    overview: ""
-
-  leave:
-    name: "leave"
-    usage: "/leave"
-    help: "Clears the queue and leaves the call."
-    overview: ""
-
-  nowplaying:
-    name: "now-playing"
-    usage: "/nowplaying"
-    help: "Displays the currently playing track"
-    overview: ""
-
-  pause:
-    name: "pause"
-    usage: "/pause"
-    help: "Pauses the currently playing audio."
-    overview: ""
-
-  play:
-    name: "play"
-    usage: "/play <search term or URL>"
-    help: "Streams audio from a selected source."
-    overview: ""
-
-  previous:
-    name: "previous"
-    usage: "/previous"
-    help: "Plays the previously played track."
-    overview: ""
-
-  queue:
-    name: "queue"
-    usage: "/queue"
-    help: "Shows the first ten (or specified amount of) tracks in the queue."
-    overview: ""
-
-  repeat:
-    name: "repeat"
-    usage: "/repeat none \n/repeat one \n/repeat all"
-    help: "Repeats the contents of the queue. Valid options: OFF, CURRENT-TRACK, QUEUE"
-    overview: ""
-
-  shuffle:
-    name: "shuffle"
-    usage: "/shuffle"
-    help: "Plays the contents of the queue in a pseudo-random order."
-    overview: ""
-
-  skip:
-    name: "skip"
-    usage: "/skip"
-    help: "Moves to the next track in the queue."
-    overview: ""
-
-  stop:
-    name: "stop"
-    usage: "/stop"
-    help: "Clears the queue and leaves the call."
-    overview: ""
+config:
+  name: "config"
+  usage: "/config"
+  help: "Opens up settings menu for modifying user or server settings."
+  overview: ""
 
 # Do not change this, this is automatically changed if needed
-config-revision: 1.1
+config-revision: 1.2

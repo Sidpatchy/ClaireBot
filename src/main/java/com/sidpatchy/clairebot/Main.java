@@ -1,12 +1,14 @@
 package com.sidpatchy.clairebot;
 
 import com.sidpatchy.Robin.Discord.ParseCommands;
-import com.sidpatchy.Robin.File.ConfigReader;
+import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
 import com.sidpatchy.Robin.File.ResourceLoader;
+import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Listener.*;
 import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
+import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -17,6 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * ClaireBot - Simply the best.
@@ -59,40 +62,44 @@ public class Main {
     private static String botName;
     private static String color;
     private static String errorColor;
-    private static List<String> errorGifs;
-    private static List<String> zerfas;
+    private static List<Object> errorGifs;
+    private static List<Object> zerfas;
     private static String zerfasEmote;
-    private static List<String> eightBall;
-    private static List<String> eightBallRigged;
-    private static List<String> claireBotOnTopResponses;
-    private static List<String> onTopTriggers;
+    private static List<Object> eightBall;
+    private static List<Object> eightBallRigged;
+    private static List<Object> claireBotOnTopResponses;
+    private static List<Object> onTopTriggers;
 
     // Commands
-    private static HashMap<String, String> helpCommand;
-
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     // Related to configuration files
-    private static final ConfigReader config = new ConfigReader();
     private static final String configFile = "config.yml";
     private static final String commandsFile = "commands.yml";
-    private static final ParseCommands commands = new ParseCommands(commandsFile);
+    private static RobinConfiguration config;
+    private static ParseCommands commands;
 
     public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "request", "server", "user", "config");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidConfigurationException {
         logger.info("ClaireBot loading...");
 
-        // Make sure require resources are loaded
+        // Make sure required resources are loaded
         ResourceLoader loader = new ResourceLoader();
         loader.saveResource(configFile, false);
         loader.saveResource(commandsFile, false);
 
+        // Init config handlers
+        config = new RobinConfiguration("config/" + configFile);
+        commands = new ParseCommands("config/" + commandsFile);
+
+        config.load();
+
         // Read data from config file
-        String token = config.getString(configFile, "token");
-        Integer current_shard = config.getInt(configFile, "current_shard");
-        Integer total_shards = config.getInt(configFile, "total_shards");
-        String video_url = config.getString(configFile, "video_url");
+        String token = config.getString("token");
+        Integer current_shard = config.getInt("current_shard");
+        Integer total_shards = config.getInt("total_shards");
+        String video_url = config.getString("video_url");
 
         extractParametersFromConfig(true);
 
@@ -125,6 +132,7 @@ public class Main {
         // Misc. Events
         api.addServerJoinListener(new ServerJoin());
         api.addMessageCreateListener(new AntiPhish());
+        api.addMessageCreateListener(new MessageCreate());
     }
 
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
@@ -160,24 +168,21 @@ public class Main {
         logger.info("Loading configuration files...");
 
         try {
-            botName = config.getString(configFile, "botName");
-            apiPath = config.getString(configFile, "apiPath");
-            apiUser = config.getString(configFile, "apiUser");
-            apiPassword = config.getString(configFile, "apiPassword");
-            userDefaults = ((Map<String, Object>) config.getObj(configFile, "userDefaults"));
-            guildDefaults = ((Map<String, Object>) config.getObj(configFile, "guildDefaults"));
-            color = config.getString(configFile, "color");
-            errorColor = config.getString(configFile, "errorColor");
-            errorGifs = config.getList(configFile, "error_gifs");
-            zerfas = config.getList(configFile, "zerfas");
-            zerfasEmote = "<:" + config.getString(configFile, "zerfas_emote_name") + ":" + config.getLong(configFile, "zerfas_emote_id") + ">";
-            eightBall = config.getList(configFile, "8bResponses");
-            eightBallRigged = config.getList(configFile, "8bRiggedResponses");
-            claireBotOnTopResponses = config.getList(configFile, "ClaireBotOnTopResponses");
-            onTopTriggers = config.getList(configFile, "OnTopTriggers");
-
-            // commands
-            helpCommand = commands.get("help");
+            botName = config.getString("botName");
+            apiPath = config.getString("apiPath");
+            apiUser = config.getString("apiUser");
+            apiPassword = config.getString("apiPassword");
+            userDefaults = ((Map<String, Object>) config.getObj("userDefaults"));
+            guildDefaults = ((Map<String, Object>) config.getObj("guildDefaults"));
+            color = config.getString("color");
+            errorColor = config.getString("errorColor");
+            errorGifs = config.getList("error_gifs");
+            zerfas = config.getList("zerfas");
+            zerfasEmote = "<:" + config.getString( "zerfas_emote_name") + ":" + config.getLong("zerfas_emote_id") + ">";
+            eightBall = config.getList("8bResponses");
+            eightBallRigged = config.getList("8bRiggedResponses");
+            claireBotOnTopResponses = config.getList("ClaireBotOnTopResponses");
+            onTopTriggers = config.getList("OnTopTriggers");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -192,7 +197,7 @@ public class Main {
             logger.info("Slash commands registered successfully!");
         }
         catch (NullPointerException e) {
-            logger.fatal(e.toString());
+            e.printStackTrace();
             logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file, trying to read all commands and printing out results.");
             for (String s : Main.commandList) {
                 logger.fatal(commands.getCommandName(s));
@@ -233,17 +238,39 @@ public class Main {
 
     public static Color getErrorColor() { return Color.decode(errorColor); }
 
-    public static List<String> getErrorGifs() { return errorGifs; }
+    public static List<String> getErrorGifs() {
+        return errorGifs.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
 
-    public static List<String> getEightBall() { return eightBall; }
+    public static List<String> getEightBall() {
+        return eightBall.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
 
-    public static List<String> getEightBallRigged() { return eightBallRigged; }
+    public static List<String> getEightBallRigged() {
+        return eightBallRigged.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
 
-    public static List<String> getOnTopTriggers() { return onTopTriggers; }
+    public static List<String> getOnTopTriggers() {
+        return onTopTriggers.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getClaireBotOnTopResponses() {
+        return claireBotOnTopResponses.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
 
     public static String getConfigFile() { return configFile; }
 
-    public static String getCommandsFile() { return commandsFile; }
+    public static String getCommandsFile() { return "config/" + commandsFile; }
 
     public static Logger getLogger() { return logger; }
 
@@ -254,9 +281,6 @@ public class Main {
     public static DiscordApi getApi() { return api; }
 
     public static List<String> getVoteEmoji() { return Arrays.asList("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "\uD83D\uDC4D", "\uD83D\uDC4E"); }
-
-    // Commands
-    public static HashMap<String, String> getHelpCommand() { return helpCommand; }
 
     public static long getStartMillis() { return startMillis; }
 }

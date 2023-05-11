@@ -61,7 +61,6 @@ public class ServerPreferencesComponents {
             }
             if (count < 25) {
                 options.add(SelectMenuOption.create(channelName, channel.getIdAsString()));
-                Main.getLogger().info("Added option with label: " + channelName);
                 count++;
             }
         }

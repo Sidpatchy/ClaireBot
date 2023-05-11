@@ -1,6 +1,6 @@
 package com.sidpatchy.clairebot.API;
 
-import com.sidpatchy.Robin.Util.GetYAMLFromURL;
+import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
@@ -25,8 +25,8 @@ public class Guild {
      */
     public void getGuild() throws IOException {
         try {
-            GetYAMLFromURL yaml = new GetYAMLFromURL();
-            guild = yaml.getYAMLFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/guild/" + guildID);
+            RobinConfiguration yaml = new RobinConfiguration();
+            yaml.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/guild/" + guildID);
         }
         catch (Exception e) {
             if (createNewWithDefaults) {

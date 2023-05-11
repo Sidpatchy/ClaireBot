@@ -2,14 +2,19 @@ package com.sidpatchy.clairebot.API;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sidpatchy.Robin.Util.GetYAMLFromURL;
+import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
+import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Map;
 
 public class APIUser {
@@ -28,8 +33,9 @@ public class APIUser {
      */
     public void getUser() throws IOException {
         try {
-            GetYAMLFromURL yaml = new GetYAMLFromURL();
-            user = yaml.getYAMLFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user/" + userID);
+            RobinConfiguration yaml = new RobinConfiguration();
+            yaml.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user/" + userID);
+            fixUserPointsGuildID();
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -103,13 +109,21 @@ public class APIUser {
         put.putToURL(Main.getApiPath() + "api/v1/user/" + userID, userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
     }
 
-    public void updateUserColour(String accentColour) throws IOException{
+    public void updateUserColour(String accentColour) throws IOException {
         updateUser(accentColour,
                 getLanguage(),
                 getPointsGuildID(),
                 getPointsMessages(),
                 getPointsVoiceChat()
         );
+    }
+
+    public void updateUserLanguage(String languageString) throws IOException {
+        updateUser(getAccentColour(),
+                languageString,
+                getPointsGuildID(),
+                getPointsMessages(),
+                getPointsVoiceChat());
     }
 
     public void deleteUser() throws IOException {
@@ -133,5 +147,44 @@ public class APIUser {
         userNode.put("pointsVoiceChat", objectMapper.valueToTree(pointsVoiceChat));
 
         return userNode.toString();
+    }
+
+    /**
+     * @return Returns a RobinConfiguration containing ALL users. Intended for use with points leaderboards.
+     * @throws IOException
+     */
+    public InputStreamReader getALLUsers() {
+        URL url;
+        InputStreamReader reader;
+
+        String link = Main.getApiPath() + "api/v1/user/";
+        try {
+            url = new URL(link);
+            URLConnection uc = url.openConnection();
+            String userpass = Main.getApiUser() + ":" + Main.getApiPassword();
+            String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
+            uc.setRequestProperty("Authorization", basicAuth);
+            reader = new InputStreamReader(uc.getInputStream());
+
+            return reader;
+        }
+        catch (IOException e) {
+            Main.getLogger().error(e);
+            Main.getLogger().error("Unable to read from " + link);
+            return null;
+        }
+    }
+
+    private void fixUserPointsGuildID() throws IOException {
+        Map<String, Object> defaults = Main.getUserDefaults();
+        if (getPointsGuildID().get(0).equalsIgnoreCase("global")) {
+            updateUser(
+                    getAccentColour(),
+                    getLanguage(),
+                    (ArrayList<String>) defaults.get("pointsGuildID"),
+                    getPointsMessages(),
+                    getPointsVoiceChat()
+            );
+        }
     }
 }
