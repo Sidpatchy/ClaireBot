@@ -8,6 +8,7 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.ServerPreferencesCompon
 import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponents;
 import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
+import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -105,6 +106,33 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("info"))) {
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(InfoEmbed.getInfo(author))
+                    .respond();
+        }
+        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("leaderboard"))) {
+            boolean getGlobal = slashCommandInteraction.getOptionBooleanValueByName("global").orElse(false);
+
+            if (server == null || getGlobal) {
+                slashCommandInteraction.createImmediateResponder()
+                        .addEmbed(LeaderboardEmbed.getLeaderboard("global", author))
+                        .respond();
+            }
+            else {
+                slashCommandInteraction.createImmediateResponder()
+                        .addEmbed(LeaderboardEmbed.getLeaderboard(server, author))
+                        .respond();
+            }
+        }
+        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("level"))) {
+            String serverID;
+            if (server == null) {
+                serverID = "global";
+            }
+            else {
+                serverID = server.getIdAsString();
+            }
+
+            slashCommandInteraction.createImmediateResponder()
+                    .addEmbed(LevelEmbed.getLevel(serverID, user))
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("poll"))) {

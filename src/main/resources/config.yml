@@ -56,7 +56,7 @@ userDefaults:
   language: "eng"
   pointsGuildID:
     - |
-      {"guildID": "global", "points": 0}
+      {"global": 0}
   pointsMessages: [0]
   pointsVoiceChat: [0]
 

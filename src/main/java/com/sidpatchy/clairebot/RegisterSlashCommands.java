@@ -45,8 +45,8 @@ public class RegisterSlashCommands {
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("help")).setDescription(parseCommands.getCommandHelp("help"))
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "command-name", "Command to get more info on", false, helpCommandOptions)),
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("info")).setDescription(parseCommands.getCommandHelp("info")),
-                //new SlashCommandBuilder().setName(parseCommands.getCommandName("leaderboard")).setDescription(parseCommands.getCommandHelp("leaderboard")).addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "global", "Get the global leaderboard?", false)),
-                //new SlashCommandBuilder().setName(parseCommands.getCommandName("level")).setDescription(parseCommands.getCommandHelp("level")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+                new SlashCommandBuilder().setName(parseCommands.getCommandName("leaderboard")).setDescription(parseCommands.getCommandHelp("leaderboard")).addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "global", "Get the global leaderboard?", false)),
+                new SlashCommandBuilder().setName(parseCommands.getCommandName("level")).setDescription(parseCommands.getCommandHelp("level")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("poll")).setDescription(parseCommands.getCommandHelp("poll"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "question", "Question to ask", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "allow-multiple-choices", "Whether multiple choices should be enabled.", false))

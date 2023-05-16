@@ -14,8 +14,8 @@ jar {
 group 'com.sidpatchy'
 version '3.0'
 
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
     mavenCentral()
@@ -39,7 +39,8 @@ dependencies {
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
 
-    implementation 'org.yaml:snakeyaml:1.33'
+    implementation 'org.yaml:snakeyaml:2.0'
+    implementation 'org.json:json:20230227'
 }
 
 test {

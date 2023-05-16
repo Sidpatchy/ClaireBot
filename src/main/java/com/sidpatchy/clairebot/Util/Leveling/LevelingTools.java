@@ -1,6 +1,10 @@
 package com.sidpatchy.clairebot.Util.Leveling;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sidpatchy.clairebot.API.APIUser;
+import com.sidpatchy.clairebot.Main;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -8,7 +12,7 @@ import java.util.*;
 
 public class LevelingTools {
 
-    public static List<Map.Entry<String, Integer>> rankUsers(String guildID) {
+    public static HashMap<String, Integer> rankUsers(String guildID) {
         APIUser apiUser = new APIUser("");
 
         // Load the YAML data from an InputStream into a Java object
@@ -16,9 +20,8 @@ public class LevelingTools {
         List<Map<String, Object>> users = yaml.load(apiUser.getALLUsers());
 
         // Iterate over each user and calculate their total points
-        Map<String, Integer> userPoints = new HashMap<>();
+        HashMap<String, Integer> userPoints = new HashMap<>();
         for (Map<String, Object> user : users) {
-            int totalPoints = 0;
             Object pointsGuildID = user.get("pointsGuildID");
             List<String> pointsGuildIDList = new ArrayList<>();
             if (pointsGuildID instanceof String) {
@@ -29,44 +32,65 @@ public class LevelingTools {
                 pointsGuildIDList = (List<String>) pointsGuildID;
             }
             // Parse the pointsGuildID list and sum the points for the matching guild ID
-            List<Map<String, Object>> pointsGuildIDMaps = parseJsonArray(pointsGuildIDList);
-            for (Map<String, Object> point : pointsGuildIDMaps) {
-                if (point.get("guildID").equals(guildID)) { // Change the guild ID to match your criteria
-                    totalPoints += (int) point.get("points");
-                }
-            }
-            userPoints.put((String) user.get("userID"), totalPoints);
+            Map<String, Integer> pointsGuildIDMaps = parseJsonArray2(pointsGuildIDList);
+            userPoints.put((String) user.get("userID"), pointsGuildIDMaps.getOrDefault(guildID, 0));
         }
 
-        // Sort the userPoints map by value in descending order
-        List<Map.Entry<String, Integer>> sortedUserPoints = new ArrayList<>(userPoints.entrySet());
-        sortedUserPoints.sort(Collections.reverseOrder(Map.Entry.comparingByValue()));
-
-        return sortedUserPoints;
+        return userPoints;
     }
 
-    public String getUserPoints(String userID, String guildID) {
+
+    public static Integer getUserPoints(String userID, String guildID) {
         APIUser apiUser = new APIUser(userID);
         try {
             apiUser.getUser();
-            apiUser.getPointsGuildID();
-            return null; // can't be bothered to finish this right now
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        Map<String, Integer> guildPoints = parseJsonArray2(apiUser.getPointsGuildID());
+        return guildPoints.get(guildID);
     }
 
-    private static List<Map<String, Object>> parseJsonArray(List<String> jsonArray) {
-        List<Map<String, Object>> result = new ArrayList<>();
+    public static List<String> updateUserPoints(String userID, String guildID, int newPoints) {
+        // Fetch the user's current points
+        Map<String, Integer> currentPointsMap = parseJsonArray2(new APIUser(userID).getPointsGuildID());
+
+        // Update the points
+        int updatedPoints = currentPointsMap.getOrDefault(guildID, 0) + newPoints;
+        currentPointsMap.put(guildID, updatedPoints);
+
+        List<String> pointsByGuild = new ArrayList<String>();
+        for (Map.Entry<String, Integer> entry : currentPointsMap.entrySet()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode pointsNode = objectMapper.createObjectNode();
+            String jsonString = pointsNode.put(entry.getKey(), entry.getValue()).toString();
+            pointsByGuild.add(jsonString);
+        }
+
+        return pointsByGuild;
+    }
+
+    private static Map<String, Integer> parseJsonArray2(List<String> jsonArray) {
+        Map<String, Integer> result = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();  // Create an ObjectMapper instance
+
         for (String json : jsonArray) {
+
+            // this if/else only exists because I messed up in every way possible at one point --CC
             if (json.equals("global")) {
                 // If the JSON string is "global", assume the user has 0 points in all guilds
-                result.add(Map.of("guildID", "global", "points", 0));
+                result.put("global", 0);
             } else {
                 // Otherwise, parse the JSON string and add it to the result list
-                Object yamlObject = new Yaml().load(json);
-                if (yamlObject instanceof Map) {
-                    result.add((Map<String, Object>) yamlObject);
+                try {
+                    // Parse the JSON string into a Map<String, Integer>
+                    Map<String, Integer> map = mapper.readValue(json, new TypeReference<Map<String, Integer>>() {});
+                    // Add all entries from the map to the result
+                    result.putAll(map);
+                } catch (IOException e) {
+                    // Handle the exception
+                    e.printStackTrace();
                 }
             }
         }
@@ -80,25 +104,13 @@ public class LevelingTools {
      * @return progress bar
      */
     public static String getProgressBar(float percentage, int style) {
-        String[] charset = new String[]{};
-
-        switch (style) {
-            case 0:
-                charset = new String[]{"▰", "▱"};
-                break;
-
-            case 1:
-                charset = new String[]{"◼", "▭"};
-                break;
-
-            case 2:
-                charset = new String[]{"⬛", "⬜"};
-                break;
-
-            case 3:
-                charset = new String[]{"▮", "▯"};
-                break;
-        }
+        String[] charset = switch (style) {
+            case 0 -> new String[]{"▰", "▱"};
+            case 1 -> new String[]{"◼", "▭"};
+            case 2 -> new String[]{"⬛", "⬜"};
+            case 3 -> new String[]{"▮", "▯"};
+            default -> new String[]{};
+        };
 
         int percent;
         try {

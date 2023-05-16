@@ -2,9 +2,9 @@ package com.sidpatchy.clairebot.API;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.Main;
+import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
@@ -16,10 +16,11 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class APIUser {
     private final String userID;
-    private Map<String, Object> user;
+    private final RobinConfiguration user = new RobinConfiguration();
 
     public APIUser(String userID) {
         this.userID = userID;
@@ -33,9 +34,7 @@ public class APIUser {
      */
     public void getUser() throws IOException {
         try {
-            RobinConfiguration yaml = new RobinConfiguration();
-            yaml.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user/" + userID);
-            fixUserPointsGuildID();
+            user.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user/" + userID);
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -49,26 +48,39 @@ public class APIUser {
                 }
             }
         }
+
+        //fixUserPointsGuildID();
     }
 
     public String getAccentColour() {
-        return (String) user.get("accentColour");
+        return (String) user.getString("accentColour");
     }
 
     public String getLanguage() {
-        return (String) user.get("language");
+        return (String) user.getString("language");
     }
 
     public ArrayList<String> getPointsGuildID() {
-        return (ArrayList<String>) user.get("pointsGuildID");
+        return (ArrayList<String>) user.getList("pointsGuildID")
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
     }
 
     public ArrayList<Integer> getPointsMessages() {
-        return (ArrayList<Integer>) user.get("pointsMessages");
+        return (ArrayList<Integer>) user.getList("pointsMessages")
+                .stream()
+                .filter(Integer.class::isInstance)
+                .map(Integer.class::cast)
+                .collect(Collectors.toList());
     }
 
     public ArrayList<Integer> getPointsVoiceChat() {
-        return (ArrayList<Integer>) user.get("pointsVoiceChat");
+        return (ArrayList<Integer>) user.getList("pointsVoiceChat")
+                .stream()
+                .filter(Integer.class::isInstance)
+                .map(Integer.class::cast)
+                .collect(Collectors.toList());
     }
 
     public void createUser(String accentColour,
@@ -126,6 +138,18 @@ public class APIUser {
                 getPointsVoiceChat());
     }
 
+    public void updateUserPointsGuildID(String guildID, Integer newPoints) throws IOException {
+        updateUserPointsGuildID((ArrayList<String>) LevelingTools.updateUserPoints(userID, guildID, newPoints));
+    }
+
+    public void updateUserPointsGuildID(ArrayList<String> pointsGuildID) throws IOException {
+        updateUser(getAccentColour(),
+                getLanguage(),
+                pointsGuildID,
+                getPointsMessages(),
+                getPointsVoiceChat());
+    }
+
     public void deleteUser() throws IOException {
         DELETE delete = new DELETE();
         delete.deleteToURL(Main.getApiPath() + "api/v1/user/" + userID);
@@ -178,13 +202,7 @@ public class APIUser {
     private void fixUserPointsGuildID() throws IOException {
         Map<String, Object> defaults = Main.getUserDefaults();
         if (getPointsGuildID().get(0).equalsIgnoreCase("global")) {
-            updateUser(
-                    getAccentColour(),
-                    getLanguage(),
-                    (ArrayList<String>) defaults.get("pointsGuildID"),
-                    getPointsMessages(),
-                    getPointsVoiceChat()
-            );
+            updateUserPointsGuildID((ArrayList<String>) defaults.get("pointsGuildID"));
         }
     }
 }
