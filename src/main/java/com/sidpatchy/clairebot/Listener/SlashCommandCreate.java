@@ -8,7 +8,6 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.ServerPreferencesCompon
 import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponents;
 import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
-import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.EmbedBuilder;

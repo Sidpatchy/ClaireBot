@@ -1,6 +1,5 @@
 package com.sidpatchy.clairebot.MessageComponents.Regular;
 
-import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.ActionRowBuilder;

@@ -8,7 +8,6 @@ import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Listener.*;
 import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
-import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.DiscordApi;
@@ -16,7 +15,6 @@ import org.javacord.api.DiscordApiBuilder;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

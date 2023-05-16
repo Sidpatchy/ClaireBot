@@ -53,11 +53,11 @@ public class APIUser {
     }
 
     public String getAccentColour() {
-        return (String) user.getString("accentColour");
+        return user.getString("accentColour");
     }
 
     public String getLanguage() {
-        return (String) user.getString("language");
+        return user.getString("language");
     }
 
     public ArrayList<String> getPointsGuildID() {
