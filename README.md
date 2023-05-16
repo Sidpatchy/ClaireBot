@@ -3,12 +3,10 @@
 [![License](https://img.shields.io/github/license/Sidpatchy/ClaireBot?style=flat-square)](https://github.com/Sidpatchy/ClaireBot/blob/main/LICENSE)
 ![Last Commit](https://img.shields.io/github/last-commit/Sidpatchy/ClaireBot?style=flat-square)
 
-ClaireBot is a feature-packed Discord bot (being re-)written in Java/Kotlin.
+ClaireBot is a feature-packed Discord bot (being re-)written in Java.
 
 Want to host ClaireBot? That's documented right here: https://github.com/Sidpatchy/ClaireBot/wiki/Hosting-ClaireBot
 
-The audio-streaming functionality will be removed in the near future, I no longer have interest in maintaining it. It has been buggy and thus disabled by default for quite some time anyways...
-
 As of now, ClaireBot 3 alpha releases are being hosted on the main ClaireBot which you can invite using https://invite.clairebot.net/
 
-ClaireBot 2 is still available and will slowly be shutting down as features are ported to ClaireBot 3, you can invite the legacy bot using https://legacy.clairebot.net/
+ClaireBot 2 has been shutdown as most public-facing features have been ported to ClaireBot 3. ClaireBot 2 is closed-source and cannot be hosted by individuals.
