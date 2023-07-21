@@ -113,9 +113,6 @@ public class LevelingTools {
 
 
     private static Map<String, Integer> parseJsonArray2(List<String> jsonArray) {
-
-        Main.getLogger().fatal(jsonArray.toString());
-
         Map<String, Integer> result = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();  // Create an ObjectMapper instance
 
