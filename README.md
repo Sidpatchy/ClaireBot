@@ -9,4 +9,4 @@ Want to host ClaireBot? That's documented right here: https://github.com/Sidpatc
 
 As of now, ClaireBot 3 alpha releases are being hosted on the main ClaireBot which you can invite using https://invite.clairebot.net/
 
-ClaireBot 2 has been shutdown as most public-facing features have been ported to ClaireBot 3. ClaireBot 2 is closed-source and cannot be hosted by individuals.
+ClaireBot 2 has been shutdown as most public-facing features have been ported to ClaireBot 3. ClaireBot 2 is closed-source and cannot be hosted by individuals. This will not change as ClaireBot 2 contained many features that were locked down to specific servers and an ungodly amount of lazy that I'm embarrassed of. It is not worthwhile to remove/fix the issues present for a bot that is utterly foobared.

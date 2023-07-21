@@ -12,7 +12,9 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
@@ -26,7 +28,9 @@ public class MessageCreate implements MessageCreateListener {
         MessageAuthor messageAuthor = message.getAuthor();
         APIUser apiUser = new APIUser(messageAuthor.getIdAsString());
 
-        if (messageAuthor.isBotUser() || messageAuthor.isYourself()) {
+        // it seems as though the Javacord functions for this don't actually work, or I'm using them wrong
+        if (messageAuthor.isBotUser() || messageAuthor.isYourself() || messageAuthor.getIdAsString().equalsIgnoreCase("704244031772950528") || messageAuthor.getIdAsString().equalsIgnoreCase("848024760789237810")) {
+            Main.getLogger().debug("Detected bot user, skipping onMesssage checks!");
             return;
         }
 
@@ -55,8 +59,10 @@ public class MessageCreate implements MessageCreateListener {
             RandomGenerator randomGenerator = RandomGenerator.getDefault();
             Integer pointsToGrant = randomGenerator.nextInt(8);
             try {
-                apiUser.updateUserPointsGuildID(server.getIdAsString(), pointsToGrant);
-                apiUser.updateUserPointsGuildID("global", pointsToGrant);
+                Map<String, Integer> guildPointsToUpdate = new HashMap<>();
+                guildPointsToUpdate.put(server.getIdAsString(), pointsToGrant);
+                guildPointsToUpdate.put("global", pointsToGrant);
+                apiUser.updateUserPointsGuildID(guildPointsToUpdate);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);

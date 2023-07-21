@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sidpatchy.clairebot.API.APIUser;
+import com.sidpatchy.clairebot.Main;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -33,13 +34,20 @@ public class LevelingTools {
                 // Otherwise, cast pointsGuildID to a list of strings
                 pointsGuildIDList = (List<String>) pointsGuildID;
             }
+
             // Parse the pointsGuildID list and sum the points for the matching guild ID
             Map<String, Integer> pointsGuildIDMaps = parseJsonArray2(pointsGuildIDList);
-            userPoints.put((String) user.get("userID"), pointsGuildIDMaps.getOrDefault(guildID, 0));
+            Integer userPointsForGuild = pointsGuildIDMaps.getOrDefault(guildID, 0);
+
+            // Exclude users with zero or null points
+            if (userPointsForGuild != null && userPointsForGuild != 0) {
+                userPoints.put((String) user.get("userID"), userPointsForGuild);
+            }
         }
 
         return userPoints;
     }
+
 
 
     public static Integer getUserPoints(String userID, String guildID) {
@@ -73,7 +81,41 @@ public class LevelingTools {
         return pointsByGuild;
     }
 
+    /**
+     * Update the user points for multiple guilds at the same time.
+     *
+     * @param userID
+     * @param guildPointsToUpdate
+     * @return
+     */
+    public static List<String> updateUserPoints(String userID, Map<String, Integer> guildPointsToUpdate) {
+        // Fetch the user's current points
+        Map<String, Integer> currentPointsMap = parseJsonArray2(new APIUser(userID).getPointsGuildID());
+
+        // Iterate over each guild ID and update the points
+        for (Map.Entry<String, Integer> guildEntry : guildPointsToUpdate.entrySet()) {
+            String guildID = guildEntry.getKey();
+            int newPoints = guildEntry.getValue();
+            int updatedPoints = currentPointsMap.getOrDefault(guildID, 0) + newPoints;
+            currentPointsMap.put(guildID, updatedPoints);
+        }
+
+        List<String> pointsByGuild = new ArrayList<String>();
+        for (Map.Entry<String, Integer> entry : currentPointsMap.entrySet()) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode pointsNode = objectMapper.createObjectNode();
+            String jsonString = pointsNode.put(entry.getKey(), entry.getValue()).toString();
+            pointsByGuild.add(jsonString);
+        }
+
+        return pointsByGuild;
+    }
+
+
     private static Map<String, Integer> parseJsonArray2(List<String> jsonArray) {
+
+        Main.getLogger().fatal(jsonArray.toString());
+
         Map<String, Integer> result = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();  // Create an ObjectMapper instance
 

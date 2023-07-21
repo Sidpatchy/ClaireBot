@@ -52,14 +52,26 @@ public class APIUser {
         //fixUserPointsGuildID();
     }
 
+    /**
+     *
+     * @return the user's selected accent colour
+     */
     public String getAccentColour() {
         return user.getString("accentColour");
     }
 
+    /**
+     *
+     * @return the users preferred language
+     */
     public String getLanguage() {
         return user.getString("language");
     }
 
+    /**
+     *
+     * @return the value of pointsGuildID
+     */
     public ArrayList<String> getPointsGuildID() {
         return (ArrayList<String>) user.getList("pointsGuildID")
                 .stream()
@@ -67,6 +79,10 @@ public class APIUser {
                 .collect(Collectors.toList());
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Integer> getPointsMessages() {
         return (ArrayList<Integer>) user.getList("pointsMessages")
                 .stream()
@@ -142,6 +158,10 @@ public class APIUser {
         updateUserPointsGuildID((ArrayList<String>) LevelingTools.updateUserPoints(userID, guildID, newPoints));
     }
 
+    public void updateUserPointsGuildID(Map<String, Integer> guildPointsToUpdate) throws IOException {
+        updateUserPointsGuildID((ArrayList<String>) LevelingTools.updateUserPoints(userID, guildPointsToUpdate));
+    }
+
     public void updateUserPointsGuildID(ArrayList<String> pointsGuildID) throws IOException {
         updateUser(getAccentColour(),
                 getLanguage(),
@@ -155,6 +175,16 @@ public class APIUser {
         delete.deleteToURL(Main.getApiPath() + "api/v1/user/" + userID);
     }
 
+    /**
+     * Constructs a user JSON.
+     *
+     * @param accentColour hex colour, with "#" - should be safe to exclude, but preferred to have.
+     * @param language ISO 639-3 compatible
+     * @param pointsGuildID
+     * @param pointsMessages DEPRECATED, do not use.
+     * @param pointsVoiceChat DEPRECATED, do not use.
+     * @return
+     */
     public String userConstructor(String accentColour,
                                   String language,
                                   ArrayList<String> pointsGuildID,

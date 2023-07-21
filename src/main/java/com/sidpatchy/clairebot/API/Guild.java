@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Guild {
     private final String guildID;
-    private Map<String, Object> guild;
+    RobinConfiguration guild = new RobinConfiguration();
 
     public Guild(String guildID) {
         this.guildID = guildID;
@@ -25,8 +25,7 @@ public class Guild {
      */
     public void getGuild() throws IOException {
         try {
-            RobinConfiguration yaml = new RobinConfiguration();
-            yaml.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/guild/" + guildID);
+            guild.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/guild/" + guildID);
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -43,15 +42,15 @@ public class Guild {
     }
 
     public String getRequestsChannelID() {
-        return (String) guild.get("requestsChannelID");
+        return guild.getString("requestsChannelID");
     }
 
     public String getModeratorMessagesChannelID() {
-        return (String) guild.get("moderatorMessagesChannelID");
+        return guild.getString("moderatorMessagesChannelID");
     }
 
     public boolean isEnforceSeverLanguage() {
-        return (boolean) guild.get("enforceServerLanguage");
+        return (boolean) guild.getObj("enforceServerLanguage");
     }
 
     public void createGuild(String requestsChannelID,
