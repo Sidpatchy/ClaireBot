@@ -1,5 +1,7 @@
 package com.sidpatchy.clairebot.Listener.Voting;
 
+import com.sidpatchy.clairebot.Main;
+import com.sidpatchy.clairebot.Util.MessageUtils;
 import com.sidpatchy.clairebot.Util.VotingUtils;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Reaction;
@@ -18,6 +20,13 @@ public class ModerateReactions implements ReactionAddListener {
     public void onReactionAdd(ReactionAddEvent event) {
         Message message = event.requestMessage().join();
         assert message != null;
+
+        // Avoid executing past here when the author isn't the bot.
+        if (!MessageUtils.isBotUser(message)) {
+            Main.getLogger().debug("Ignoring reactions, not bot user.");
+            return;
+        }
+
         Embed embed = message.getEmbeds().get(0);
         EmbedFooter footer = embed.getFooter().orElse(null);
         assert footer != null;

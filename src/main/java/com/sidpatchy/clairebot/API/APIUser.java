@@ -207,7 +207,7 @@ public class APIUser {
      * @return Returns a RobinConfiguration containing ALL users. Intended for use with points leaderboards.
      * @throws IOException
      */
-    public InputStreamReader getALLUsers() {
+    public InputStreamReader getALLUsers() throws IOException {
         URL url;
         InputStreamReader reader;
 
@@ -225,7 +225,7 @@ public class APIUser {
         catch (IOException e) {
             Main.getLogger().error(e);
             Main.getLogger().error("Unable to read from " + link);
-            return null;
+            throw new IOException("Unable to access database.");
         }
     }
 

@@ -5,6 +5,7 @@ import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
 import com.sidpatchy.Robin.File.ResourceLoader;
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.API.APIUser;
+import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Listener.*;
 import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
@@ -14,6 +15,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +103,8 @@ public class Main {
 
         extractParametersFromConfig(true);
 
+        verifyDatabaseConnectivity();
+
         api = DiscordLogin(token, current_shard, total_shards);
 
         if (api == null) {
@@ -113,7 +117,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.0.0-alpha.6", video_url);
+        api.updateActivity("ClaireBot v3.0.0", video_url);
 
         // Register slash commands
         registerSlashCommands();
@@ -133,6 +137,7 @@ public class Main {
         api.addMessageCreateListener(new MessageCreate());
     }
 
+    // Connect to Discord and create an API object
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
         if (token == null || token.equals("")) {
             logger.fatal("Token can't be null or empty. Check your config file!");
@@ -161,6 +166,7 @@ public class Main {
         return null;
     }
 
+    // Extract parameters from the config.yml file, update the config if applicable.
     @SuppressWarnings("unchecked")
     public static void extractParametersFromConfig(boolean updateOutdatedConfigs) {
         logger.info("Loading configuration files...");
@@ -189,6 +195,7 @@ public class Main {
 
     }
 
+    // Handle the registry of slash commands and any errors associated.
     public static void registerSlashCommands() {
         try {
             RegisterSlashCommands.RegisterSlashCommand(api);
@@ -205,12 +212,35 @@ public class Main {
         }
         catch (Exception e) {
             e.printStackTrace();
-            logger.fatal(e.toString());
-            logger.fatal("There was an error while registering slash commands.");
+            logger.fatal("There was a fatal error while registering slash commands.");
             System.exit(5);
         }
     }
 
+    // Verify that the database is online and responding to the bot's queries.
+    public static void verifyDatabaseConnectivity() {
+        // test APIUser connectivity
+        try {
+            APIUser api = new APIUser("12345");
+            api.getALLUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("ClaireBot was unable to access the APIUser table. See previous errors for more details.");
+            logger.error("This isn't strictly fatal, but things WILL be very broken.");
+        }
+
+        // test Guild connectivity
+        try {
+            Guild api = new Guild("12345");
+            api.getALLGuilds();
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("ClaireBot was unable to access the Guild table. See previous errors for more details.");
+            logger.error("This isn't strictly fatal, but things WILL be very broken.");
+        }
+    }
+
+    // Getters
     public static String getApiPath() { return apiPath; }
 
     public static String getApiUser() { return apiUser; }

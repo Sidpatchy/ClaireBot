@@ -1,11 +1,13 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,7 +18,16 @@ public class LeaderboardEmbed {
     public static EmbedBuilder getLeaderboard(Server server, User author) {
         String serverID = server.getIdAsString();
 
-        HashMap<String, Integer> unsortedLevelMap = LevelingTools.rankUsers(serverID);
+        HashMap<String, Integer> unsortedLevelMap = null;
+        try {
+            unsortedLevelMap = LevelingTools.rankUsers(serverID);
+        } catch (IOException e) {
+            e.printStackTrace();
+            String errorCode = Main.getErrorCode("loclead");
+
+            Main.getLogger().error("Failed to query database while generating leaderboard. Ref: " + errorCode);
+            return ErrorEmbed.getError(errorCode);
+        }
         Map<String, Integer> namedMap = convertUserIDstoNames(unsortedLevelMap);
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);
         EmbedBuilder embed = initializeLeaderboardEmbed(sortedLevelMap, author);
@@ -27,7 +38,16 @@ public class LeaderboardEmbed {
     }
 
     public static EmbedBuilder getLeaderboard(String serverID, User author) {
-        HashMap<String, Integer> unsortedLevelMap = LevelingTools.rankUsers(serverID);
+        HashMap<String, Integer> unsortedLevelMap;
+        try {
+            unsortedLevelMap = LevelingTools.rankUsers(serverID);
+        } catch (IOException e) {
+            e.printStackTrace();
+            String errorCode = Main.getErrorCode("globlead");
+
+            Main.getLogger().error("Failed to query database while generating leaderboard. Ref: " + errorCode);
+            return ErrorEmbed.getError(errorCode);
+        }
         Map<String, Integer> namedMap = convertUserIDstoNames(unsortedLevelMap);
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);
         EmbedBuilder embed = initializeLeaderboardEmbed(sortedLevelMap, author);

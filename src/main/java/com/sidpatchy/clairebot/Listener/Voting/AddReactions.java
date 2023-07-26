@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.Listener.Voting;
 
 import com.sidpatchy.clairebot.Main;
+import com.sidpatchy.clairebot.Util.MessageUtils;
 import com.sidpatchy.clairebot.Util.VotingUtils;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.message.Message;
@@ -20,11 +21,20 @@ public class AddReactions implements MessageCreateListener {
     public void onMessageCreate(MessageCreateEvent event) {
         List<String> reactions = Main.getVoteEmoji();
         Message message = event.getMessage();
+
+        // Avoid executing past here when the author isn't the bot.
+        if (!MessageUtils.isBotUser(message)) {
+            Main.getLogger().debug("Ignoring reactions, not bot user.");
+            return;
+        }
+
         Embed embed = null;
         try {
             embed = message.getEmbeds().get(0);
         }
-        catch (Exception ignored) {
+        catch (Exception e) {
+            e.printStackTrace();
+            Main.getLogger().error(e.getMessage());
             return;
         }
         if (embed == null) { return; }

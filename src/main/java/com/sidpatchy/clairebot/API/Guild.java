@@ -7,6 +7,10 @@ import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
 import java.util.Map;
 
 public class Guild {
@@ -127,5 +131,31 @@ public class Guild {
                 "\"moderatorMessagesChannelID\":\"" + moderatorMessagesChannelID + "\"," +
                 "\"enforceServerLanguage\":\"" + enforceServerLanguage + "\"" +
                 "}";
+    }
+
+    /**
+     * @return Returns a RobinConfiguration containing ALL users. Intended for use with points leaderboards.
+     * @throws IOException
+     */
+    public InputStreamReader getALLGuilds() throws IOException {
+        URL url;
+        InputStreamReader reader;
+
+        String link = Main.getApiPath() + "api/v1/guild/";
+        try {
+            url = new URL(link);
+            URLConnection uc = url.openConnection();
+            String userpass = Main.getApiUser() + ":" + Main.getApiPassword();
+            String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
+            uc.setRequestProperty("Authorization", basicAuth);
+            reader = new InputStreamReader(uc.getInputStream());
+
+            return reader;
+        }
+        catch (IOException e) {
+            Main.getLogger().error(e);
+            Main.getLogger().error("Unable to read from " + link);
+            throw new IOException("Unable to access database.");
+        }
     }
 }

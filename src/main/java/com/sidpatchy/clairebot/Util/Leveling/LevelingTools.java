@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sidpatchy.clairebot.API.APIUser;
-import com.sidpatchy.clairebot.Main;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.util.Map;
 
 public class LevelingTools {
 
-    public static HashMap<String, Integer> rankUsers(String guildID) {
+    public static HashMap<String, Integer> rankUsers(String guildID) throws IOException {
         APIUser apiUser = new APIUser("");
 
         // Load the YAML data from an InputStream into a Java object
