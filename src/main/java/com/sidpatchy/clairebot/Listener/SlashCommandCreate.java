@@ -9,6 +9,7 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponen
 import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
 import org.apache.logging.log4j.Logger;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
@@ -172,6 +173,22 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                         .respond()
                         .join();
             }
+        }
+        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("quote"))) {
+            TextChannel channel = slashCommandInteraction.getChannel().orElse(null);
+            if (channel == null) {
+                slashCommandInteraction.createImmediateResponder()
+                        .addEmbed(ErrorEmbed.getError("NotInAChannel"))
+                        .respond();
+                return;
+            }
+
+            User finalUser = user;
+            slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
+                QuoteEmbed.getQuote(server, finalUser, channel).thenAccept(embedBuilder -> {
+                    interactionOriginalResponseUpdater.addEmbed(embedBuilder).update();
+                });
+            });
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("request"))) {
             if (server == null) {

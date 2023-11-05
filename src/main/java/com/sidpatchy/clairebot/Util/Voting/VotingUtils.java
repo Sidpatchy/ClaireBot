@@ -1,4 +1,4 @@
-package com.sidpatchy.clairebot.Util;
+package com.sidpatchy.clairebot.Util.Voting;
 
 import org.apache.commons.lang3.StringUtils;
 

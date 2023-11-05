@@ -117,7 +117,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.0.0", video_url);
+        api.updateActivity("ClaireBot v3.1.0", video_url);
 
         // Register slash commands
         registerSlashCommands();

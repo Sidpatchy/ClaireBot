@@ -2,7 +2,7 @@ package com.sidpatchy.clairebot.Listener.Voting;
 
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.MessageUtils;
-import com.sidpatchy.clairebot.Util.VotingUtils;
+import com.sidpatchy.clairebot.Util.Voting.VotingUtils;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.Embed;
@@ -33,8 +33,7 @@ public class AddReactions implements MessageCreateListener {
             embed = message.getEmbeds().get(0);
         }
         catch (Exception e) {
-            e.printStackTrace();
-            Main.getLogger().error(e.getMessage());
+            Main.getLogger().debug(e.getMessage());
             return;
         }
         if (embed == null) { return; }

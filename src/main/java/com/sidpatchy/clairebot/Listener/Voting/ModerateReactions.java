@@ -2,7 +2,7 @@ package com.sidpatchy.clairebot.Listener.Voting;
 
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.MessageUtils;
-import com.sidpatchy.clairebot.Util.VotingUtils;
+import com.sidpatchy.clairebot.Util.Voting.VotingUtils;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Reaction;
 import org.javacord.api.entity.message.embed.Embed;

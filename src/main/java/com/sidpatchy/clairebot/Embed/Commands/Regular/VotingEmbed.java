@@ -1,7 +1,7 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Main;
-import com.sidpatchy.clairebot.Util.VotingUtils;
+import com.sidpatchy.clairebot.Util.Voting.VotingUtils;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;

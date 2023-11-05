@@ -59,6 +59,8 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-7", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-8", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")),
+                new SlashCommandBuilder().setName(parseCommands.getCommandName("quote")).setDescription(parseCommands.getCommandOverview("quote"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "User", "Optionally mention a user", false)),
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("request")).setDescription(parseCommands.getCommandOverview("request"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "question", "Question to ask", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "allow-multiple-choices", "Whether multiple choices should be enabled.", false))

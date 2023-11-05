@@ -51,6 +51,12 @@ poll:
   help: "Creates a poll. If no queries are added, it will behave similar to the request function."
   overview: ""
 
+quote:
+  name: "quote"
+  usage: "/quote <user>"
+  help: "Picks a random message from a user and posts it."
+  overview: ""
+
 request:
   name: "request"
   usage: "/request <question>, <optional: allow-multiple-choices>, <optional: queries>..."
