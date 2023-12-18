@@ -12,6 +12,7 @@ build/
 .idea/
 /shelf/
 /workspace.xml
+.fleet/
 
 # Target jars #
 target
