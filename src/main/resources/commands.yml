@@ -1,5 +1,5 @@
 # ----------------------------------------------
-# |             ClaireBot v3.0.0               |
+# |             ClaireBot v3.1.1               |
 # |           Commands Config file             |
 # ----------------------------------------------
 # Allows for changing how the help command displays commands.
@@ -49,13 +49,13 @@ poll:
   name: "poll"
   usage: "/poll <question>, <optional: queries>..."
   help: "Creates a poll. If no queries are added, it will behave similar to the request function."
-  overview: ""
+  overview: "Creates a poll."
 
 quote:
   name: "quote"
   usage: "/quote <user>"
-  help: "Picks a random message from a user and posts it."
-  overview: ""
+  help: "Picks a random message (out of the last 50,000) from a user and posts it. On PC, you can click the author's name to jump to the quoted message."
+  overview: "Picks a random message from a user and posts it."
 
 request:
   name: "request"
