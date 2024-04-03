@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @since April 2020
- * @version 3.1.1
+ * @version 3.1.2
  * @author Sidpatchy
  */
 public class Main {
@@ -117,7 +117,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.1.1", video_url);
+        api.updateActivity("ClaireBot v3.1.2", video_url);
 
         // Register slash commands
         registerSlashCommands();

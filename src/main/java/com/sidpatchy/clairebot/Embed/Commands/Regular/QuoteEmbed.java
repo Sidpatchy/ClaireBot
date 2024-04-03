@@ -29,6 +29,7 @@ public class QuoteEmbed {
             Message randomMessage = userMessages.get(rand);
 
             return new EmbedBuilder()
+                    .setColor(Main.getColor(user.getIdAsString()))
                     .setAuthor(user.getDisplayName(server), randomMessage.getLink().toString(), user.getAvatar())
                     .setDescription(randomMessage.getContent())
                     .setTimestamp(randomMessage.getCreationTimestamp())

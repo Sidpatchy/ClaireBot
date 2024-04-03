@@ -31,7 +31,7 @@ public class ModalSubmit implements ModalSubmitListener {
         else if (modalID.equalsIgnoreCase("request")) {
             voteType = "REQUEST";
         }
-
+        
         switch (modalID) {
             case "hex-entry-modal":
                 String hexColour = modalInteraction.getTextInputValueByCustomId("hex-entry-field").orElse("");

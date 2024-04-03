@@ -35,14 +35,10 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         Server server = slashCommandInteraction.getServer().orElse(null);
         String commandName = slashCommandInteraction.getCommandName();
         User author = slashCommandInteraction.getUser();
-        User user = slashCommandInteraction.getOptionUserValueByName("user").orElse(null);
-
-        if (user == null) {
-            user = author;
-        }
+        User user = slashCommandInteraction.getArgumentUserValueByName("user").orElse(author);
 
         if (commandName.equalsIgnoreCase(parseCommands.getCommandName("8ball"))) {
-            String query = slashCommandInteraction.getOptionStringValueByIndex(0).orElse(null);
+            String query = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse(null);
 
             if (query == null) {
                 return;
@@ -65,7 +61,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("config"))) {
-            String mode = slashCommandInteraction.getOptionStringValueByName("mode").orElse("user");
+            String mode = slashCommandInteraction.getArgumentStringValueByName("mode").orElse("user");
 
             if (mode.equalsIgnoreCase("user")) {
                 slashCommandInteraction.createImmediateResponder()
@@ -92,7 +88,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             }
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("help"))) {
-            String command = slashCommandInteraction.getOptionStringValueByIndex(0).orElse("help");
+            String command = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse("help");
 
             try {
                 slashCommandInteraction.createImmediateResponder()
@@ -109,7 +105,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("leaderboard"))) {
-            boolean getGlobal = slashCommandInteraction.getOptionBooleanValueByName("global").orElse(false);
+            boolean getGlobal = slashCommandInteraction.getArgumentBooleanValueByName("global").orElse(false);
 
             if (server == null || getGlobal) {
                 slashCommandInteraction.createImmediateResponder()
@@ -136,7 +132,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("poll"))) {
-            if (slashCommandInteraction.getOptionStringValueByName("question").orElse(null) == null) {
+            if (slashCommandInteraction.getArgumentStringValueByName("question").orElse(null) == null) {
                 try {
                     // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
                     CompletableFuture<Void> pollModal = slashCommandInteraction.respondWithModal("poll", "Create Poll",
@@ -154,15 +150,15 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 }
             }
             else {
-                String question = slashCommandInteraction.getOptionStringValueByIndex(0).orElse(null);
-                boolean allowMultipleChoices = slashCommandInteraction.getOptionBooleanValueByIndex(1).orElse(false);
+                String question = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse(null);
+                boolean allowMultipleChoices = slashCommandInteraction.getArgumentBooleanValueByIndex(1).orElse(false);
                 List<String> choices = new ArrayList<>();
 
                 // Populate choices
                 int numChoices = 0;
                 for (int i = 0; i < 10; i++) {
-                    choices.add(slashCommandInteraction.getOptionStringValueByName("choice-" + (i + 1)).orElse(null));
-                    if (slashCommandInteraction.getOptionStringValueByName("choice-" + (i + 1)).orElse(null) == null) {
+                    choices.add(slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null));
+                    if (slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null) == null) {
                         numChoices = i;
                         break;
                     }
@@ -170,8 +166,8 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
                 slashCommandInteraction.createImmediateResponder()
                         .addEmbed(VotingEmbed.getPoll("POLL", question, allowMultipleChoices, choices, server, author, numChoices))
-                        .respond()
-                        .join();
+                        .respond();
+                //      .join; Pretty sure this isn't needed
             }
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("quote"))) {
@@ -183,10 +179,11 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 return;
             }
 
+            // Construct response and update message
             User finalUser = user;
             slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
-                QuoteEmbed.getQuote(server, finalUser, channel).thenAccept(embedBuilder -> {
-                    interactionOriginalResponseUpdater.addEmbed(embedBuilder).update();
+                QuoteEmbed.getQuote(server, finalUser, channel).thenAccept(embed -> {
+                    interactionOriginalResponseUpdater.addEmbed(embed).update();
                 });
             });
         }
@@ -199,7 +196,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 return;
             }
 
-            if (slashCommandInteraction.getOptionStringValueByName("question").orElse(null) == null) {
+            if (slashCommandInteraction.getArgumentStringValueByName("question").orElse(null) == null) {
                 try {
                     // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
                     CompletableFuture<Void> pollModal = slashCommandInteraction.respondWithModal("request", "Create Request",
@@ -217,15 +214,15 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 }
             }
             else {
-                String question = slashCommandInteraction.getOptionStringValueByIndex(0).orElse(null);
-                boolean allowMultipleChoices = slashCommandInteraction.getOptionBooleanValueByIndex(1).orElse(false);
+                String question = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse(null);
+                boolean allowMultipleChoices = slashCommandInteraction.getArgumentBooleanValueByIndex(1).orElse(false);
                 List<String> choices = new ArrayList<>();
 
                 // Populate choices
                 int numChoices = 0;
                 for (int i = 0; i < 10; i++) {
-                    choices.add(slashCommandInteraction.getOptionStringValueByName("choice-" + (i + 1)).orElse(null));
-                    if (slashCommandInteraction.getOptionStringValueByName("choice-" + (i + 1)).orElse(null) == null) {
+                    choices.add(slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null));
+                    if (slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null) == null) {
                         numChoices = i;
                         break;
                     }
@@ -242,7 +239,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         else if (commandName.equalsIgnoreCase("server")) {
             EmbedBuilder embed = null;
 
-            String guildID = slashCommandInteraction.getOptionStringValueByName("guildID").orElse(null);
+            String guildID = slashCommandInteraction.getArgumentStringValueByName("guildID").orElse(null);
 
             if (server == null && guildID == null) {
                 embed = ErrorEmbed.getCustomError(Main.getErrorCode("no-guild-present"), "A guild must be specified. Either run this command in a server or specify a guild ID.");
