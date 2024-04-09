@@ -1,5 +1,5 @@
 # ----------------------------------------------
-# |               ClaireBot v3.0               |
+# |             ClaireBot v3.2.0               |
 # |                Config file                 |
 # ----------------------------------------------
 
@@ -116,6 +116,7 @@ zerfas_emote_id: 822591272295596032
   - "*With ClaireBot, there's no question!*"
   - "*All signs point to ClaireBot being on top!*"
 
+# Things ClaireBot should respond with when triggered by one of the OnTopTriggers
 ClaireBotOnTopResponses:
   - "*You know it!*"
   - "*I am... inevitable. -ClaireBot*"
@@ -165,6 +166,26 @@ OnTopTriggers:
   - "ClaireBot for the win"
   - "Thank you based god"
   - "Based god"
+
+# Triggers for the pls ban feature. Ex. @clairebot pls ban the zucc
+PlsBanTriggers:
+  - "pls ban"
+  - "please ban"
+  - "ban"
+
+# Responses to the PlsBanTriggers
+PlsBanResponses:
+  - "i gotchu fam"
+  - "No problem!"
+  - "Done. Happy to help :)"
+  - "Consider it done."
+  - "It's done. RIP BOZO"
+  - "*L + Ratio -ClaireBot*"
+  - "I'll tell them to kick rocks, I guess ¯\\_(ツ)_/¯"
+  - "Sand has been shipped to their location. Gift note: \"Pound sand\""
+  - "Cry harder."
+  - "K"
+  - "Good riddance"
 
 # -------------------- MISC --------------------
 # This section contains values that don't fit in the main categories

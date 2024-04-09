@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @since April 2020
- * @version 3.1.2
+ * @version 3.2.0
  * @author Sidpatchy
  */
 public class Main {
@@ -69,6 +69,8 @@ public class Main {
     private static List<Object> eightBallRigged;
     private static List<Object> claireBotOnTopResponses;
     private static List<Object> onTopTriggers;
+    private static List<Object> plsBanResponses;
+    private static List<Object> plsBanTriggers;
 
     // Commands
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -117,7 +119,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.1.2", video_url);
+        api.updateActivity("ClaireBot v3.2.0", video_url);
 
         // Register slash commands
         registerSlashCommands();
@@ -187,6 +189,8 @@ public class Main {
             eightBallRigged = config.getList("8bRiggedResponses");
             claireBotOnTopResponses = config.getList("ClaireBotOnTopResponses");
             onTopTriggers = config.getList("OnTopTriggers");
+            plsBanResponses = config.getList("PlsBanResponses");
+            plsBanTriggers = config.getList("PlsBanTriggers");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -292,6 +296,18 @@ public class Main {
 
     public static List<String> getClaireBotOnTopResponses() {
         return claireBotOnTopResponses.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getPlsBanTriggers() {
+        return plsBanTriggers.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> getPlsBanResponses() {
+        return plsBanResponses.stream()
                 .map(Object::toString)
                 .collect(Collectors.toList());
     }

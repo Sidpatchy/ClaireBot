@@ -8,6 +8,7 @@ import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -45,6 +46,27 @@ public class MessageCreate implements MessageCreateListener {
                 // because apparently message.reply() doesn't allow disabling mentions.
                 new MessageBuilder()
                         .setContent(Main.getClaireBotOnTopResponses().get(rand))
+                        .setAllowedMentions(new AllowedMentionsBuilder().build())
+                        .replyTo(message)
+                        .send(message.getChannel());
+
+                break;
+            }
+        }
+
+        // pls ban
+        List<String> plsBanResponses = Main.getPlsBanResponses();
+        String escapedBotId = Pattern.quote("<@" + Main.getApi().getClientId() + ">");
+
+        for (String trigger : Main.getPlsBanTriggers()) {
+            String regex = "(?i)" + escapedBotId + "\\s*" + Pattern.quote(trigger) + ".*";
+            if (messageContent.toUpperCase().matches(regex)) {
+                Random random = new Random();
+                int rand = random.nextInt(plsBanResponses.size());
+
+                // Message.reply() doesn't allow disabling mentions.
+                new MessageBuilder()
+                        .setContent(Main.getPlsBanResponses().get(rand))
                         .setAllowedMentions(new AllowedMentionsBuilder().build())
                         .replyTo(message)
                         .send(message.getChannel());
