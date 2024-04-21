@@ -14,7 +14,7 @@ public class HelpEmbed {
 
     private static final ParseCommands commands = new ParseCommands(Main.getCommandsFile());
     public static EmbedBuilder getHelp(String commandName, String userID) throws FileNotFoundException {
-        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "quote", "request", "server", "user", "config");
+        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "quote", "request", "server", "user", "config", "santa");
 
         // Create HashMaps for help command
         HashMap<String, HashMap<String, String>> allCommands = new HashMap<String, HashMap<String, String>>();

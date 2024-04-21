@@ -66,7 +66,12 @@ guildDefaults:
   enforceServerLanguage: false
 
 # ------------------- ZERFAS -------------------
-# https://reddit.com/r/Zerfas
+# https://en.wikipedia.org/wiki/Zerfas_(band)
+#
+# You will need to create a Zerfas emoji in a server YOU own, and copy the server and emoji ID here.
+# An emoji is provided here: https://github.com/Sidpatchy/ClaireBot/tree/main/img
+#
+# You can realistically modify this to work for anything you want. Just change the triggers under 'zerfas'
 
 # List of things to react to with the Zerfas emote
 zerfas:
@@ -83,8 +88,8 @@ zerfas:
   - "ZERFAS"
   - "GOOD MUSIC"
 
-zerfas_emote_name: Zerfas
-zerfas_emote_id: 822591272295596032
+zerfas_emoji_server_id:
+zerfas_emoji_id:
 
 # -------------------- 8ball -------------------
 # Controls various options pertaining to 8ball
@@ -190,14 +195,14 @@ PlsBanResponses:
 # -------------------- MISC --------------------
 # This section contains values that don't fit in the main categories
 
-# Controls whether the bot should check for updates
+# Controls whether the bot should check for updates.
 checkForUpdates: true
 
 # Whether the bot should attempt to update or fix broken configuration files on startup or reloads.
 UpdateOutdatedConfigs: true
 
-# Do not change this, this is automatically changed when needed
-configRevsion: 4
+# Do not change this, this is automatically changed when needed.
+configRevision: 5
 
 # ---------- ADDED AFTER INITIAL USE -----------
 # Parameters that were added to the config file after it was initially generated

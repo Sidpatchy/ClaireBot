@@ -41,7 +41,8 @@ public class RegisterSlashCommands {
         Set<SlashCommandBuilder> commandsList = new HashSet<>(Arrays.asList(
                 // Regular commands
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("8ball")).setDescription(parseCommands.getCommandHelp("8ball")).addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "The question you wish to ask.", true)),
-                new SlashCommandBuilder().setName(parseCommands.getCommandName("avatar")).setDescription(parseCommands.getCommandHelp("avatar")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
+                new SlashCommandBuilder().setName(parseCommands.getCommandName("avatar")).setDescription(parseCommands.getCommandHelp("avatar")).addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "globalAvatar", "Whether the bot should display the global or server avatar.")),
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("help")).setDescription(parseCommands.getCommandHelp("help"))
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "command-name", "Command to get more info on", false, helpCommandOptions)),
                 new SlashCommandBuilder().setName(parseCommands.getCommandName("info")).setDescription(parseCommands.getCommandHelp("info")),
@@ -79,7 +80,9 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "mode", "Settings to change", false, Arrays.asList(
                                 SlashCommandOptionChoice.create("user", "user"),
                                 SlashCommandOptionChoice.create("server", "server")
-                        )))
+                        ))),
+                new SlashCommandBuilder().setName(parseCommands.getCommandName("santa")).setDescription(parseCommands.getCommandOverview("santa"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.ROLE, "Role", "Role to get users from", true))
                 //new SlashCommandBuilder().setName(parseCommands.getCommandName("debug")).setDescription(parseCommands.getCommandHelp("debug"))
         ));
 

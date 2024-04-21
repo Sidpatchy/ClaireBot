@@ -1,5 +1,5 @@
 # ----------------------------------------------
-# |             ClaireBot v3.1.1               |
+# |             ClaireBot v3.3.0               |
 # |           Commands Config file             |
 # ----------------------------------------------
 # Allows for changing how the help command displays commands.
@@ -16,9 +16,11 @@
 
 avatar:
   name: "avatar"
-  usage: "/avatar <optional: user>"
+  usage: "/avatar <optional: user> <optional: globalAvatar>"
   help: "Gets a user's avatar."
-  overview: ""
+  overview: "globalAvatar determines whether the bot will select the user's server specific avatar, or get their global 
+  avatar. If the user has no server avatar, ClaireBot will fallback to their global avatar. True = global, 
+  False = server. Defaults to True."
 
 help:
   name: "help"
@@ -84,8 +86,17 @@ user:
 config:
   name: "config"
   usage: "/config"
-  help: "Opens up settings menu for modifying user or server settings."
+  help: "Opens up settings menu for modifying user or server settings." # Probably worth writing a brief wiki page for this command
   overview: ""
+
+santa:
+  name: "santa"
+  usage: "/santa <role: role to pull users from>"
+  help: "The all-in-one gift exchange coordinator for secret santa-like events.\n\nWhen run, a dialogue displaying all 
+  pair-ups will be privately messaged to the issuer. The issuer will then be able to view the pair-ups, add 
+  rules/themes, view a sample message, and regenerate the pair-ups before anything is sent to a santa.\n\nYou must have 
+  permission to manage the role you are attempting to use."
+  overview: "Command to send secret santa message to mentioned role's users."
 
 # Do not change this, this is automatically changed if needed
 config-revision: 1.2

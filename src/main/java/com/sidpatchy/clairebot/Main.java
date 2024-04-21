@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @since April 2020
- * @version 3.2.0
+ * @version 3.3.0
  * @author Sidpatchy
  */
 public class Main {
@@ -64,7 +64,8 @@ public class Main {
     private static String errorColor;
     private static List<Object> errorGifs;
     private static List<Object> zerfas;
-    private static String zerfasEmote;
+    private static String zerfasEmojiServerID;
+    private static String zerfasEmojiID;
     private static List<Object> eightBall;
     private static List<Object> eightBallRigged;
     private static List<Object> claireBotOnTopResponses;
@@ -81,7 +82,7 @@ public class Main {
     private static RobinConfiguration config;
     private static ParseCommands commands;
 
-    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "quote", "request", "server", "user", "config");
+    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "quote", "request", "server", "user", "config", "santa");
 
     public static void main(String[] args) throws InvalidConfigurationException {
         logger.info("ClaireBot loading...");
@@ -119,7 +120,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.2.0", video_url);
+        api.updateActivity("ClaireBot v3.3.0", video_url);
 
         // Register slash commands
         registerSlashCommands();
@@ -137,6 +138,7 @@ public class Main {
         api.addServerJoinListener(new ServerJoin());
         api.addMessageCreateListener(new AntiPhish());
         api.addMessageCreateListener(new MessageCreate());
+        api.addButtonClickListener(new ButtonClick());
     }
 
     // Connect to Discord and create an API object
@@ -184,7 +186,8 @@ public class Main {
             errorColor = config.getString("errorColor");
             errorGifs = config.getList("error_gifs");
             zerfas = config.getList("zerfas");
-            zerfasEmote = "<:" + config.getString( "zerfas_emote_name") + ":" + config.getLong("zerfas_emote_id") + ">";
+            zerfasEmojiServerID = String.valueOf(config.getLong("zerfas_emoji_server_id"));
+            zerfasEmojiID = String.valueOf(config.getLong("zerfas_emoji_id"));
             eightBall = config.getList("8bResponses");
             eightBallRigged = config.getList("8bRiggedResponses");
             claireBotOnTopResponses = config.getList("ClaireBotOnTopResponses");
@@ -310,6 +313,20 @@ public class Main {
         return plsBanResponses.stream()
                 .map(Object::toString)
                 .collect(Collectors.toList());
+    }
+
+    public static List<String> getZerfas() {
+        return zerfas.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
+
+    public static String getZerfasEmojiServerID() {
+        return zerfasEmojiServerID;
+    }
+
+    public static String getZerfasEmojiID() {
+        return zerfasEmojiID;
     }
 
     public static String getConfigFile() { return configFile; }

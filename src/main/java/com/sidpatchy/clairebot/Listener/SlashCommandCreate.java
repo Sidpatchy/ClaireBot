@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
@@ -56,8 +57,9 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             });
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("avatar"))) {
+            boolean getGlobalAvatar = slashCommandInteraction.getArgumentBooleanValueByName("globalAvatar").orElse(true);
             slashCommandInteraction.createImmediateResponder()
-                    .addEmbed(AvatarEmbed.getAvatar(user, author))
+                    .addEmbed(AvatarEmbed.getAvatar(server, user, author, getGlobalAvatar))
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("config"))) {
@@ -266,6 +268,30 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(UserInfoEmbed.getUser(user, author, server))
                     .respond();
+        }
+        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("santa"))) {
+            Role role = slashCommandInteraction.getArgumentRoleValueByName("role").orElse(null);
+
+            if (role == null) {
+                slashCommandInteraction.createImmediateResponder().addEmbed(
+                        ErrorEmbed.getError(Main.getErrorCode("RoleMissing"))
+                ).respond();
+                return;
+            }
+
+            if (!author.canManageRole(role)) {
+                slashCommandInteraction.createImmediateResponder()
+                        .addEmbed(ErrorEmbed.getLackingPermissions("Sorry! You don't have the permission to run this " +
+                                "command. You must be able to manage the role " + role.getMentionTag() + "."))
+                        .respond();
+                return;
+            }
+
+            slashCommandInteraction.createImmediateResponder().addEmbed(
+                    SantaEmbed.getConfirmationEmbed(author)
+            ).respond();
+
+            SantaEmbed.getHostMessage(role, author, "", "").send(author);
         }
     }
 }

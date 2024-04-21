@@ -3,12 +3,12 @@ package com.sidpatchy.clairebot.Listener;
 import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
+import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -42,7 +42,7 @@ public class MessageCreate implements MessageCreateListener {
             if (messageContent.toUpperCase().matches(regex)) {
                 Random random = new Random();
                 int rand = random.nextInt(onTopResponses.size());
-
+                
                 // because apparently message.reply() doesn't allow disabling mentions.
                 new MessageBuilder()
                         .setContent(Main.getClaireBotOnTopResponses().get(rand))
@@ -72,6 +72,16 @@ public class MessageCreate implements MessageCreateListener {
                         .send(message.getChannel());
 
                 break;
+            }
+        }
+
+        // Zerfas react
+        for (String trigger : Main.getZerfas()) {
+            String regex = ".*\\b" + Pattern.quote(trigger.toUpperCase()) + "\\b.*"; // match trigger led/followed by anything
+            if (messageContent.toUpperCase().matches(regex)) {
+                Server zerfasEmojiServer = event.getApi().getServerById(Main.getZerfasEmojiServerID()).orElse(null);
+                Emoji zerfasEmoji = zerfasEmojiServer.getCustomEmojiById(Main.getZerfasEmojiID()).orElse(null);
+                message.addReactions(zerfasEmoji);
             }
         }
 
