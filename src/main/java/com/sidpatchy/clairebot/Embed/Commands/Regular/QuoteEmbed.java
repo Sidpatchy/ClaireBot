@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Main;
+import org.javacord.api.entity.Icon;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -12,12 +13,21 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 public class QuoteEmbed {
+
+    /**
+     * Retrieves a random quote from the messages sent by a user in a text channel.
+     *
+     * @param server  the server where the text channel is located
+     * @param user    the user whose messages will be considered for quotes
+     * @param channel the text channel where the messages are located
+     * @return a CompletableFuture that resolves to an EmbedBuilder containing the quote
+     */
     public static CompletableFuture<EmbedBuilder> getQuote(Server server, final User user, TextChannel channel) {
 
         return channel.getMessages(50000).thenApply(messages -> {
-            List<Message> userMessages = messages.stream()
+            List<Message> userMessages = new java.util.ArrayList<>(messages.stream()
                     .filter(message -> message.getAuthor().getId() == user.getId())
-                    .toList();
+                    .toList());
 
             if (userMessages.isEmpty()) {
                 // user not sent messages
@@ -25,15 +35,47 @@ public class QuoteEmbed {
             }
 
             Random random = new Random();
-            int rand = random.nextInt(userMessages.size());
-            Message randomMessage = userMessages.get(rand);
 
-            return new EmbedBuilder()
-                    .setColor(Main.getColor(user.getIdAsString()))
-                    .setAuthor(user.getDisplayName(server), randomMessage.getLink().toString(), user.getAvatar())
-                    .setDescription(randomMessage.getContent())
-                    .setTimestamp(randomMessage.getCreationTimestamp())
-                    .setFooter(randomMessage.getIdAsString());
+            EmbedBuilder embed = new EmbedBuilder()
+                    .setColor(Main.getColor(user.getIdAsString()));
+
+            boolean messageSelected = false;
+            int numberOfAttempts = 0;
+            int maxNumberOfAttempts = Math.min(userMessages.size(), 100);
+
+            // Attempt to select a message 100 times.
+            // todo validate that this won't nuke the bot
+            while (!messageSelected && numberOfAttempts <= maxNumberOfAttempts) {
+                int rand = random.nextInt(userMessages.size());
+                Message randomMessage = userMessages.get(rand);
+
+                if (!randomMessage.getContent().isEmpty()) {
+                    embed.setDescription(randomMessage.getContent());
+                    messageSelected = true;
+                }
+                if (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().getFirst().isImage()) {
+                    embed.setThumbnail(randomMessage.getAttachments().getFirst().asImage().join());
+                    messageSelected = true;
+                }
+
+                // Set embed details if one of the above statements are valid
+                if (!randomMessage.getContent().isEmpty() || (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().getFirst().isImage())) {
+                    embed.setAuthor(user.getDisplayName(server), randomMessage.getLink().toString(), user.getAvatar())
+                            .setTimestamp(randomMessage.getCreationTimestamp())
+                            .setFooter(randomMessage.getIdAsString());
+                }
+
+                userMessages.remove(rand);
+                numberOfAttempts++;
+            }
+
+            // Fallback for if all messages checked were invalid
+            if (!messageSelected) {
+                embed = ErrorEmbed.getCustomError(Main.getErrorCode("invalidMessages"),
+                        "Looks like the messages I selected were invalid. Please try again later.");
+            }
+
+            return embed;
         });
     }
 }
