@@ -79,6 +79,7 @@ public class Main {
     // Related to configuration files
     private static final String configFile = "config.yml";
     private static final String commandsFile = "commands.yml";
+    private static final String translationsPath = "config/translations/";
     private static RobinConfiguration config;
     private static ParseCommands commands;
 
@@ -344,4 +345,8 @@ public class Main {
     public static List<String> getVoteEmoji() { return Arrays.asList("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "\uD83D\uDC4D", "\uD83D\uDC4E"); }
 
     public static long getStartMillis() { return startMillis; }
+
+    public static String getTranslationsPath() {
+        return translationsPath;
+    }
 }
