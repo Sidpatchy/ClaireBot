@@ -53,13 +53,13 @@ public class QuoteEmbed {
                     embed.setDescription(randomMessage.getContent());
                     messageSelected = true;
                 }
-                if (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().getFirst().isImage()) {
-                    embed.setThumbnail(randomMessage.getAttachments().getFirst().asImage().join());
+                if (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().get(0).isImage()) {
+                    embed.setThumbnail(randomMessage.getAttachments().get(0).asImage().join());
                     messageSelected = true;
                 }
 
                 // Set embed details if one of the above statements are valid
-                if (!randomMessage.getContent().isEmpty() || (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().getFirst().isImage())) {
+                if (!randomMessage.getContent().isEmpty() || (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().get(0).isImage())) {
                     embed.setAuthor(user.getDisplayName(server), randomMessage.getLink().toString(), user.getAvatar())
                             .setTimestamp(randomMessage.getCreationTimestamp())
                             .setFooter(randomMessage.getIdAsString());
