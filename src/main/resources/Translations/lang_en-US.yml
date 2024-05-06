@@ -41,3 +41,54 @@ translationNotes: "The officially supported language for ClaireBot."
 # See the below wiki page for a changelog:
 # todo insert wiki page
 version: 1
+
+#                                                    Language Keys
+# -------------------------------------------------------------------------------------------------------------------- #
+
+clairebot:
+  embed:
+    Commands:
+      Regular:
+        AvatarEmbed: "" # Unused
+        EightBallEmbed:
+          8bResponses:
+            - "*Hell yes!*"
+            - "*Fuck no*"
+            - "*Maybe*"
+            - "*Yes*"
+            - "*No*"
+            - "*No way*"
+            - "*It's possible.*"
+            - "*Not a chance.*"
+            - "*I doubt it.*"
+            - "*Absolutely!*"
+            - "*Hard to say.*"
+            - "*Likely!*"
+            - "*Not likely.*"
+          8bRiggedResponses:
+            - "*Hell yeah!*"
+            - "*FUCK YEAH*"
+            - "*You know it!*"
+            - "*Do you really need to ask question you already know answer for? Obviously yes.*"
+            - "*Doesn't even need to be said, everyone knows ClaireBot is on top.*"
+            - "*The answer is clear: YES!*"
+            - "*ClaireBot's dominance is undisputed.*"
+            - "*With ClaireBot, there's no question!*"
+            - "*All signs point to ClaireBot being on top!*"
+          # Note: The rest of the help is located separately within commands_en-US.yml
+          HelpEmbed:
+            Commands: "Commands"
+          InfoEmbed:
+            NeedHelp: "Need Help?"
+            NeedHelpDetails: "You can get help by creating an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or by joining our [support server](https://support.clairebot.net/)"
+            AddToServer: "Add Me to a Server"
+            AddToServerDetails: "Adding me to a server is simple, all you have to do is click [here](https://invite.clairebot.net)"
+            GitHub: "GitHub"
+            GitHubDetails: "ClaireBot is open source, that means you can view all of its code! Check out its [GitHub!](https://github.com/Sidpatchy/ClaireBot)"
+            ServerCount: "Server Count"
+            ServerCountDetails: "I have enlightened **{clairebot.placeholder.numservers}** servers."
+            Version: "Version"
+            VersionDetails: "I am running ClaireBot **v{clairebot.placeholder.version}**, released on **{clairebot.placeholder.releasedate}**"
+            Uptime: "Uptime"
+            UptimeValue: "Started on <t:{clairebot.placeholder.startseconds)>\n*{clairebot.placeholder.runtimedurationwords}*"
+

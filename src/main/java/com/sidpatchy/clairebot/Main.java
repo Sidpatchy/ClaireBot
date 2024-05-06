@@ -1,6 +1,6 @@
 package com.sidpatchy.clairebot;
 
-import com.sidpatchy.Robin.Discord.ParseCommands;
+import com.sidpatchy.Robin.Discord.CommandFactory;
 import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
 import com.sidpatchy.Robin.File.ResourceLoader;
 import com.sidpatchy.Robin.File.RobinConfiguration;
@@ -81,9 +81,7 @@ public class Main {
     private static final String commandsFile = "commands.yml";
     private static final String translationsPath = "config/translations/";
     private static RobinConfiguration config;
-    private static ParseCommands commands;
-
-    public static List<String> commandList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "quote", "request", "server", "user", "config", "santa");
+    private static Commands commands;
 
     public static void main(String[] args) throws InvalidConfigurationException {
         logger.info("ClaireBot loading...");
@@ -95,7 +93,6 @@ public class Main {
 
         // Init config handlers
         config = new RobinConfiguration("config/" + configFile);
-        commands = new ParseCommands("config/" + commandsFile);
 
         config.load();
 
@@ -106,6 +103,7 @@ public class Main {
         String video_url = config.getString("video_url");
 
         extractParametersFromConfig(true);
+        loadCommandDefs();
 
         verifyDatabaseConnectivity();
 
@@ -203,6 +201,17 @@ public class Main {
 
     }
 
+    public static void loadCommandDefs() {
+        try {
+            commands = CommandFactory.loadConfig("config/" + commandsFile, Commands.class);
+            logger.warn(commands.getInfo().getName());
+            logger.warn(commands.getInfo().getHelp());
+        } catch (IOException e) {
+            logger.fatal("There was a fatal error while registering slash commands", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     // Handle the registry of slash commands and any errors associated.
     public static void registerSlashCommands() {
         try {
@@ -210,17 +219,12 @@ public class Main {
             logger.info("Slash commands registered successfully!");
         }
         catch (NullPointerException e) {
-            e.printStackTrace();
-            logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file, trying to read all commands and printing out results.");
-            for (String s : Main.commandList) {
-                logger.fatal(commands.getCommandName(s));
-            }
-            logger.fatal("If the above list looks incomplete or generates another error, check your commands.yml file!");
+            logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file.", e);
+            logger.fatal("Check your commands.yml file!");
             System.exit(4);
         }
         catch (Exception e) {
-            e.printStackTrace();
-            logger.fatal("There was a fatal error while registering slash commands.");
+            logger.fatal("There was a fatal error while registering slash commands.", e);
             System.exit(5);
         }
     }
@@ -333,6 +337,10 @@ public class Main {
     public static String getConfigFile() { return configFile; }
 
     public static String getCommandsFile() { return "config/" + commandsFile; }
+
+    public static Commands getCommands() {
+        return commands;
+    }
 
     public static Logger getLogger() { return logger; }
 
