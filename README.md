@@ -1,5 +1,5 @@
 # ClaireBot
-![Build Status](https://img.shields.io/github/actions/workflow/status/Sidpatchy/ClaireBot/gradle.yml?style=flat-square)
+![Build Status](https://img.shields.io/teamcity/build/s/ClaireBot_Build?server=https%3A%2F%2Fci.sidpatchy.com&style=flat-square)
 [![License](https://img.shields.io/github/license/Sidpatchy/ClaireBot?style=flat-square)](https://github.com/Sidpatchy/ClaireBot/blob/main/LICENSE)
 ![Last Commit](https://img.shields.io/github/last-commit/Sidpatchy/ClaireBot?style=flat-square)
 
