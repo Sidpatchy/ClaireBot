@@ -10,7 +10,7 @@ public class InfoEmbed {
         String timeSinceStart = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - Main.getStartMillis(), true, false);
         return new EmbedBuilder()
                 .setColor(Main.getColor(author.getIdAsString()))
-                .addField("Need Help?", "You can get help by creating an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or by joining our [support server](https://discord.gg/NwQUkZQ)", true)
+                .addField("Need Help?", "You can get help by creating an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or by joining our [support server](https://support.clairebot.net/)", true)
                 .addField("Add Me to a Server", "Adding me to a server is simple, all you have to do is click [here](https://invite.clairebot.net)", true)
                 .addField("GitHub", "ClaireBot is open source, that means you can view all of its code! Check out its [GitHub!](https://github.com/Sidpatchy/ClaireBot)", true)
                 .addField("Server Count", "I have enlightened **" + Main.getApi().getServers().size() + "** servers.", true)
