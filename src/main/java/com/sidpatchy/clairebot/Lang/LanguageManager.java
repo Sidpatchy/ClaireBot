@@ -1,4 +1,4 @@
-package com.sidpatchy.clairebot.Util.Lang;
+package com.sidpatchy.clairebot.Lang;
 
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.API.APIUser;

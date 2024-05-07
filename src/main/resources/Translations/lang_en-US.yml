@@ -45,8 +45,8 @@ version: 1
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
 
-clairebot:
-  embed:
+ClaireLang:
+  Embed:
     Commands:
       Regular:
         AvatarEmbed: "" # Unused
