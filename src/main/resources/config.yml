@@ -51,6 +51,10 @@ apiPath: https://api.example.com/
 apiUser: clairedata
 apiPassword: examplePassword
 
+# Determines whether failing to connect to the ClaireData API is fatal. This is only checked when the bot is started.
+# Recommend leaving enabled unless you are developing ClaireBot & need to bypass this check.
+apiFailureIsFatal: true
+
 userDefaults:
   accentColour: "#3498db"
   language: "eng"

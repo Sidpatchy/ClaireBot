@@ -16,6 +16,7 @@ import org.javacord.api.DiscordApiBuilder;
 
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @since April 2020
- * @version 3.3.0
+ * @version 3.4.0
  * @author Sidpatchy
  */
 public class Main {
@@ -53,6 +54,7 @@ public class Main {
     private static String apiPath;
     private static String apiUser;
     private static String apiPassword;
+    private static boolean apiFailureIsFatal;
 
     // Default values for users and guilds when creating them
     private static Map<String, Object> userDefaults;
@@ -102,24 +104,24 @@ public class Main {
         Integer total_shards = config.getInt("total_shards");
         String video_url = config.getString("video_url");
 
+        // Load data from config.yml
         extractParametersFromConfig(true);
+
+        // Load data from commands.yml files
         loadCommandDefs();
 
         verifyDatabaseConnectivity();
 
         api = DiscordLogin(token, current_shard, total_shards);
 
-        if (api == null) {
-            System.exit(2);
-        }
-        else {
-            logger.info("Successfully connected to Discord on shard " + current_shard + " with a total shard count of " + total_shards);
+        if (api != null) {
+            logger.info("Successfully connected to Discord on shard {} with a total shard count of {}", current_shard, total_shards);
         }
 
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.3.0", video_url);
+        api.updateActivity("ClaireBot v3.4.0", video_url);
 
         // Register slash commands
         registerSlashCommands();
@@ -142,7 +144,7 @@ public class Main {
 
     // Connect to Discord and create an API object
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
-        if (token == null || token.equals("")) {
+        if (token == null || token.isEmpty()) {
             logger.fatal("Token can't be null or empty. Check your config file!");
             System.exit(1);
         }
@@ -162,9 +164,8 @@ public class Main {
                     .login().join();
         }
         catch (Exception e) {
-            e.printStackTrace();
-            logger.fatal(e.toString());
-            logger.fatal("Unable to log in to Discord. Aborting startup!");
+            logger.fatal("Unable to log in to Discord. Aborting startup!", e);
+            System.exit(2);
         }
         return null;
     }
@@ -178,6 +179,7 @@ public class Main {
             botName = config.getString("botName");
             apiPath = config.getString("apiPath");
             apiUser = config.getString("apiUser");
+            apiFailureIsFatal = (boolean) config.getObj("apiFailureIsFatal");
             apiPassword = config.getString("apiPassword");
             userDefaults = ((Map<String, Object>) config.getObj("userDefaults"));
             guildDefaults = ((Map<String, Object>) config.getObj("guildDefaults"));
@@ -195,20 +197,17 @@ public class Main {
             plsBanTriggers = config.getList("PlsBanTriggers");
         }
         catch (Exception e) {
-            e.printStackTrace();
-            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be very broken.");
+            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be very broken.", e);
         }
-
     }
 
     public static void loadCommandDefs() {
+        logger.info("Attempting to load command definitions...");
         try {
             commands = CommandFactory.loadConfig("config/" + commandsFile, Commands.class);
-            logger.warn(commands.getInfo().getName());
-            logger.warn(commands.getInfo().getHelp());
         } catch (IOException e) {
             logger.fatal("There was a fatal error while registering slash commands", e);
-            throw new RuntimeException(e);
+            System.exit(4); // todo this should probably be a different status code. Will need to consult docs to see if there is already one assigned for this.
         }
     }
 
@@ -219,6 +218,9 @@ public class Main {
             logger.info("Slash commands registered successfully!");
         }
         catch (NullPointerException e) {
+            for (Field field : commands.getClass().getDeclaredFields()) {
+                logger.warn(field.getName());
+            }
             logger.fatal("There was an error while registering slash commands. There's a pretty good chance it's related to an uncaught issue with the commands.yml file.", e);
             logger.fatal("Check your commands.yml file!");
             System.exit(4);
@@ -231,14 +233,17 @@ public class Main {
 
     // Verify that the database is online and responding to the bot's queries.
     public static void verifyDatabaseConnectivity() {
+        // Store whether connection was successful
+        boolean userTableSuccessful = true;
+        boolean guildTableSuccessful = true;
+
         // test APIUser connectivity
         try {
             APIUser api = new APIUser("12345");
             api.getALLUsers();
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("ClaireBot was unable to access the APIUser table. See previous errors for more details.");
-            logger.error("This isn't strictly fatal, but things WILL be very broken.");
+            logger.error("ClaireBot was unable to access the APIUser table.", e);
+            userTableSuccessful = false;
         }
 
         // test Guild connectivity
@@ -246,9 +251,19 @@ public class Main {
             Guild api = new Guild("12345");
             api.getALLGuilds();
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("ClaireBot was unable to access the Guild table. See previous errors for more details.");
-            logger.error("This isn't strictly fatal, but things WILL be very broken.");
+            logger.error("ClaireBot was unable to access the Guild table.", e);
+            guildTableSuccessful = false;
+        }
+
+        if (!userTableSuccessful || !guildTableSuccessful) {
+            if (apiFailureIsFatal) {
+                logger.fatal("While failure to connect to the API isn't strictly fatal, ClaireBot is configured to treat it as such.");
+                logger.fatal("see: \"apiFailureIsFatal\" in config.yml for more info.");
+                System.exit(6);
+            }
+            else {
+                logger.error("This isn't strictly fatal, but things WILL be very broken.");
+            }
         }
     }
 

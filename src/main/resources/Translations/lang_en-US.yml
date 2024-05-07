@@ -91,4 +91,26 @@ ClaireLang:
             VersionDetails: "I am running ClaireBot **v{clairebot.placeholder.version}**, released on **{clairebot.placeholder.releasedate}**"
             Uptime: "Uptime"
             UptimeValue: "Started on <t:{clairebot.placeholder.startseconds)>\n*{clairebot.placeholder.runtimedurationwords}*"
-
+          LeaderboardEmbed:
+            LeaderboardForServer: "Leaderboard for"
+            GlobalLeaderboard: "Global Leaderboard"
+          LevelEmbed: "" # Unused
+          QuoteEmbed: "" # Unused
+          SantaEmbed:
+            Confirmation: "Confirmed! I've sent you a direct message. Please continue there."
+            RulesButton: "Add rules"
+            ThemeButton: "Add a theme"
+            SendButton: "Send messages"
+            TestButton: "Send Sample"
+            RandomizeButton: "Re-randomize"
+            SentByAuthor: "Sent by"
+            GiverMessage: "Ho! Ho! Ho! You have recieved **{clairebot.placeholder.userid.displayname.server}** in the {clairebot.placeholder.serverid.name} Secret Santa!"
+          ServerInfoEmbed:
+            ServerID: "Server ID"
+            Owner: "Owner"
+            RoleCount: "Role Count"
+            MemberCount: "Member Count"
+            ChannelCounts: "Channel Counts"
+            Categories: "Categories"
+            TextChannels: "Text Channels"
+            VoiceChannels: "Voice Channels"
