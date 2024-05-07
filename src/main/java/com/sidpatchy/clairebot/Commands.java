@@ -2,6 +2,9 @@ package com.sidpatchy.clairebot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sidpatchy.Robin.Discord.Command;
+import com.sidpatchy.Robin.Discord.CommandBuilder;
+
+import java.util.Objects;
 
 /**
  * Represents ALL commands within ClaireBot. Initialized using the CommandFactory from Robin >= 2.1.0.
@@ -24,55 +27,88 @@ public class Commands {
     private String configRevision;
 
     public Command getAvatar() {
+        validateCommand(avatar);
         return avatar;
     }
 
     public Command getConfig() {
+        validateCommand(config);
         return config;
     }
 
     public Command getEightball() {
+        validateCommand(eightball);
         return eightball;
     }
 
     public Command getHelp() {
+        validateCommand(help);
         return help;
     }
 
     public Command getInfo() {
+        validateCommand(info);
         return info;
     }
 
     public Command getLeaderboard() {
+        validateCommand(leaderboard);
         return leaderboard;
     }
 
     public Command getLevel() {
+        validateCommand(level);
         return level;
     }
 
     public Command getPoll() {
+        validateCommand(poll);
         return poll;
     }
 
     public Command getQuote() {
+        validateCommand(quote);
         return quote;
     }
 
     public Command getRequest() {
+        validateCommand(request);
         return request;
     }
 
     public Command getSanta() {
+        validateCommand(santa);
         return santa;
     }
 
     public Command getServer() {
+        validateCommand(server);
         return server;
     }
 
     public Command getUser() {
+        validateCommand(user);
         return user;
+    }
+
+    public String getConfigRevision() {
+        return configRevision.isEmpty() ? null : configRevision;
+    }
+
+    protected void validateCommand(Command command) {
+        Objects.requireNonNull(command, "Command cannot be null");
+        Objects.requireNonNull(command.getName(), "Command name cannot be null");
+        Objects.requireNonNull(command.getUsage(), "Command usage cannot be null");
+        Objects.requireNonNull(command.getHelp(), "Command help cannot be null");
+
+        if (command.getName().isEmpty() || command.getUsage().isEmpty() || command.getHelp().isEmpty()) {
+            throw new IllegalArgumentException("Command name or usage cannot be empty");
+        }
+
+        // If command overview is null, set it to command help
+        if (command.getOverview() == null || command.getOverview().isEmpty()) {
+            command.setOverview(command.getHelp());
+        }
     }
 
     public void setAvatar(Command avatar) {
@@ -125,5 +161,9 @@ public class Commands {
 
     public void setUser(Command user) {
         this.user = user;
+    }
+
+    public void setConfigRevision(String configRevision) {
+        this.configRevision = configRevision;
     }
 }

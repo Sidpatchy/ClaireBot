@@ -41,7 +41,7 @@ public class VotingEmbed {
             }
         }
 
-        if (choiceBuilder.toString().equalsIgnoreCase("")) {
+        if (choiceBuilder.toString().isEmpty()) {
             allowMultipleChoices = false;
         }
         else {
@@ -57,7 +57,7 @@ public class VotingEmbed {
             embed.setAuthor(author.getDisplayName(server) + " asks:", "https://discord.com/users/" + author.getIdAsString(), author.getAvatar());
         }
 
-        if (description.equalsIgnoreCase("")) {
+        if (description.isEmpty()) {
             embed.setDescription(question);
         }
         else {
