@@ -14,7 +14,7 @@ public class InfoEmbed {
                 .addField("Add Me to a Server", "Adding me to a server is simple, all you have to do is click [here](https://invite.clairebot.net)", true)
                 .addField("GitHub", "ClaireBot is open source, that means you can view all of its code! Check out its [GitHub!](https://github.com/Sidpatchy/ClaireBot)", true)
                 .addField("Server Count", "I have enlightened **" + Main.getApi().getServers().size() + "** servers.", true)
-                .addField("Version", "I am running ClaireBot **v3.3.0**, released on **2024-04-21**", true)
+                .addField("Version", "I am running ClaireBot **v3.3.1**, released on **2024-08-21**", true)
                 .addField("Uptime", "Started on <t:" + Main.getStartMillis() / 1000 + ">" + "\n*" + timeSinceStart + "*", true);
     }
 }
