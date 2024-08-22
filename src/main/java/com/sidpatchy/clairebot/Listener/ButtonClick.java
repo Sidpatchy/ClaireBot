@@ -1,10 +1,15 @@
 package com.sidpatchy.clairebot.Listener;
 
+import com.sidpatchy.clairebot.Embed.Commands.Regular.QuoteEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.SantaEmbed;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.SantaModal;
 import com.sidpatchy.clairebot.Util.SantaUtils;
+import org.javacord.api.entity.channel.Channel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.message.embed.EmbedFooter;
 import org.javacord.api.entity.permission.Role;
@@ -22,15 +27,20 @@ public class ButtonClick implements ButtonClickListener {
         String buttonID = buttonInteraction.getCustomId().toLowerCase();
         User buttonAuthor = buttonInteraction.getUser();
         Message message = buttonInteraction.getMessage();
+        TextChannel channel = message.getChannel();
 
         Embed embed = buttonInteraction.getMessage().getEmbeds().get(0);
         EmbedFooter footer = embed.getFooter().orElse(null);
 
         // Extract data from embed fields
-        SantaUtils.ExtractionResult extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);
-
-        Server server = Main.getApi().getServerById(extractionResult.santaID.get("serverID")).orElse(null);
-        User author = Main.getApi().getUserById(extractionResult.santaID.get("authorID")).join();
+        SantaUtils.ExtractionResult extractionResult = null;
+        Server server = null;
+        User author = null;
+        if (!buttonID.equalsIgnoreCase("view_original")) {
+            extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);
+            server = Main.getApi().getServerById(extractionResult.santaID.get("serverID")).orElse(null);
+            author = Main.getApi().getUserById(extractionResult.santaID.get("authorID")).join();
+        }
 
         switch (buttonID) {
             case "rules":
@@ -62,6 +72,16 @@ public class ButtonClick implements ButtonClickListener {
                 Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
                 buttonInteraction.getMessage().delete();
                 SantaEmbed.getHostMessage(role, buttonAuthor, extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+
+                break;
+
+            // Quote command
+            case "view_original":
+                //buttonInteraction.acknowledge();
+                buttonInteraction.createImmediateResponder()
+                        .addEmbed(QuoteEmbed.viewOriginalMessageBuilder(channel, message))
+                        .setFlags(MessageFlag.EPHEMERAL)
+                        .respond();
 
                 break;
         }

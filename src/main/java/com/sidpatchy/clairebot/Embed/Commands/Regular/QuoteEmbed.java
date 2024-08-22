@@ -4,7 +4,9 @@ import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.Icon;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.message.embed.EmbedFooter;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
@@ -77,5 +79,13 @@ public class QuoteEmbed {
 
             return embed;
         });
+    }
+
+    public static EmbedBuilder viewOriginalMessageBuilder(TextChannel channel, Message message) {
+        EmbedFooter footer = message.getEmbeds().get(0).getFooter().orElse(null);
+        Message quotedMessage = message.getApi().getMessageById(footer.getText().orElse(""), channel).join();
+
+        return new EmbedBuilder()
+                .addField("Click to jump to the original message:", quotedMessage.getLink().toString());
     }
 }

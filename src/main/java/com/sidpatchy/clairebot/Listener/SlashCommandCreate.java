@@ -11,6 +11,8 @@ import com.sidpatchy.clairebot.Util.ChannelUtils;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageFlag;
+import org.javacord.api.entity.message.component.ActionRow;
+import org.javacord.api.entity.message.component.Button;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.server.Server;
@@ -185,7 +187,15 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             User finalUser = user;
             slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
                 QuoteEmbed.getQuote(server, finalUser, channel).thenAccept(embed -> {
-                    interactionOriginalResponseUpdater.addEmbed(embed).update();
+                    // Create an ActionRow with a button
+                    ActionRow actionRow = ActionRow.of(
+                            Button.primary("view_original", "View Original")
+                    );
+
+                    // Update the interaction's original response with the embed and action row
+                    interactionOriginalResponseUpdater.addEmbed(embed)
+                            .addComponents(actionRow)
+                            .update();
                 });
             });
         }
