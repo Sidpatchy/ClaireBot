@@ -168,10 +168,15 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     }
                 }
 
-                slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(VotingEmbed.getPoll("POLL", question, allowMultipleChoices, choices, server, author, numChoices))
-                        .respond();
-                //      .join; Pretty sure this isn't needed
+                int finalNumChoices = numChoices;
+                slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
+                    interactionOriginalResponseUpdater.addEmbed(VotingEmbed.getPoll("POLL", question, allowMultipleChoices, choices, server, author, finalNumChoices))
+                            .update().thenAccept(message -> {
+                                message.addReaction("\uD83D\uDC4D"); // 👍 emoji
+                                message.addReaction("\uD83D\uDC4E"); // 👎 emoji
+                                message.addReaction(":vote:706373563564949566"); // Custom emoji
+                            });
+                });
             }
         }
         else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("quote"))) {
@@ -184,9 +189,8 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             }
 
             // Construct response and update message
-            User finalUser = user;
             slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
-                QuoteEmbed.getQuote(server, finalUser, channel).thenAccept(embed -> {
+                QuoteEmbed.getQuote(server, user, channel).thenAccept(embed -> {
                     // Create an ActionRow with a button
                     ActionRow actionRow = ActionRow.of(
                             Button.primary("view_original", "View Original")
@@ -245,7 +249,11 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                         .setFlags(MessageFlag.EPHEMERAL)
                         .respond();
 
-                ChannelUtils.getRequestsChannel(server).sendMessage(VotingEmbed.getPoll("REQUEST", question, allowMultipleChoices, choices, server, author, numChoices));
+                ChannelUtils.getRequestsChannel(server).sendMessage(VotingEmbed.getPoll("REQUEST", question, allowMultipleChoices, choices, server, author, numChoices)).thenAccept(message -> {
+                    message.addReaction("\uD83D\uDC4D");
+                    message.addReaction("\uD83D\uDC4E");
+                    message.addReaction(":vote:706373563564949566");
+                });
             }
         }
         else if (commandName.equalsIgnoreCase("server")) {
