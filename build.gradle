@@ -4,9 +4,6 @@ plugins {
     id 'java'
 }
 
-// Make compiler not dumb when using Winblows
-compileJava.options.encoding = 'UTF-8'
-
 jar {
     manifest.attributes(
             'Main-Class': 'com.sidpatchy.clairebot.Main',
@@ -15,7 +12,7 @@ jar {
 }
 
 group 'com.sidpatchy'
-version '3.4.0'
+version '3.3.3'
 
 sourceCompatibility = 17
 targetCompatibility = 17
@@ -27,40 +24,26 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.3'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 
-    implementation 'com.github.Sidpatchy:Robin:2.1.3'
+    implementation 'com.github.Sidpatchy:Robin:2.0.0'
 
     implementation 'org.javacord:javacord:3.8.0'
 
-    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
-    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.23.1'
-    implementation 'org.apache.commons:commons-lang3:3.15.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.22.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.22.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.22.1'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.22'
 
-    // How many file processing libraries can we have?!?!
     implementation 'org.yaml:snakeyaml:2.0'
     implementation 'org.json:json:20231013'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
 
 }
 
 test {
     useJUnitPlatform()
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }

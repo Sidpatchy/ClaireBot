@@ -7,7 +7,6 @@ import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Listener.*;
-import com.sidpatchy.clairebot.Listener.Voting.AddReactions;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -130,7 +129,6 @@ public class Main {
         api.addModalSubmitListener(new ModalSubmit());
 
         // Related to Voting Functions
-        api.addMessageCreateListener(new AddReactions());
         api.addReactionAddListener(new ModerateReactions());
 
         // Misc. Events

@@ -1,7 +1,8 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
-
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Main;
+import com.sidpatchy.clairebot.Util.Cache.MessageCacheManager;
+import org.javacord.api.entity.Icon;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -26,11 +27,7 @@ public class QuoteEmbed {
      */
     public static CompletableFuture<EmbedBuilder> getQuote(Server server, final User user, TextChannel channel) {
 
-        return channel.getMessages(50000).thenApply(messages -> {
-            List<Message> userMessages = new java.util.ArrayList<>(messages.stream()
-                    .filter(message -> message.getAuthor().getId() == user.getId())
-                    .toList());
-
+        return MessageCacheManager.queryMessageCache(channel, user).thenApply(userMessages -> {
             if (userMessages.isEmpty()) {
                 // user not sent messages
                 return ErrorEmbed.getError(Main.getErrorCode("UserNotInSet"));
