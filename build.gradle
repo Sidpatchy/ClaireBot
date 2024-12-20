@@ -44,6 +44,10 @@ dependencies {
 
 }
 
+kotlin {
+    jvmToolchain(sourceCompatibility)
+}
+
 test {
     useJUnitPlatform()
 }
