@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @since April 2020
- * @version 3.3.2
+ * @version 3.4.0-SNAPSHOT
  * @author Sidpatchy
  */
 public class Main {
@@ -118,7 +118,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.3.2", video_url);
+        api.updateActivity("ClaireBot v3.4.0-SNAPSHOT", video_url);
 
         // Register slash commands
         registerSlashCommands();
@@ -140,7 +140,7 @@ public class Main {
 
     // Connect to Discord and create an API object
     private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
-        if (token == null || token.equals("")) {
+        if (token == null || token.isEmpty()) {
             logger.fatal("Token can't be null or empty. Check your config file!");
             System.exit(1);
         }
@@ -160,14 +160,13 @@ public class Main {
                     .login().join();
         }
         catch (Exception e) {
-            e.printStackTrace();
-            logger.fatal(e.toString());
-            logger.fatal("Unable to log in to Discord. Aborting startup!");
+            logger.fatal("Unable to log in to Discord. Aborting startup!", e);
         }
         return null;
     }
 
     // Extract parameters from the config.yml file, update the config if applicable.
+    // todo stop using Robin for this. Switch to standard Java classses.
     @SuppressWarnings("unchecked")
     public static void extractParametersFromConfig(boolean updateOutdatedConfigs) {
         logger.info("Loading configuration files...");
