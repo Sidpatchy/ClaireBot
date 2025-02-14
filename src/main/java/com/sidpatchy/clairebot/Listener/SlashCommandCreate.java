@@ -1,8 +1,11 @@
 package com.sidpatchy.clairebot.Listener;
 
 import com.sidpatchy.Robin.Discord.ParseCommands;
+import com.sidpatchy.clairebot.Commands;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.*;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.ServerPreferencesComponents;
 import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponents;
@@ -10,6 +13,7 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.Button;
@@ -24,13 +28,16 @@ import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class SlashCommandCreate implements SlashCommandCreateListener {
 
-    static ParseCommands parseCommands = new ParseCommands(Main.getCommandsFile());
-    Logger logger = Main.getLogger();
+    private final Logger logger = Main.getLogger();
+    private static final Commands commands = Main.getCommands();
+    private LanguageManager languageManager;
 
     @Override
     public void onSlashCommandCreate(SlashCommandCreateEvent event) {
@@ -39,8 +46,14 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         String commandName = slashCommandInteraction.getCommandName();
         User author = slashCommandInteraction.getUser();
         User user = slashCommandInteraction.getArgumentUserValueByName("user").orElse(author);
+        TextChannel textchannel = slashCommandInteraction.getChannel().orElse(null);
 
-        if (commandName.equalsIgnoreCase(parseCommands.getCommandName("8ball"))) {
+        ContextManager context = new ContextManager(server, textchannel, author, user, null, new HashMap<>());
+
+        // Todo replace reference to en-US with config file parameter
+        languageManager = new LanguageManager(Locale.forLanguageTag("en-US"), context);
+
+        if (commandName.equalsIgnoreCase(commands.getEightball().getName())) {
             String query = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse(null);
 
             if (query == null) {
@@ -51,20 +64,20 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
             future.thenAccept(interactionResponse -> {
                 try {
-                    interactionResponse.addEmbed(EightBallEmbed.getEightBall(query, author));
+                    interactionResponse.addEmbed(EightBallEmbed.getEightBall(languageManager, query, author));
                     interactionResponse.update();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("avatar"))) {
+        else if (commandName.equalsIgnoreCase(commands.getAvatar().getName())) {
             boolean getGlobalAvatar = slashCommandInteraction.getArgumentBooleanValueByName("globalAvatar").orElse(true);
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(AvatarEmbed.getAvatar(server, user, author, getGlobalAvatar))
                     .respond();
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("config"))) {
+        else if (commandName.equalsIgnoreCase(commands.getConfig().getName())) {
             String mode = slashCommandInteraction.getArgumentStringValueByName("mode").orElse("user");
 
             if (mode.equalsIgnoreCase("user")) {
@@ -91,7 +104,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 }
             }
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("help"))) {
+        else if (commandName.equalsIgnoreCase(commands.getHelp().getName())) {
             String command = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse("help");
 
             try {
@@ -103,12 +116,12 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 Main.getLogger().error("There was an issue locating the commands file at some point in the chain while the help command was running, good luck!");
             }
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("info"))) {
+        else if (commandName.equalsIgnoreCase(commands.getInfo().getName())) {
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(InfoEmbed.getInfo(author))
                     .respond();
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("leaderboard"))) {
+        else if (commandName.equalsIgnoreCase(commands.getLeaderboard().getName())) {
             boolean getGlobal = slashCommandInteraction.getArgumentBooleanValueByName("global").orElse(false);
 
             if (server == null || getGlobal) {
@@ -122,7 +135,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                         .respond();
             }
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("level"))) {
+        else if (commandName.equalsIgnoreCase(commands.getLevel().getName())) {
             String serverID;
             if (server == null) {
                 serverID = "global";
@@ -135,7 +148,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .addEmbed(LevelEmbed.getLevel(serverID, user))
                     .respond();
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("poll"))) {
+        else if (commandName.equalsIgnoreCase(commands.getPoll().getName())) {
             if (slashCommandInteraction.getArgumentStringValueByName("question").orElse(null) == null) {
                 try {
                     // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
@@ -179,7 +192,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 });
             }
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("quote"))) {
+        else if (commandName.equalsIgnoreCase(commands.getQuote().getName())) {
             TextChannel channel = slashCommandInteraction.getChannel().orElse(null);
             if (channel == null) {
                 slashCommandInteraction.createImmediateResponder()
@@ -203,7 +216,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 });
             });
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("request"))) {
+        else if (commandName.equalsIgnoreCase(commands.getRequest().getName())) {
             if (server == null) {
                 slashCommandInteraction.createImmediateResponder()
                         .addEmbed(ErrorEmbed.getCustomError(Main.getErrorCode("notaserver"),
@@ -256,7 +269,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 });
             }
         }
-        else if (commandName.equalsIgnoreCase("server")) {
+        else if (commandName.equalsIgnoreCase(commands.getServer().getName())) {
             EmbedBuilder embed = null;
 
             String guildID = slashCommandInteraction.getArgumentStringValueByName("guildID").orElse(null);
@@ -282,12 +295,12 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .addEmbed(embed)
                     .respond();
         }
-        else if (commandName.equalsIgnoreCase("user")) {
+        else if (commandName.equalsIgnoreCase(commands.getInfo().getName())) {
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(UserInfoEmbed.getUser(user, author, server))
                     .respond();
         }
-        else if (commandName.equalsIgnoreCase(parseCommands.getCommandName("santa"))) {
+        else if (commandName.equalsIgnoreCase(commands.getSanta().getName())) {
             Role role = slashCommandInteraction.getArgumentRoleValueByName("role").orElse(null);
 
             if (role == null) {

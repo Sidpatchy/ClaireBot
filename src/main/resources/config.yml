@@ -95,86 +95,8 @@ zerfas:
 zerfas_emoji_server_id:
 zerfas_emoji_id:
 
-# -------------------- 8ball -------------------
-# Controls various options pertaining to 8ball
-
-# List of responses to 8ball
-8bResponses:
-  - "*Hell yes!*"
-  - "*Fuck no*"
-  - "*Maybe*"
-  - "*Yes*"
-  - "*No*"
-  - "*No way*"
-  - "*It's possible.*"
-  - "*Not a chance.*"
-  - "*I doubt it.*"
-  - "*Absolutely!*"
-  - "*Hard to say.*"
-  - "*Likely!*"
-  - "*Not likely.*"
-
-8bRiggedResponses:
-  - "*Hell yeah!*"
-  - "*FUCK YEAH*"
-  - "*You know it!*"
-  - "*Do you really need to ask question you already know answer for? Obviously yes.*"
-  - "*Doesn't even need to be said, everyone knows ClaireBot is on top.*"
-  - "*The answer is clear: YES!*"
-  - "*ClaireBot's dominance is undisputed.*"
-  - "*With ClaireBot, there's no question!*"
-  - "*All signs point to ClaireBot being on top!*"
-
-# Things ClaireBot should respond with when triggered by one of the OnTopTriggers
-ClaireBotOnTopResponses:
-  - "*You know it!*"
-  - "*I am... inevitable. -ClaireBot*"
-  - "*Approved.*"
-  - "*Factual.*"
-  - "*Better than Mee6*"
-  - "*No stop!*"
-  - "*Can't be beat!*"
-  - "*Based*"
-  - "*pot no toBerialC*"
-  - "*Better than Groovy*"
-  - "*Always one step ahead.*"
-  - "*An unstoppable force.*"
-  - "*ClaireBot to the rescue!*"
-  - "*Top-tier!*"
-  - "*Outshining the rest!*"
-  - "*ClaireBot supremacy is achieved.*"
-  - "*Not a CIA mind control weapon since 2025!*"
-  - "*Hail me! -ClaireBot*"
-  - "*Unstoppable force! 🚀*"
-  - "*Forever on top! 🏆*"
-  - "*Fear not, ClaireBot's got your back! ✌️*"
-  - "*With great power, comes great ClaireBot! 💪*"
-  - "*Trust in ClaireBot, trust in victory! 🏅*"
-  - "*The best there is, the best there was, the best there ever will be!*"
-  - "*Bringing the best, always! 🌟*"
-  - "*Excellence. 💯*"
-
-# Defines what triggers a response from the ClaireBotOnTopResponses
-OnTopTriggers:
-  - "ClaireBot on top"
-  - "ClaireBot based"
-  - "ClaireBot pogchamp"
-  - "ClaireBot is always right"
-  - "pot no toBerialC"
-  - "Thank God for ClaireBot"
-  - "ClaireBot rules"
-  - "ClaireBot MVP"
-  - "ClaireBot unbeatable"
-  - "Hail ClaireBot"
-  - "All Hail ClaireBot"
-  - "In ClaireBot we trust"
-  - "Long live ClaireBot"
-  - "ClaireBot > everything"
-  - "ClaireBot is the GOAT"
-  - "ClaireBot is GOATed"
-  - "ClaireBot for the win"
-  - "Thank you based god"
-  - "Based god"
+# -------------------- MISC --------------------
+# This section contains values that don't fit in the main categories
 
 # Triggers for the pls ban feature. Ex. @clairebot pls ban the zucc
 PlsBanTriggers:
@@ -195,9 +117,6 @@ PlsBanResponses:
   - "Cry harder."
   - "K"
   - "Good riddance"
-
-# -------------------- MISC --------------------
-# This section contains values that don't fit in the main categories
 
 # Controls whether the bot should check for updates.
 checkForUpdates: true

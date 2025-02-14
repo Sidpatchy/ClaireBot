@@ -44,31 +44,31 @@ public class RegisterSlashCommands {
                 // Regular commands
                 new SlashCommandBuilder()
                         .setName(commands.getEightball().getName())
-                        .setDescription(commands.getEightball().getHelp())
+                        .setDescription(commands.getEightball().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "query", "The question you wish to ask.", true)),
                 new SlashCommandBuilder()
                         .setName(commands.getAvatar().getName())
-                        .setDescription(commands.getAvatar().getHelp())
+                        .setDescription(commands.getAvatar().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "globalAvatar", "Whether the bot should display the global or server avatar.")),
                 new SlashCommandBuilder()
                         .setName(commands.getHelp().getName())
-                        .setDescription(commands.getHelp().getHelp())
+                        .setDescription(commands.getHelp().getOverview())
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "command-name", "Command to get more info on", false, helpCommandOptions)),
                 new SlashCommandBuilder()
                         .setName(commands.getInfo().getName())
-                        .setDescription(commands.getInfo().getHelp()),
+                        .setDescription(commands.getInfo().getOverview()),
                 new SlashCommandBuilder()
                         .setName(commands.getLeaderboard().getName())
-                        .setDescription(commands.getLeaderboard().getHelp())
+                        .setDescription(commands.getLeaderboard().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "global", "Get the global leaderboard?", false)),
                 new SlashCommandBuilder()
                         .setName(commands.getLevel().getName())
-                        .setDescription(commands.getLevel().getHelp())
+                        .setDescription(commands.getLevel().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
                 new SlashCommandBuilder()
                         .setName(commands.getPoll().getName())
-                        .setDescription(commands.getPoll().getHelp())
+                        .setDescription(commands.getPoll().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "question", "Question to ask", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "allow-multiple-choices", "Whether multiple choices should be enabled.", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-1", "Custom choice"))
@@ -82,11 +82,11 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")),
                 new SlashCommandBuilder()
                         .setName(commands.getQuote().getName())
-                        .setDescription(commands.getQuote().getHelp())
+                        .setDescription(commands.getQuote().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "User", "Optionally mention a user", false)),
                 new SlashCommandBuilder()
                         .setName(commands.getRequest().getName())
-                        .setDescription(commands.getRequest().getHelp())
+                        .setDescription(commands.getRequest().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "question", "Question to ask", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "allow-multiple-choices", "Whether multiple choices should be enabled.", false))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-1", "Custom choice"))
@@ -100,22 +100,22 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")),
                 new SlashCommandBuilder()
                         .setName(commands.getServer().getName())
-                        .setDescription(commands.getServer().getHelp())
+                        .setDescription(commands.getServer().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "guildID", "Optionally specify a guild by ID.", false)),
                 new SlashCommandBuilder()
-                        .setName(commands.getServer().getName())
-                        .setDescription(commands.getServer().getHelp())
+                        .setName(commands.getUser().getName())
+                        .setDescription(commands.getUser().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.USER, "user", "Optionally mention a user.", false)),
                 new SlashCommandBuilder()
                         .setName(commands.getConfig().getName())
-                        .setDescription(commands.getConfig().getHelp())
+                        .setDescription(commands.getConfig().getOverview())
                         .addOption(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING, "mode", "Settings to change", false, Arrays.asList(
                                 SlashCommandOptionChoice.create("user", "user"),
                                 SlashCommandOptionChoice.create("server", "server")
                         ))),
                 new SlashCommandBuilder()
                         .setName(commands.getSanta().getName())
-                        .setDescription(commands.getSanta().getHelp())
+                        .setDescription(commands.getSanta().getOverview())
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.ROLE, "Role", "Role to get users from", true))
                 //new SlashCommandBuilder().setName(parseCommands.getCommandName("debug")).setDescription(parseCommands.getCommandHelp("debug"))
         ));

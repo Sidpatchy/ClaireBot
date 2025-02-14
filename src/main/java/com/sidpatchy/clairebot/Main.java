@@ -89,6 +89,7 @@ public class Main {
         ResourceLoader loader = new ResourceLoader();
         loader.saveResource(configFile, false);
         loader.saveResource(commandsFile, false);
+        loader.saveResource("translations/lang_en-US.yml", true); // TODO make this false, handle non en-US files.
 
         // Init config handlers
         config = new RobinConfiguration("config/" + configFile);

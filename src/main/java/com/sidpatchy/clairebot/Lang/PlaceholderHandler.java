@@ -3,10 +3,7 @@ package com.sidpatchy.clairebot.Lang;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.ServerChannel;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,36 +23,30 @@ public class PlaceholderHandler {
     }
 
     private Map<String, PlaceholderProvider> initializePlaceholders() {
-        Map<String, PlaceholderProvider> map = new HashMap<>();
 
-        // Server placeholders
-        map.put("cb.server.name", () ->
-                context.getServer() != null ? context.getServer().getName() : "");
-        map.put("cb.server.id", () ->
-                context.getServer() != null ? context.getServer().getIdAsString() : "");
+        return Map.of(
+                // Server placeholders
+                "cb.server.name", () ->
+                        context.getServer() != null ? context.getServer().getName() : "", "cb.server.id", () ->
+                        context.getServer() != null ? context.getServer().getIdAsString() : "",
 
-        // User placeholders
-        map.put("cb.user.name", () ->
-                context.getUser() != null ? context.getUser().getName() : "");
-        map.put("cb.user.id", () ->
-                context.getUser() != null ? context.getUser().getIdAsString() : "");
+                // User placeholders
+                "cb.user.name", () ->
+                        context.getUser() != null ? context.getUser().getName() : "", "cb.user.id", () ->
+                        context.getUser() != null ? context.getUser().getIdAsString() : "",
 
-        // Author placeholders
-        map.put("cb.author.name", () ->
-                context.getAuthor() != null ? context.getAuthor().getName() : "");
-        map.put("cb.author.id", () ->
-                context.getAuthor() != null ? context.getAuthor().getIdAsString() : "");
+                // Author placeholders
+                "cb.author.name", () ->
+                        context.getAuthor() != null ? context.getAuthor().getName() : "", "cb.author.id", () ->
+                        context.getAuthor() != null ? context.getAuthor().getIdAsString() : "",
 
-        // Channel placeholders
-        map.put("cb.channel.name", () ->
-                Optional.ofNullable(context.getChannel())
-                        .flatMap(Channel::asServerChannel)
-                        .map(ServerChannel::getName)
-                        .orElse("NOT FOUND"));
-        map.put("cb.channel.id", () ->
-                context.getChannel() != null ? context.getChannel().getIdAsString() : "");
-
-        return Collections.unmodifiableMap(map);
+                // Channel placeholders
+                "cb.channel.name", () ->
+                        Optional.ofNullable(context.getChannel())
+                                .flatMap(Channel::asServerChannel)
+                                .map(ServerChannel::getName)
+                                .orElse("NOT FOUND"), "cb.channel.id", () ->
+                        context.getChannel() != null ? context.getChannel().getIdAsString() : "");
     }
 
     /**
@@ -81,6 +72,12 @@ public class PlaceholderHandler {
         matcher.appendTail(result);
 
         return result.toString();
+    }
+
+    public List<String> process(List<String> input) {
+        return input.stream()
+                .map(this::process)
+                .toList();
     }
 
     /**

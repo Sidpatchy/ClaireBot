@@ -11,10 +11,10 @@
 avatar:
   name: "avatar"
   usage: "/avatar <optional: user> <optional: globalAvatar>"
-  help: "Gets a user's avatar."
-  overview: "globalAvatar determines whether the bot will select the user's server specific avatar, or get their global 
+  help: "globalAvatar determines whether the bot will select the user's server specific avatar, or get their global 
   avatar. If the user has no server avatar, ClaireBot will fallback to their global avatar. True = global, 
   False = server. Defaults to True."
+  overview: "Gets a user's avatar."
 
 config:
   name: "config"

@@ -1,5 +1,6 @@
 package com.sidpatchy.clairebot.Lang;
 
+import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.API.Guild;
@@ -10,6 +11,7 @@ import org.javacord.api.entity.user.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 public class LanguageManager {
@@ -20,23 +22,27 @@ public class LanguageManager {
     private final Locale fallbackLocale;
     private final Server server;
     private final User user;
+    private final ContextManager context;
+    private final PlaceholderHandler placeholderHandler;
 
     /**
      * The LanguageManager class is responsible for loading and managing language files based on user preferences.
      * It provides methods to retrieve localized strings and get the language file based on the user's preferred language.
      * <p>
-     * If the language manager is NOT being used in the context of a Server, but instead is being used in direct
-     * messages or similar, server must be set to null. There is another constructor signature that handles this,
-     * but it is best to avoid whenever possible.
+     * If the language manager is being used in the context of a Server, a server MUST be specified in order to conform
+     * to the ClaireLang and ClaireConfig specifications. It is safe to pass a null value for the server via
+     * ContextManager as ClaireLang will automatically interpret this as there being no server.
      */
     public LanguageManager(String pathToLanguageFiles,
-                           Locale fallbackLocaleString,
-                           Server server,
-                           User user) {
-        this.pathToLanguageFiles = pathToLanguageFiles;
-        this.fallbackLocale = fallbackLocaleString;
-        this.server = server;
-        this.user = user;
+                           Locale fallbackLocale,
+                           ContextManager context) {
+        this.pathToLanguageFiles = Main.getTranslationsPath();
+        this.context = context;
+        this.fallbackLocale = fallbackLocale;
+
+        this.server = context.getServer();
+        this.user = context.getUser();
+        this.placeholderHandler = new PlaceholderHandler(context);
     }
 
     /**
@@ -44,57 +50,21 @@ public class LanguageManager {
      * It provides methods to retrieve localized strings and get the language file based on the user's preferred language.
      * <p>
      * If the language manager is being used in the context of a Server, a server MUST be specified in order to conform
-     * to the ClaireLang and ClaireConfig specifications. There is another constructor signature that handles this. It
-     * is safe to pass a null value for the server as ClaireLang will automatically interpret this as there being no
-     * server.
-     */
-    public LanguageManager(String pathToLanguageFiles,
-                           Locale fallbackLocaleString,
-                           User user) {
-        this.pathToLanguageFiles = pathToLanguageFiles;
-        this.fallbackLocale = fallbackLocaleString;
-        this.server = null;
-        this.user = user;
-    }
-
-    /**
-     * The LanguageManager class is responsible for loading and managing language files based on user preferences.
-     * It provides methods to retrieve localized strings and get the language file based on the user's preferred language.
+     * to the ClaireLang and ClaireConfig specifications. It is safe to pass a null value for the server via
+     * ContextManager as ClaireLang will automatically interpret this as there being no server.
      * <p>
-     * If the language manager is NOT being used in the context of a Server, but instead is being used in direct
-     * messages or similar, server must be set to null. There is another constructor signature that handles this,
-     * but it is best to avoid whenever possible.
-     * <p>
-     * This signature should only be used by ClaireBot. If you are developing a plugin, you must specify a different
-     * locale path. The standard path can be obtained through the plugin API.
+     * <b>This signature should only be used by ClaireBot. If you are developing a plugin, you must specify a different
+     * locale path unless you are referencing ClaireBot's builtin language strings. The standard path can be obtained
+     * through the plugin API.</b>
      */
-    public LanguageManager(Locale fallbackLocaleString,
-                           Server server,
-                           User user) {
+    public LanguageManager(Locale fallbackLocale, ContextManager context) {
         this.pathToLanguageFiles = Main.getTranslationsPath();
-        this.fallbackLocale = fallbackLocaleString;
-        this.server = server;
-        this.user = user;
-    }
+        this.context = context;
+        this.fallbackLocale = fallbackLocale;
 
-    /**
-     * The LanguageManager class is responsible for loading and managing language files based on user preferences.
-     * It provides methods to retrieve localized strings and get the language file based on the user's preferred language.
-     * <p>
-     * If the language manager is being used in the context of a Server, a server MUST be specified in order to conform
-     * to the ClaireLang and ClaireConfig specifications. There is another constructor signature that handles this. It
-     * is safe to pass a null value for the server as ClaireLang will automatically interpret this as there being no
-     * server.
-     * <p>
-     * This signature should only be used by ClaireBot. If you are developing a plugin, you must specify a different
-     * locale path. The standard path can be obtained through the plugin API.
-     */
-    public LanguageManager(Locale fallbackLocaleString,
-                           User user) {
-        this.pathToLanguageFiles = Main.getTranslationsPath();
-        this.fallbackLocale = fallbackLocaleString;
-        this.server = null;
-        this.user = user;
+        this.server = context.getServer();
+        this.user = context.getUser();
+        this.placeholderHandler = new PlaceholderHandler(context);
     }
 
     /**
@@ -104,30 +74,62 @@ public class LanguageManager {
      * @return the localized string if found, otherwise returns the key itself
      * @throws IOException if an I/O error occurs while retrieving the localized string
      */
-    // todo consider handling the exception in this method, or in a different method signature.
-    public String getLocalizedString(String key) throws IOException {
-        APIUser apiUser = new APIUser(user.getIdAsString());
-        apiUser.getUser();
-        Locale locale = Locale.forLanguageTag(apiUser.getLanguage());
-
-        // todo, pending ClaireData update: allow server admins to specify a custom language string.
-        // todo ref https://trello.com/c/vkQTCTMG
-        if (server != null) {
-            Guild guild = new Guild(server.getIdAsString());
-            guild.getGuild();
-
-            if (guild.isEnforceSeverLanguage()) {
-                // todo this should not be determined here, but will be until the ClaireData implementation is completed.
-                // todo this should instead be determined when the Guild object is created in the database.
-                // todo ClaireData update on hold while still designing the major ClaireBot update that follows this one.
-                locale = server.getPreferredLocale();
-            }
-        }
-
-        RobinConfiguration languageFile = getLangFileByLocale(locale);
+    public String getLocalizedString(String key) {
+        RobinConfiguration languageFile = parseUserAndServerOptions(server, user);
         String localizedString = languageFile.getString(key);
         logger.debug(localizedString);
-        return localizedString != null ? localizedString : key;
+        String rawLanguageString = localizedString != null ? localizedString : key;
+
+        return placeholderHandler.process(rawLanguageString);
+    }
+
+    /**
+     * Retrieves the localized string corresponding to the given key.
+     *
+     * @param key the key for the desired localized string
+     * @return the localized string if found, otherwise returns the key itself
+     * @throws IOException if an I/O error occurs while retrieving the localized string
+     */
+    public List<String> getLocalizedList(String key) {
+        RobinConfiguration languageFile = parseUserAndServerOptions(server, user);
+        List<Object> localizedList = languageFile.getList(key);
+        logger.debug(localizedList);
+        List<String> rawLanguageString = localizedList != null ? localizedList.stream()
+                .map(Object::toString)
+                .toList()
+                : List.of(key);
+
+        logger.warn(rawLanguageString);
+
+        return placeholderHandler.process(rawLanguageString);
+    }
+
+    private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
+        Locale locale = null;
+        try {
+            APIUser apiUser = new APIUser(user.getIdAsString());
+            apiUser.getUser();
+            locale = Locale.forLanguageTag(apiUser.getLanguage());
+
+            // todo, pending ClaireData update: allow server admins to specify a custom language string.
+            // todo ref https://trello.com/c/vkQTCTMG
+            if (server != null) {
+                Guild guild = new Guild(server.getIdAsString());
+                guild.getGuild();
+
+                if (guild.isEnforceSeverLanguage()) {
+                    // todo this should not be determined here, but will be until the ClaireData implementation is completed.
+                    // todo this should instead be determined when the Guild object is created in the database.
+                    // todo ClaireData update on hold while still designing the major ClaireBot update that follows this one.
+                    locale = server.getPreferredLocale();
+                }
+            }
+        } catch (IOException e) {
+            logger.error("ClaireData failed to return a response for Locale information. Are we cooked?");
+            locale = fallbackLocale;
+        }
+
+        return getLangFileByLocale(locale);
     }
 
     /**
@@ -138,12 +140,37 @@ public class LanguageManager {
      * @return Returns a localized language file or the fallback file if a suitable translation doesn't exist.
      */
     public RobinConfiguration getLangFileByLocale(Locale locale) {
-        File file = new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml");
-        if (file.exists()) {
-            return new RobinConfiguration(pathToLanguageFiles + "lang_" + locale.toLanguageTag() + ".yml");
+        File targetFile = new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml");
+        File fallbackFile = new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml");
+
+        // Try primary file
+        RobinConfiguration config = tryLoadConfig(targetFile);
+        if (config != null) {
+            return config;
         }
-        else {
-            return new RobinConfiguration(pathToLanguageFiles + "lang_" + fallbackLocale.toLanguageTag() + ".yml");
+
+        // Try fallback file
+        config = tryLoadConfig(fallbackFile);
+        if (config != null) {
+            logger.warn("Using fallback language file for locale: {}", locale);
+            return config;
+        }
+
+        // Ultimate fallback - empty config
+        logger.error("All language files failed to load! Using empty configuration.");
+        return new RobinConfiguration();
+    }
+
+    private RobinConfiguration tryLoadConfig(File file) {
+        try {
+            RobinConfiguration config = new RobinConfiguration(file.getAbsolutePath());
+            config.load();
+            return config;
+        } catch (InvalidConfigurationException e) {
+            logger.error("Failed to load language file {}: {}", file, e.getMessage());
+            return null;
         }
     }
+
+
 }
