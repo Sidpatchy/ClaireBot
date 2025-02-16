@@ -92,14 +92,9 @@ public class LanguageManager {
      */
     public List<String> getLocalizedList(String key) {
         RobinConfiguration languageFile = parseUserAndServerOptions(server, user);
-        List<Object> localizedList = languageFile.getList(key);
+        List<String> localizedList = languageFile.getList(key, String.class);
         logger.debug(localizedList);
-        List<String> rawLanguageString = localizedList != null ? localizedList.stream()
-                .map(Object::toString)
-                .toList()
-                : List.of(key);
-
-        logger.warn(rawLanguageString);
+        List<String> rawLanguageString = localizedList != null ? localizedList : List.of(key);
 
         return placeholderHandler.process(rawLanguageString);
     }
@@ -171,6 +166,4 @@ public class LanguageManager {
             return null;
         }
     }
-
-
 }

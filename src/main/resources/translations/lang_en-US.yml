@@ -46,6 +46,23 @@ version: 1
 # -------------------------------------------------------------------------------------------------------------------- #
 
 ClaireLang:
+  PlsBan:
+    PlsBanTriggers:
+      - "pls ban"
+      - "please ban"
+      - "ban"
+    PlsBanResponses:
+      - "i gotchu fam"
+      - "No problem!"
+      - "Done. Happy to help :)"
+      - "Consider it done."
+      - "It's done. RIP BOZO"
+      - "*L + Ratio -ClaireBot*"
+      - "I'll tell them to kick rocks, I guess ¯\\_(ツ)_/¯"
+      - "Sand has been shipped to their location. Gift note: \"Pound sand\""
+      - "Cry harder."
+      - "K"
+      - "Good riddance"
   Embed:
     Commands:
       Regular:
@@ -77,7 +94,7 @@ ClaireLang:
             - "*With ClaireBot, there's no question!*"
             - "*All signs point to ClaireBot being on top!*"
           OnTopTriggers:
-            # Defines what triggers a response from the ClaireBotOnTopResponses
+            # Defines what triggers a response from the ClaireBotOnTopResponses or 8bRiggedResponses
             - "ClaireBot on top"
             - "ClaireBot based"
             - "ClaireBot pogchamp"

@@ -15,6 +15,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,7 @@ public class APIUser {
     public void getUser() throws IOException {
         try {
             user.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user/" + userID);
+            Main.getLogger().info(user.getRobinSection().getSectionData().toString());
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -73,10 +75,8 @@ public class APIUser {
      * @return the value of pointsGuildID
      */
     public ArrayList<String> getPointsGuildID() {
-        return (ArrayList<String>) user.getList("pointsGuildID")
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        List<String> list = user.getList("pointsGuildID", String.class);
+        return new ArrayList<>(list);
     }
 
     /**
@@ -84,19 +84,13 @@ public class APIUser {
      * @return
      */
     public ArrayList<Integer> getPointsMessages() {
-        return (ArrayList<Integer>) user.getList("pointsMessages")
-                .stream()
-                .filter(Integer.class::isInstance)
-                .map(Integer.class::cast)
-                .collect(Collectors.toList());
+        List<Integer> list = user.getList("pointsMessages", Integer.class);
+        return new ArrayList<>(list);
     }
 
     public ArrayList<Integer> getPointsVoiceChat() {
-        return (ArrayList<Integer>) user.getList("pointsVoiceChat")
-                .stream()
-                .filter(Integer.class::isInstance)
-                .map(Integer.class::cast)
-                .collect(Collectors.toList());
+        List<Integer> list = user.getList("pointsVoiceChat", Integer.class);
+        return new ArrayList<>(list);
     }
 
     public void createUser(String accentColour,

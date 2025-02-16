@@ -61,16 +61,16 @@ public class Main {
     private static String botName;
     private static String color;
     private static String errorColor;
-    private static List<Object> errorGifs;
-    private static List<Object> zerfas;
+    private static List<String> errorGifs;
+    private static List<String> zerfas;
     private static String zerfasEmojiServerID;
     private static String zerfasEmojiID;
-    private static List<Object> eightBall;
-    private static List<Object> eightBallRigged;
-    private static List<Object> claireBotOnTopResponses;
-    private static List<Object> onTopTriggers;
-    private static List<Object> plsBanResponses;
-    private static List<Object> plsBanTriggers;
+    private static List<String> eightBall;
+    private static List<String> eightBallRigged;
+    private static List<String> claireBotOnTopResponses;
+    private static List<String> onTopTriggers;
+    private static List<String> plsBanResponses;
+    private static List<String> plsBanTriggers;
 
     // Commands
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -181,16 +181,16 @@ public class Main {
             guildDefaults = ((Map<String, Object>) config.getObj("guildDefaults"));
             color = config.getString("color");
             errorColor = config.getString("errorColor");
-            errorGifs = config.getList("error_gifs");
-            zerfas = config.getList("zerfas");
+            errorGifs = config.getList("error_gifs", String.class);
+            zerfas = config.getList("zerfas", String.class);
             zerfasEmojiServerID = String.valueOf(config.getLong("zerfas_emoji_server_id"));
             zerfasEmojiID = String.valueOf(config.getLong("zerfas_emoji_id"));
-            eightBall = config.getList("8bResponses");
-            eightBallRigged = config.getList("8bRiggedResponses");
-            claireBotOnTopResponses = config.getList("ClaireBotOnTopResponses");
-            onTopTriggers = config.getList("OnTopTriggers");
-            plsBanResponses = config.getList("PlsBanResponses");
-            plsBanTriggers = config.getList("PlsBanTriggers");
+            eightBall = config.getList("8bResponses", String.class);
+            eightBallRigged = config.getList("8bRiggedResponses", String.class);
+            claireBotOnTopResponses = config.getList("ClaireBotOnTopResponses", String.class);
+            onTopTriggers = config.getList("OnTopTriggers", String.class);
+            plsBanResponses = config.getList("PlsBanResponses", String.class);
+            plsBanTriggers = config.getList("PlsBanTriggers", String.class);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -277,51 +277,35 @@ public class Main {
     public static Color getErrorColor() { return Color.decode(errorColor); }
 
     public static List<String> getErrorGifs() {
-        return errorGifs.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return errorGifs;
     }
 
     public static List<String> getEightBall() {
-        return eightBall.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return eightBall;
     }
 
     public static List<String> getEightBallRigged() {
-        return eightBallRigged.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return eightBallRigged;
     }
 
     public static List<String> getOnTopTriggers() {
-        return onTopTriggers.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return onTopTriggers;
     }
 
     public static List<String> getClaireBotOnTopResponses() {
-        return claireBotOnTopResponses.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return claireBotOnTopResponses;
     }
 
     public static List<String> getPlsBanTriggers() {
-        return plsBanTriggers.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return plsBanTriggers;
     }
 
     public static List<String> getPlsBanResponses() {
-        return plsBanResponses.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return plsBanResponses;
     }
 
     public static List<String> getZerfas() {
-        return zerfas.stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());
+        return zerfas;
     }
 
     public static String getZerfasEmojiServerID() {
