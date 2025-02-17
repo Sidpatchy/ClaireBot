@@ -41,3 +41,115 @@ translationNotes: ""
 # See the below wiki page for a changelog:
 # todo insert wiki page
 version: 1
+
+#                                                    Language Keys
+# -------------------------------------------------------------------------------------------------------------------- #
+
+ClaireLang:
+  PlsBan:
+    PlsBanTriggers:
+      - ""
+    PlsBanResponses:
+      - ""
+  Embed:
+    Commands:
+      Regular:
+        AvatarEmbed: "" # Unused
+        EightBallEmbed:
+          8ball: ""
+          8bResponses:
+            - ""
+          8bRiggedResponses:
+            - ""
+          OnTopTriggers:
+            # Defines what triggers a response from the ClaireBotOnTopResponses or 8bRiggedResponses
+            - ""
+          # Things ClaireBot should respond with when triggered by one of the OnTopTriggers
+          ClaireBotOnTopResponses:
+            - ""
+          # Note: The rest of the help is located separately within commands_en-US.yml
+          HelpEmbed:
+            Commands: ""
+          InfoEmbed:
+            NeedHelp: ""
+            NeedHelpDetails: ""
+            AddToServer: ""
+            AddToServerDetails: ""
+            GitHub: ""
+            GitHubDetails: ""
+            ServerCount: ""
+            ServerCountDetails: ""
+            Version: ""
+            VersionDetails: ""
+            Uptime: ""
+            UptimeValue: ""
+          LeaderboardEmbed:
+            LeaderboardForServer: ""
+            GlobalLeaderboard: ""
+          LevelEmbed: "" # Unused
+          QuoteEmbed: "" # Unused
+          SantaEmbed:
+            Confirmation: ""
+            RulesButton: ""
+            ThemeButton: ""
+            SendButton: ""
+            TestButton: ""
+            RandomizeButton: ""
+            SentByAuthor: ""
+            GiverMessage: ""
+          ServerInfoEmbed:
+            ServerID: ""
+            Owner: ""
+            RoleCount: ""
+            MemberCount: ""
+            ChannelCounts: ""
+            Categories: ""
+            TextChannels: ""
+            VoiceChannels: ""
+          ServerPreferencesEmbed:
+            MainMenuTitle: ""
+            NotAServer: ""
+            RequestsChannelMenuName: ""
+            RequestsChannelDescription: ""
+            ModeratorChannelMenuName: ""
+            ModeratorChannelDescription: ""
+            EnforceServerLanguageMenuName: ""
+            AcknowledgeRequestsChannelChangeTitle: "!"
+            AcknowledgeRequestsChannelChangeDescription: ""
+            AcknowledgeModeratorChannelChangeTitle: ""
+            AcknowledgeModeratorChannelChangeDescription: ""
+            AcknowledgeEnforceServerLanguageUpdateTitle: ""
+            AcknowledgeEnforceServerLanguageUpdateEnforced: ""
+            AcknowledgeEnforceServerLanguageUpdateNotEnforced: ""
+          UserInfoEmbed:
+            Error_1: ""
+            Error_2: ""
+            User: ""
+            DiscordID: ""
+            JoinDate: ""
+            CreationDate: ""
+          UserPreferencesEmbed:
+            MainMenuText: ""
+            AccentColourMenu: ""
+            AccentColourList: ""
+            AccentColourChanged: ""
+            AccentColourChangedDesc: ""
+            LanguageMenuTitle: ""
+            LanguageMenuDesc: ""
+          VotingEmbed:
+            PollRequest: ""
+            PollAsk: ""
+            Choices: ""
+            PollID: ""
+            UserResponseTitle: ""
+            UserResponseDescription: ""
+        ErrorEmbed:
+          Error: ""
+          GenericDescription: ""
+        WelcomeEmbed:
+          Title: ""
+          Motto: ""
+          UsageTitle: ""
+          UsageDesc: ""
+          SupportTitle: ""
+          SupportDesc: ""
