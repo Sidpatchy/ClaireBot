@@ -36,7 +36,6 @@ public class APIUser {
     public void getUser() throws IOException {
         try {
             user.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user/" + userID);
-            Main.getLogger().info(user.getRobinSection().getSectionData().toString());
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -74,64 +73,67 @@ public class APIUser {
      *
      * @return the value of pointsGuildID
      */
-    public ArrayList<String> getPointsGuildID() {
-        List<String> list = user.getList("pointsGuildID", String.class);
-        return new ArrayList<>(list);
+    public List<String> getPointsGuildID() {
+        return user.getList("pointsGuildID", String.class);
     }
 
     /**
      *
      * @return
      */
-    public ArrayList<Integer> getPointsMessages() {
-        List<Integer> list = user.getList("pointsMessages", Integer.class);
-        return new ArrayList<>(list);
+    public List<Integer> getPointsMessages() {
+        return user.getList("pointsMessages", Integer.class);
     }
 
-    public ArrayList<Integer> getPointsVoiceChat() {
-        List<Integer> list = user.getList("pointsVoiceChat", Integer.class);
-        return new ArrayList<>(list);
+    public List<Integer> getPointsVoiceChat() {
+        return user.getList("pointsVoiceChat", Integer.class);
     }
 
     public void createUser(String accentColour,
                            String language,
-                           ArrayList<String> pointsGuildID,
-                           ArrayList<Integer> pointsMessages,
-                           ArrayList<Integer> pointsVoiceChat) throws IOException {
+                           List<String> pointsGuildID,
+                           List<Integer> pointsMessages,
+                           List<Integer> pointsVoiceChat) throws IOException {
         POST post = new POST();
         post.postToURL(Main.getApiPath() + "api/v1/user/", userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
     }
 
     public void createUserWithDefaults() {
-        Map<String, Object> defaults = Main.getUserDefaults();
+        RobinConfiguration.RobinSection defaults = new RobinConfiguration.RobinSection(Main.getUserDefaults());
 
         try {
             createUser(
-                    (String) defaults.get("accentColour"),
-                    (String) defaults.get("language"),
-                    (ArrayList<String>) defaults.get("pointsGuildID"),
-                    (ArrayList<Integer>) defaults.get("pointsMessages"),
-                    (ArrayList<Integer>) defaults.get("pointsVoiceChat")
+                    defaults.getString("accentColour"),
+                    defaults.getString("language"),
+                    defaults.getList("pointsGuildID", String.class),
+                    defaults.getList("pointsMessages", Integer.class),
+                    defaults.getList("pointsVoiceChat", Integer.class)
             );
         }
-        // top 10 bad ideas #1
-        catch (Exception ignored) {
-            ignored.printStackTrace();
-            Main.getLogger().error("Unable to create user with defaults.");
+        catch (Exception e) {
+            Main.getLogger().error("Unable to create user with defaults.", e);
         }
         createNewWithDefaults = false; // prevent recursion if ClaireData goes down.
     }
 
     public void updateUser(String accentColour,
                            String language,
-                           ArrayList<String> pointsGuildID,
-                           ArrayList<Integer> pointsMessages,
-                           ArrayList<Integer> pointsVoiceChat) throws IOException {
+                           List<String> pointsGuildID,
+                           List<Integer> pointsMessages,
+                           List<Integer> pointsVoiceChat) throws IOException {
+        // Add null check and fallback for language
+        if (language == null) {
+            new Exception("Language null origin trace").printStackTrace();
+        }
+
         PUT put = new PUT();
-        put.putToURL(Main.getApiPath() + "api/v1/user/" + userID, userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
+        put.putToURL(Main.getApiPath() + "api/v1/user/" + userID,
+                userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
     }
 
     public void updateUserColour(String accentColour) throws IOException {
+        // Ensure that the values for the getters below are populated before querying.
+        getUser();
         updateUser(accentColour,
                 getLanguage(),
                 getPointsGuildID(),
@@ -141,6 +143,8 @@ public class APIUser {
     }
 
     public void updateUserLanguage(String languageString) throws IOException {
+        // Ensure that the values for the getters below are populated before querying.
+        getUser();
         updateUser(getAccentColour(),
                 languageString,
                 getPointsGuildID(),
@@ -149,14 +153,16 @@ public class APIUser {
     }
 
     public void updateUserPointsGuildID(String guildID, Integer newPoints) throws IOException {
-        updateUserPointsGuildID((ArrayList<String>) LevelingTools.updateUserPoints(userID, guildID, newPoints));
+        updateUserPointsGuildID(LevelingTools.updateUserPoints(userID, guildID, newPoints));
     }
 
     public void updateUserPointsGuildID(Map<String, Integer> guildPointsToUpdate) throws IOException {
-        updateUserPointsGuildID((ArrayList<String>) LevelingTools.updateUserPoints(userID, guildPointsToUpdate));
+        updateUserPointsGuildID(LevelingTools.updateUserPoints(userID, guildPointsToUpdate));
     }
 
-    public void updateUserPointsGuildID(ArrayList<String> pointsGuildID) throws IOException {
+    public void updateUserPointsGuildID(List<String> pointsGuildID) throws IOException {
+        // Ensure that the values for the getters below are populated before querying.
+        getUser();
         updateUser(getAccentColour(),
                 getLanguage(),
                 pointsGuildID,
@@ -181,18 +187,18 @@ public class APIUser {
      */
     public String userConstructor(String accentColour,
                                   String language,
-                                  ArrayList<String> pointsGuildID,
-                                  ArrayList<Integer> pointsMessages,
-                                  ArrayList<Integer> pointsVoiceChat) {
+                                  List<String> pointsGuildID,
+                                  List<Integer> pointsMessages,
+                                  List<Integer> pointsVoiceChat) {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode userNode = objectMapper.createObjectNode();
 
         userNode.put("userID", userID);
         userNode.put("accentColour", accentColour);
         userNode.put("language", language);
-        userNode.put("pointsGuildID", objectMapper.valueToTree(pointsGuildID));
-        userNode.put("pointsMessages", objectMapper.valueToTree(pointsMessages));
-        userNode.put("pointsVoiceChat", objectMapper.valueToTree(pointsVoiceChat));
+        userNode.set("pointsGuildID", objectMapper.valueToTree(pointsGuildID));
+        userNode.set("pointsMessages", objectMapper.valueToTree(pointsMessages));
+        userNode.set("pointsVoiceChat", objectMapper.valueToTree(pointsVoiceChat));
 
         return userNode.toString();
     }

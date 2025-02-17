@@ -19,6 +19,7 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 
@@ -97,18 +98,17 @@ public class MessageCreate implements MessageCreateListener {
 
         // Grant between 0 and 8 points
         if (server != null) {
-            Integer currentPoints = LevelingTools.getUserPoints(messageAuthor.getIdAsString(), "global");
-            RandomGenerator randomGenerator = RandomGenerator.getDefault();
-            Integer pointsToGrant = randomGenerator.nextInt(8);
+            int pointsToGrant = ThreadLocalRandom.current().nextInt(9);
             try {
-                Map<String, Integer> guildPointsToUpdate = new HashMap<>();
-                guildPointsToUpdate.put(server.getIdAsString(), pointsToGrant);
-                guildPointsToUpdate.put("global", pointsToGrant);
+                Map<String, Integer> guildPointsToUpdate = Map.of(
+                        server.getIdAsString(), pointsToGrant,
+                        "global", pointsToGrant
+                );
                 apiUser.updateUserPointsGuildID(guildPointsToUpdate);
-
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                Main.getLogger().error("Failed to update points for user {}", messageAuthor.getIdAsString(), e);
             }
         }
+
     }
 }

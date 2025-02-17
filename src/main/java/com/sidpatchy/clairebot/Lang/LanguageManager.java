@@ -100,7 +100,7 @@ public class LanguageManager {
     }
 
     private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
-        Locale locale = null;
+        Locale locale;
         try {
             APIUser apiUser = new APIUser(user.getIdAsString());
             apiUser.getUser();

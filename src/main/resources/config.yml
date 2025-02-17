@@ -10,7 +10,7 @@
 token:
 
 # Name of bot to be used in logs and
-botName: ClaireBot
+botName: ClaireBot # TODO does this even do anything?
 
 # URL of the YouTube video ClaireBot claims to be streaming
 video_url: https://www.youtube.com/watch?v=AeZRYhLDLeU
@@ -57,7 +57,7 @@ apiFailureIsFatal: true
 
 userDefaults:
   accentColour: "#3498db"
-  language: "eng"
+  language: "en-US"
   pointsGuildID:
     - |
       {"global": 0}
