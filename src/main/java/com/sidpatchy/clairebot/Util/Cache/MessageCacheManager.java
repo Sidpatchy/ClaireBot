@@ -1,10 +1,7 @@
 package com.sidpatchy.clairebot.Util.Cache;
 
-import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageSet;
 import org.javacord.api.entity.user.User;
 
 import java.util.List;
@@ -16,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * A message caching system to assist in
  */
 public class MessageCacheManager {
-    private static Map<String, MessageCacheEntry> messageCache = new ConcurrentHashMap<>();
+    private static final Map<String, MessageCacheEntry> messageCache = new ConcurrentHashMap<>();
 
     public static void purgeCache(long secondsAged) {
         for (MessageCacheEntry entry : messageCache.values()) {

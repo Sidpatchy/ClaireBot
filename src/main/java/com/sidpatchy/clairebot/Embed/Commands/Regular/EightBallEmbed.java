@@ -5,7 +5,6 @@ import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +12,7 @@ public class EightBallEmbed {
 
     public static EmbedBuilder getEightBall(LanguageManager languageManager, String query, User author) {
 
+        // Language Strings
         List<String> eightBall = languageManager.getLocalizedList("ClaireLang.Embed.Commands.Regular.EightBallEmbed.8bResponses");
         List<String> eightBallRigged = languageManager.getLocalizedList("ClaireLang.Embed.Commands.Regular.EightBallEmbed.8bRiggedResponses");
         List<String> onTopTriggers = languageManager.getLocalizedList("ClaireLang.Embed.Commands.Regular.EightBallEmbed.OnTopTriggers");

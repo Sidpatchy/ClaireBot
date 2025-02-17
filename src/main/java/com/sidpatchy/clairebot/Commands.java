@@ -2,7 +2,6 @@ package com.sidpatchy.clairebot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sidpatchy.Robin.Discord.Command;
-import com.sidpatchy.Robin.Discord.CommandBuilder;
 
 import java.util.Objects;
 

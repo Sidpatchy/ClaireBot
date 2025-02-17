@@ -4,13 +4,11 @@ import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.MessageType;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
@@ -20,7 +18,6 @@ import org.javacord.api.listener.message.MessageCreateListener;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.random.RandomGenerator;
 import java.util.regex.Pattern;
 
 public class MessageCreate implements MessageCreateListener {
