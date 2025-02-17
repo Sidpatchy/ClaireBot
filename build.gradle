@@ -29,7 +29,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
 
-    implementation 'com.github.Sidpatchy:Robin:2.2.3'
+    implementation 'com.github.Sidpatchy:Robin:2.2.4'
 
     implementation 'org.javacord:javacord:3.8.0'
 
