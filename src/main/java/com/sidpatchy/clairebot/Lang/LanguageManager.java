@@ -166,4 +166,8 @@ public class LanguageManager {
             return null;
         }
     }
+
+    public void addContext(ContextManager.ContextType contextType, String key, Object Data) {
+        context.addData(contextType, key, Data);
+    }
 }

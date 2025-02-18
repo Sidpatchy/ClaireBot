@@ -42,7 +42,8 @@ dependencies {
 
     implementation 'org.yaml:snakeyaml:2.0'
     implementation 'org.json:json:20231013'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.0'
 
 }
 

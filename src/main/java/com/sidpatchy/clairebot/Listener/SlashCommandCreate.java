@@ -107,7 +107,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
             try {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(HelpEmbed.getHelp(command, user.getIdAsString()))
+                        .addEmbed(HelpEmbed.getHelp(languageManager, command, user.getIdAsString()))
                         .respond();
             } catch (FileNotFoundException e) {
                 Main.getLogger().error(e);

@@ -3,6 +3,8 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 import com.sidpatchy.Robin.Discord.Command;
 import com.sidpatchy.clairebot.Commands;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
@@ -13,14 +15,21 @@ import java.util.HashMap;
 public class HelpEmbed {
 
     private static final Commands commands = Main.getCommands();
+    private static String commandsLangString;
+    private static String usageLangString;
 
-    public static EmbedBuilder getHelp(String commandName, String userID) throws FileNotFoundException {
+    public static EmbedBuilder getHelp(LanguageManager languageManager, String commandName, String userID) throws FileNotFoundException {
+        // Language Strings
+        commandsLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Commands");
+        usageLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Usage");
+        languageManager.addContext(ContextManager.ContextType.GENERIC, "commandname", commandName);
+
         HashMap<String, Command> allCommands = new HashMap<>();
         HashMap<String, Command> regularCommands = new HashMap<>();
 
         for (Field field : commands.getClass().getDeclaredFields()) {
             try {
-                Command command = (Command) field.get(commands);
+                Command command = field.get(commands);
                 allCommands.put(field.getName(), command);
                 regularCommands.put(field.getName(), command);
             } catch (IllegalAccessException e) {
@@ -31,7 +40,7 @@ public class HelpEmbed {
         if (commandName.equalsIgnoreCase("help")) {
             return buildHelpEmbed(userID, regularCommands);
         } else {
-            return buildCommandDetailEmbed(commandName, userID, allCommands);
+            return buildCommandDetailEmbed(commandName, userID, allCommands, languageManager);
         }
     }
 
@@ -49,22 +58,24 @@ public class HelpEmbed {
 
         return new EmbedBuilder()
                 .setColor(Main.getColor(userID))
-                .addField("Commands", commandsList.toString(), false);
+                .addField(commandsLangString, commandsList.toString(), false);
     }
 
-    private static EmbedBuilder buildCommandDetailEmbed(String commandName, String userID, HashMap<String, Command> allCommands) {
+    private static EmbedBuilder buildCommandDetailEmbed(String commandName, String userID, HashMap<String, Command> allCommands, LanguageManager languageManager) {
         Command command = allCommands.get(commandName);
 
         if (command == null) {
             String errorCode = Main.getErrorCode("help_command");
-            Main.getLogger().error("Unable to locate command \"" + commandName + "\" for help command. Error code: " + errorCode);
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "errorcode", errorCode);
+            String errorLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Error");
+            Main.getLogger().error(errorLangString);
             return ErrorEmbed.getError(errorCode);
         } else {
             return new EmbedBuilder()
                     .setColor(Main.getColor(userID))
                     .setAuthor(commandName.toUpperCase())
                     .setDescription(command.getOverview().isEmpty() ? command.getHelp() : command.getOverview())
-                    .addField("Command", "Usage\n```" + command.getUsage() + "```");
+                    .addField(commandsLangString, usageLangString + "\n```" + command.getUsage() + "```");
         }
     }
 }

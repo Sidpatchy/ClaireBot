@@ -17,7 +17,7 @@ data class ContextManager(
     enum class ContextType {
         POLL,
         SANTA,
-        // Add other types as needed
+        GENERIC
     }
 
     // Add dynamic data with type safety
