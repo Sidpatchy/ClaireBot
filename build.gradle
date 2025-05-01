@@ -12,7 +12,16 @@ jar {
 }
 
 group 'com.sidpatchy'
-version '3.4.0'
+version '3.4.0-SNAPSHOT'
+
+processResources {
+    filesMatching('**/build.properties') {
+        expand(
+                version: project.version,
+                buildDate: new Date().format("yyyy-MM-dd HH:mm:ss")
+        )
+    }
+}
 
 kotlin {
     jvmToolchain(17)

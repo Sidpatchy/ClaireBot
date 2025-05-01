@@ -116,7 +116,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         }
         else if (commandName.equalsIgnoreCase(commands.getInfo().getName())) {
             slashCommandInteraction.createImmediateResponder()
-                    .addEmbed(InfoEmbed.getInfo(author))
+                    .addEmbed(InfoEmbed.getInfo(languageManager, author))
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(commands.getLeaderboard().getName())) {

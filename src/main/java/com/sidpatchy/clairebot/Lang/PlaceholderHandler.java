@@ -1,5 +1,7 @@
 package com.sidpatchy.clairebot.Lang;
 
+import com.sidpatchy.clairebot.Main;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.ServerChannel;
 
@@ -9,6 +11,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Map.entry;
+
 public class PlaceholderHandler {
     private final ContextManager context;
     private final Map<String, PlaceholderProvider> placeholders;
@@ -16,8 +20,13 @@ public class PlaceholderHandler {
     // Functional interface for placeholder value providers
     @FunctionalInterface
     private interface PlaceholderProvider {
-        String getValue();
+        Object getRawValue();  // Returns any type
+
+        default String getValue() {
+            return String.valueOf(getRawValue());
+        }
     }
+
 
     public PlaceholderHandler(ContextManager context) {
         this.context = context;
@@ -25,30 +34,48 @@ public class PlaceholderHandler {
     }
 
     private Map<String, PlaceholderProvider> initializePlaceholders() {
+        return Map.ofEntries(
+                // Project placeholders
+                entry("cb.invitelink", Main::getInviteLink),
+                entry("cb.docs", Main::getDocumentationWebsite),
+                entry("cb.website", Main::getWebsite),
+                entry("cb.github", Main::getGithub),
+                entry("cb.supportserver", Main::getSupportServer),
 
-        return Map.of(
+                // Bot placeholders
+                entry("cb.bot.numservers", () -> Main.getApi().getServers().size()),
+                entry("cb.bot.version", Main::getBuildVersion),
+                entry("cb.bot.releasedate", Main::getBuildDate),
+                entry("cb.bot.startseconds", () -> Main.getStartMillis() / 1000),
+                entry("cb.bot.runtimedurationwords", () -> DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - Main.getStartMillis(), true, false)),
+
                 // Server placeholders
-                "cb.server.name", () ->
-                        context.getServer() != null ? context.getServer().getName() : "", "cb.server.id", () ->
-                        context.getServer() != null ? context.getServer().getIdAsString() : "",
+                entry("cb.server.name", () ->
+                        context.getServer() != null ? context.getServer().getName() : ""),
+                entry("cb.server.id", () ->
+                        context.getServer() != null ? context.getServer().getIdAsString() : ""),
 
                 // User placeholders
-                "cb.user.name", () ->
-                        context.getUser() != null ? context.getUser().getName() : "", "cb.user.id", () ->
-                        context.getUser() != null ? context.getUser().getIdAsString() : "",
+                entry("cb.user.name", () ->
+                        context.getUser() != null ? context.getUser().getName() : ""),
+                entry("cb.user.id", () ->
+                        context.getUser() != null ? context.getUser().getIdAsString() : ""),
 
                 // Author placeholders
-                "cb.author.name", () ->
-                        context.getAuthor() != null ? context.getAuthor().getName() : "", "cb.author.id", () ->
-                        context.getAuthor() != null ? context.getAuthor().getIdAsString() : "",
+                entry("cb.author.name", () ->
+                        context.getAuthor() != null ? context.getAuthor().getName() : ""),
+                entry("cb.author.id", () ->
+                        context.getAuthor() != null ? context.getAuthor().getIdAsString() : ""),
 
                 // Channel placeholders
-                "cb.channel.name", () ->
+                entry("cb.channel.name", () ->
                         Optional.ofNullable(context.getChannel())
                                 .flatMap(Channel::asServerChannel)
                                 .map(ServerChannel::getName)
-                                .orElse("NOT FOUND"), "cb.channel.id", () ->
-                        context.getChannel() != null ? context.getChannel().getIdAsString() : "");
+                                .orElse("NOT FOUND")),
+                entry("cb.channel.id", () ->
+                        context.getChannel() != null ? context.getChannel().getIdAsString() : "")
+        );
     }
 
     /**

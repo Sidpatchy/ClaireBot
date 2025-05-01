@@ -15,9 +15,11 @@ import org.javacord.api.DiscordApiBuilder;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * ClaireBot - Simply the best.
@@ -80,6 +82,19 @@ public class Main {
     private static final String translationsPath = "config/translations/";
     private static RobinConfiguration config;
     private static Commands commands;
+    private static final Properties buildProperties = new Properties() {{
+        try (InputStream input = Main.class.getClassLoader().getResourceAsStream("build.properties")) {
+            if (input != null) load(input);
+            else System.err.println("build.properties missing!");
+        } catch (IOException e) { throw new RuntimeException("Failed to load build.properties", e); }
+    }};
+    private static String buildVersion;
+    private static String buildDate;
+    private static String github;
+    private static String supportServer;
+    private static String website;
+    private static String documentationWebsite;
+    private static String inviteLink;
 
     public static void main(String[] args) throws InvalidConfigurationException {
         logger.info("ClaireBot loading...");
@@ -118,7 +133,7 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot v3.4.0-SNAPSHOT", video_url);
+        api.updateActivity("ClaireBot " + buildVersion, video_url);
 
         // Register slash commands
         registerSlashCommands();
@@ -190,6 +205,13 @@ public class Main {
             onTopTriggers = config.getList("OnTopTriggers", String.class);
             plsBanResponses = config.getList("PlsBanResponses", String.class);
             plsBanTriggers = config.getList("PlsBanTriggers", String.class);
+            buildVersion = buildProperties.getProperty("clairebot.version");
+            buildDate = buildProperties.getProperty("clairebot.buildDate");
+            github = buildProperties.getProperty("clairebot.github");
+            supportServer = buildProperties.getProperty("clairebot.supportServer");
+            website = buildProperties.getProperty("clairebot.website");
+            documentationWebsite = buildProperties.getProperty("clairebot.documentationWebsite");
+            inviteLink = config.getString("clairebot.inviteLink");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -337,5 +359,33 @@ public class Main {
 
     public static String getTranslationsPath() {
         return translationsPath;
+    }
+
+    public static String getBuildVersion() {
+        return buildVersion;
+    }
+
+    public static String getBuildDate() {
+        return buildDate;
+    }
+
+    public static String getGithub() {
+        return github;
+    }
+
+    public static String getSupportServer() {
+        return supportServer;
+    }
+
+    public static String getWebsite() {
+        return website;
+    }
+
+    public static String getDocumentationWebsite() {
+        return documentationWebsite;
+    }
+
+    public static String getInviteLink() {
+        return inviteLink;
     }
 }

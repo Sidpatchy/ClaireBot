@@ -9,7 +9,6 @@ import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class HelpEmbed {
