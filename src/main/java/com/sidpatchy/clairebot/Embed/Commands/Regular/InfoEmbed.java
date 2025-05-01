@@ -9,14 +9,6 @@ import org.javacord.api.entity.user.User;
 
 public class InfoEmbed {
     public static EmbedBuilder getInfo(LanguageManager languageManager, User author) {
-        // Add required context data
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "numservers", Main.getApi().getServers().size());
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "version", "v3.4.0");
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "releasedate", "2025-05-01");
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "startseconds", Main.getStartMillis() / 1000);
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "runtimedurationwords",
-                DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - Main.getStartMillis(), true, false));
-
         return new EmbedBuilder()
                 .setColor(Main.getColor(author.getIdAsString()))
                 .addField(
