@@ -3,6 +3,7 @@ package com.sidpatchy.clairebot;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sidpatchy.Robin.Discord.Command;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,6 +25,18 @@ public class Commands {
     private Command user;
     @JsonProperty("config-revision")
     private String configRevision;
+
+    /**
+     * Retrieves a list of all available commands.
+     *
+     * @return a list containing all Command objects.
+     */
+    public List<Command> getAllCommands() {
+        return List.of(
+                avatar, config, eightball, help, info, leaderboard,
+                level, poll, quote, request, santa, server, user
+        );
+    }
 
     public Command getAvatar() {
         validateCommand(avatar);

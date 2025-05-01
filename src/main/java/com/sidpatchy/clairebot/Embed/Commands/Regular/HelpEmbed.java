@@ -27,14 +27,9 @@ public class HelpEmbed {
         HashMap<String, Command> allCommands = new HashMap<>();
         HashMap<String, Command> regularCommands = new HashMap<>();
 
-        for (Field field : commands.getClass().getDeclaredFields()) {
-            try {
-                Command command = field.get(commands);
-                allCommands.put(field.getName(), command);
-                regularCommands.put(field.getName(), command);
-            } catch (IllegalAccessException e) {
-                // todo handle the exception
-            }
+        for (Command command : commands.getAllCommands()) {
+            allCommands.put(command.getName(), command);
+            regularCommands.put(command.getName(), command);
         }
 
         if (commandName.equalsIgnoreCase("help")) {
