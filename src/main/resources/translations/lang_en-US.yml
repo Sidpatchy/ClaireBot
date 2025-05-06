@@ -142,7 +142,7 @@ ClaireLang:
             - "*The best there is, the best there was, the best there ever will be!*"
             - "*Bringing the best, always! 🌟*"
             - "*Excellence. 💯*"
-          # Note: The rest of the help is located separately within commands_en-US.yml
+        # Note: The rest of the help is located separately within commands_en-US.yml
         HelpEmbed:
           Commands: "Commands"
           Usage: "Usage"
@@ -164,7 +164,9 @@ ClaireLang:
           LeaderboardForServer: "Leaderboard for"
           GlobalLeaderboard: "Global Leaderboard"
         LevelEmbed: "" # Unused
-        QuoteEmbed: "" # Unused
+        QuoteEmbed:
+          InvalidMessages: "Looks like the messages I selected were invalid. Please try again later."
+          JumpToOriginal: "Click to jump to the original message:"
         SantaEmbed:
           Confirmation: "Confirmed! I've sent you a direct message. Please continue there."
           RulesButton: "Add rules"

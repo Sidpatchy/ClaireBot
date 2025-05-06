@@ -16,10 +16,8 @@ import org.javacord.api.DiscordApiBuilder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * ClaireBot - Simply the best.
@@ -63,6 +61,7 @@ public class Main {
     private static String color;
     private static String errorColor;
     private static List<String> errorGifs;
+    private static Locale fallbackLocale;
     private static List<String> zerfas;
     private static String zerfasEmojiServerID;
     private static String zerfasEmojiID;
@@ -196,6 +195,7 @@ public class Main {
             color = config.getString("color");
             errorColor = config.getString("errorColor");
             errorGifs = config.getList("error_gifs", String.class);
+            fallbackLocale = Locale.forLanguageTag(config.getString("fallback_locale"));
             zerfas = config.getList("zerfas", String.class);
             zerfasEmojiServerID = String.valueOf(config.getLong("zerfas_emoji_server_id"));
             zerfasEmojiID = String.valueOf(config.getLong("zerfas_emoji_id"));
@@ -387,5 +387,9 @@ public class Main {
 
     public static String getInviteLink() {
         return inviteLink;
+    }
+
+    public static Locale getFallbackLocale() {
+        return fallbackLocale;
     }
 }

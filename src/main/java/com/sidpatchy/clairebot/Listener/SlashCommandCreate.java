@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class SlashCommandCreate implements SlashCommandCreateListener {
 
-    private final Logger logger = Main.getLogger();
+    private static final Logger logger = Main.getLogger();
     private static final Commands commands = Main.getCommands();
     private LanguageManager languageManager;
 
@@ -49,7 +49,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         ContextManager context = new ContextManager(server, textchannel, author, user, null, new HashMap<>());
 
         // Todo replace reference to en-US with config file parameter
-        languageManager = new LanguageManager(Locale.forLanguageTag("en-US"), context);
+        languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         if (commandName.equalsIgnoreCase(commands.getEightball().getName())) {
             String query = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse(null);
@@ -124,12 +124,12 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
             if (server == null || getGlobal) {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(LeaderboardEmbed.getLeaderboard("global", author))
+                        .addEmbed(LeaderboardEmbed.getLeaderboard(languageManager, "global", author))
                         .respond();
             }
             else {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(LeaderboardEmbed.getLeaderboard(server, author))
+                        .addEmbed(LeaderboardEmbed.getLeaderboard(languageManager, server, author))
                         .respond();
             }
         }

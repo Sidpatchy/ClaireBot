@@ -2,6 +2,8 @@ package com.sidpatchy.clairebot.Listener;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.QuoteEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.SantaEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.SantaModal;
 import com.sidpatchy.clairebot.Util.SantaUtils;
@@ -17,22 +19,27 @@ import org.javacord.api.event.interaction.ButtonClickEvent;
 import org.javacord.api.interaction.ButtonInteraction;
 import org.javacord.api.listener.interaction.ButtonClickListener;
 
+import java.util.HashMap;
+
 public class ButtonClick implements ButtonClickListener {
     @Override
     public void onButtonClick(ButtonClickEvent event) {
         ButtonInteraction buttonInteraction = event.getButtonInteraction();
 
+        Server server = buttonInteraction.getServer().orElse(null);
         String buttonID = buttonInteraction.getCustomId().toLowerCase();
         User buttonAuthor = buttonInteraction.getUser();
         Message message = buttonInteraction.getMessage();
         TextChannel channel = message.getChannel();
+
+        ContextManager context = new ContextManager(server, channel, buttonAuthor, null, message, new HashMap<>());
+        LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         Embed embed = buttonInteraction.getMessage().getEmbeds().get(0);
         EmbedFooter footer = embed.getFooter().orElse(null);
 
         // Extract data from embed fields
         SantaUtils.ExtractionResult extractionResult = null;
-        Server server = null;
         User author = null;
         if (!buttonID.equalsIgnoreCase("view_original")) {
             extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);

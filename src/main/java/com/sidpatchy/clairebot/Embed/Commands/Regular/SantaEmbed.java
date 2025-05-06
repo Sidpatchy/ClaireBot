@@ -1,5 +1,7 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.SantaUtils;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -14,11 +16,13 @@ import java.util.*;
 
 public class SantaEmbed {
 
-    public static EmbedBuilder getConfirmationEmbed(User author) {
+    private static final String basePath = "ClaireLang.Embed.Commands.Regular.SantaEmbed";
+
+    public static EmbedBuilder getConfirmationEmbed(LanguageManager languageManager, User author) {
         return new EmbedBuilder()
                 .setColor(Main.getColor(author.getIdAsString()))
                 .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
-                .setDescription("Confirmed! I've sent you a direct message. Please continue there.");
+                .setDescription(languageManager.getLocalizedString(basePath, "Confirmation"));
     }
 
     /**
@@ -26,11 +30,11 @@ public class SantaEmbed {
      *
      * @param role The group of users participating
      * @param author Author of the command.
-     * @param rules Rules for the exchange, seperated by \n.
+     * @param rules Rules for the exchange, separated by \n.
      * @param theme Theme for the exchange.
      * @return Message with components
      */
-    public static MessageBuilder getHostMessage(Role role, User author, String rules, String theme) {
+    public static MessageBuilder getHostMessage(LanguageManager languageManager, Role role, User author, String rules, String theme) {
         Set<User> users =  role.getUsers();
         Server server = role.getServer();
 
@@ -59,25 +63,25 @@ public class SantaEmbed {
         }
 
         ActionRow actionRow = ActionRow.of(
-                Button.primary("rules", "Add rules"),
-                Button.primary("theme", "Add a theme"),
-                Button.danger("send", "Send messages"),
-                Button.success("test", "Send sample"),
-                Button.secondary("randomize", "Re-randomize"));
+                Button.primary("rules", languageManager.getLocalizedString(basePath, "RulesButton")),
+                Button.primary("theme", languageManager.getLocalizedString(basePath, "ThemeButton")),
+                Button.danger("send", languageManager.getLocalizedString(basePath, "SendButton")),
+                Button.success("test", languageManager.getLocalizedString(basePath, "TestButton")),
+                Button.secondary("randomize", languageManager.getLocalizedString(basePath, "RandomizeButton")));
 
         message.addEmbed(embed);
         message.addComponents(actionRow);
         return message;
     }
 
-    public static MessageBuilder getSantaMessage(Server server, User author, User giver, User receiver, String rules, String theme) {
+    public static MessageBuilder getSantaMessage(LanguageManager languageManager, Server server, User author, User giver, User receiver, String rules, String theme) {
 
         MessageBuilder message = new MessageBuilder();
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(author.getIdAsString()))
                 .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
-                .setFooter("Sent by " + author.getName(), author.getAvatar());
+                .setFooter(languageManager.getLocalizedString(basePath, "SentByAuthor") + " " + author.getName(), author.getAvatar());
 
         if (!theme.isEmpty()) {
             embed.addField("Theme", theme, false);
@@ -86,6 +90,9 @@ public class SantaEmbed {
         if (!rules.isEmpty()) {
             embed.addField("Rules", rules, false);
         }
+
+        languageManager.addContext(ContextManager.ContextType.SANTA, "giver", giver.getDisplayName(server));
+        languageManager.addContext(ContextManager.ContextType.SANTA, "receiver", receiver.getDisplayName(server));
 
         embed.setDescription("Ho! Ho! Ho! You have received **" + receiver.getDisplayName(server) + "** in the " + server.getName() + " Secret Santa!");
 

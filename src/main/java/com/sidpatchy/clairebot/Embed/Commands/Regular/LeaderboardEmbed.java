@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -15,7 +16,10 @@ import java.util.stream.Collectors;
 
 public class LeaderboardEmbed {
 
-    public static EmbedBuilder getLeaderboard(Server server, User author) {
+    public static EmbedBuilder getLeaderboard(LanguageManager languageManager, Server server, User author) {
+        // Language Strings
+        String leaderboardFor = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.LeaderboardEmbed.LeaderboardForServer");
+
         String serverID = server.getIdAsString();
 
         HashMap<String, Integer> unsortedLevelMap = null;
@@ -32,12 +36,14 @@ public class LeaderboardEmbed {
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);
         EmbedBuilder embed = initializeLeaderboardEmbed(sortedLevelMap, author);
 
-        embed.setAuthor("Leaderboard for " + server.getName(), "", server.getIcon().orElse(null));
+        embed.setAuthor(leaderboardFor + " " + server.getName(), "", server.getIcon().orElse(null));
 
         return embed;
     }
 
-    public static EmbedBuilder getLeaderboard(String serverID, User author) {
+    public static EmbedBuilder getLeaderboard(LanguageManager languageManager, String serverID, User author) {
+        String globalLeaderboard = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.LeaderboardEmbed.GlobalLeaderboard");
+
         HashMap<String, Integer> unsortedLevelMap;
         try {
             unsortedLevelMap = LevelingTools.rankUsers(serverID);
@@ -52,7 +58,7 @@ public class LeaderboardEmbed {
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);
         EmbedBuilder embed = initializeLeaderboardEmbed(sortedLevelMap, author);
 
-        embed.setAuthor("Global Leaderboard");
+        embed.setAuthor(globalLeaderboard);
         return embed;
     }
 

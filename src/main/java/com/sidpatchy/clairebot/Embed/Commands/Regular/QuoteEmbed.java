@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Cache.MessageCacheManager;
 import org.javacord.api.entity.channel.TextChannel;
@@ -23,7 +24,7 @@ public class QuoteEmbed {
      * @param channel the text channel where the messages are located
      * @return a CompletableFuture that resolves to an EmbedBuilder containing the quote
      */
-    public static CompletableFuture<EmbedBuilder> getQuote(Server server, final User user, TextChannel channel) {
+    public static CompletableFuture<EmbedBuilder> getQuote(LanguageManager languageManager, Server server, final User user, TextChannel channel) {
 
         return MessageCacheManager.queryMessageCache(channel, user).thenApply(userMessages -> {
             if (userMessages.isEmpty()) {
@@ -76,11 +77,12 @@ public class QuoteEmbed {
         });
     }
 
-    public static EmbedBuilder viewOriginalMessageBuilder(TextChannel channel, Message message) {
+    public static EmbedBuilder viewOriginalMessageBuilder(LanguageManager languageManager, TextChannel channel, Message message) {
         EmbedFooter footer = message.getEmbeds().get(0).getFooter().orElse(null);
         Message quotedMessage = message.getApi().getMessageById(footer.getText().orElse(""), channel).join();
 
         return new EmbedBuilder()
-                .addField("Click to jump to the original message:", quotedMessage.getLink().toString());
+                .addField(languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.QuoteEmbed.JumpToOriginal"),
+                        quotedMessage.getLink().toString());
     }
 }

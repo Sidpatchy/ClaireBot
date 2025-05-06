@@ -37,8 +37,9 @@ data class ContextManager(
         addData(ContextType.POLL, "question", question)
     }
 
-    fun addSantaData(giftee: User, theme: String) {
+    fun addSantaData(giftee: User, theme: String, rules: String) {
         addData(ContextType.SANTA, "giftee", giftee)
         addData(ContextType.SANTA, "theme", theme)
+        addData(ContextType.SANTA, "rules", rules)
     }
 }

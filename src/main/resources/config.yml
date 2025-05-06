@@ -32,6 +32,10 @@ error_gifs:
   - "https://c.tenor.com/GBrG7SqlVwoAAAAC/dog-dawg.gif"
   - "https://c.tenor.com/lRhsxkfHhJwAAAAC/spongebob-squarepants-sad.gif"
 
+# The language ClaireBot will fallback to if a translation string
+# is not available for a user's chosen language.
+fallback_language: en-US
+
 # ----------------- SHARD CONFIG ---------------
 # It is assumed that only one shard will be running by default.
 # You probably don't need to change this.
@@ -125,6 +129,7 @@ checkForUpdates: true
 UpdateOutdatedConfigs: true
 
 # Do not change this, this is automatically changed when needed.
+# TODO either automatically add new config file params or remove this.
 configRevision: 5
 
 # ---------- ADDED AFTER INITIAL USE -----------

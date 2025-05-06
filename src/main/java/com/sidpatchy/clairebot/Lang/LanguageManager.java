@@ -84,6 +84,17 @@ public class LanguageManager {
     }
 
     /**
+     * Retrieves a localized string based on the provided base path and key.
+     *
+     * @param basePath the base path used to locate the language file or namespace
+     * @param key the key for the desired localized string
+     * @return the localized string if found, otherwise returns the concatenation of basePath and key
+     */
+    public String getLocalizedString(String basePath, String key) {
+        return getLocalizedString(basePath + "." + key);
+    }
+
+    /**
      * Retrieves the localized string corresponding to the given key.
      *
      * @param key the key for the desired localized string
@@ -97,6 +108,17 @@ public class LanguageManager {
         List<String> rawLanguageString = localizedList != null ? localizedList : List.of(key);
 
         return placeholderHandler.process(rawLanguageString);
+    }
+
+    /**
+     * Retrieves a localized list of strings based on the provided base path and key.
+     *
+     * @param basePath the base path used to locate the language file or namespace
+     * @param key      the key for the desired localized list of strings
+     * @return a list of localized strings if found, otherwise returns a list containing the concatenation of basePath and key
+     */
+    public List<String> getLocalizedList(String basePath, String key) {
+        return getLocalizedList(basePath + "." + key);
     }
 
     private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
