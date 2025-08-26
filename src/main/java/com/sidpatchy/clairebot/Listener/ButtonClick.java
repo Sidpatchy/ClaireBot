@@ -63,20 +63,20 @@ public class ButtonClick implements ButtonClickListener {
             case "send":
                 buttonInteraction.acknowledge();
                 for (int i = 0; i < extractionResult.givers.size(); i++) {
-                    SantaEmbed.getSantaMessage(server, author, extractionResult.givers.get(i), extractionResult.receivers.get(i), extractionResult.rules, extractionResult.theme).send(extractionResult.givers.get(i));
+                    SantaEmbed.getSantaMessage(languageManager, server, author, extractionResult.givers.get(i), extractionResult.receivers.get(i), extractionResult.rules, extractionResult.theme).send(extractionResult.givers.get(i));
                 }
 
                 break;
             case "test":
                 buttonInteraction.acknowledge();
-                SantaEmbed.getSantaMessage(server, author, extractionResult.givers.get(0), extractionResult.receivers.get(0), extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+                SantaEmbed.getSantaMessage(languageManager, server, author, extractionResult.givers.get(0), extractionResult.receivers.get(0), extractionResult.rules, extractionResult.theme).send(buttonAuthor);
 
                 break;
             case "randomize":
                 buttonInteraction.acknowledge();
                 Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
                 buttonInteraction.getMessage().delete();
-                SantaEmbed.getHostMessage(role, buttonAuthor, extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+                SantaEmbed.getHostMessage(languageManager, role, buttonAuthor, extractionResult.rules, extractionResult.theme).send(buttonAuthor);
 
                 break;
 

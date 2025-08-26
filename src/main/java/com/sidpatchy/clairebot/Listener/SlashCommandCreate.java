@@ -81,7 +81,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             if (mode.equalsIgnoreCase("user")) {
                 slashCommandInteraction.createImmediateResponder()
                         .setFlags(MessageFlag.EPHEMERAL)
-                        .addEmbed(UserPreferencesEmbed.getMainMenu(author))
+                        .addEmbed(UserPreferencesEmbed.getMainMenu(languageManager, author))
                         .addComponents(UserPreferencesComponents.getMainMenu())
                         .respond();
             }
@@ -90,7 +90,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 if (server.isAdmin(author)) {
                     slashCommandInteraction.createImmediateResponder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ServerPreferencesEmbed.getMainMenu(author))
+                            .addEmbed(ServerPreferencesEmbed.getMainMenu(languageManager, author))
                             .addComponents(ServerPreferencesComponents.getMainMenu())
                             .respond();
                 }
@@ -181,7 +181,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
                 int finalNumChoices = numChoices;
                 slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
-                    interactionOriginalResponseUpdater.addEmbed(VotingEmbed.getPoll("POLL", question, allowMultipleChoices, choices, server, author, finalNumChoices))
+                    interactionOriginalResponseUpdater.addEmbed(VotingEmbed.getPoll(languageManager, "POLL", question, allowMultipleChoices, choices, server, author, finalNumChoices))
                             .update().thenAccept(message -> {
                                 message.addReaction("\uD83D\uDC4D"); // 👍 emoji
                                 message.addReaction("\uD83D\uDC4E"); // 👎 emoji
@@ -256,11 +256,11 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 }
 
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(VotingEmbed.getUserResponse(author, ChannelUtils.getRequestsChannel(server).getMentionTag()))
+                        .addEmbed(VotingEmbed.getUserResponse(languageManager, author, ChannelUtils.getRequestsChannel(server).getMentionTag()))
                         .setFlags(MessageFlag.EPHEMERAL)
                         .respond();
 
-                ChannelUtils.getRequestsChannel(server).sendMessage(VotingEmbed.getPoll("REQUEST", question, allowMultipleChoices, choices, server, author, numChoices)).thenAccept(message -> {
+                ChannelUtils.getRequestsChannel(server).sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, numChoices)).thenAccept(message -> {
                     message.addReaction("\uD83D\uDC4D");
                     message.addReaction("\uD83D\uDC4E");
                     message.addReaction(":vote:706373563564949566");
@@ -279,14 +279,14 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             if (guildID != null) {
                 Server fromGuildID = event.getApi().getServerById(guildID).orElse(null);
                 if (fromGuildID != null) {
-                    embed = ServerInfoEmbed.getServerInfo(fromGuildID, user.getIdAsString());
+                    embed = ServerInfoEmbed.getServerInfo(languageManager, fromGuildID, user.getIdAsString());
                 }
                 else {
                     embed = ErrorEmbed.getCustomError(Main.getErrorCode("guildID-invalid"), "Either that guild ID is invalid or I'm not a member of the server.");
                 }
             }
             else if (server != null) {
-                embed = ServerInfoEmbed.getServerInfo(server, user.getIdAsString());
+                embed = ServerInfoEmbed.getServerInfo(languageManager, server, user.getIdAsString());
             }
 
             slashCommandInteraction.createImmediateResponder()
@@ -295,7 +295,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         }
         else if (commandName.equalsIgnoreCase(commands.getInfo().getName())) {
             slashCommandInteraction.createImmediateResponder()
-                    .addEmbed(UserInfoEmbed.getUser(user, author, server))
+                    .addEmbed(UserInfoEmbed.getUser(languageManager, user, author, server))
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(commands.getSanta().getName())) {
@@ -317,10 +317,10 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             }
 
             slashCommandInteraction.createImmediateResponder().addEmbed(
-                    SantaEmbed.getConfirmationEmbed(author)
+                    SantaEmbed.getConfirmationEmbed(languageManager, author)
             ).respond();
 
-            SantaEmbed.getHostMessage(role, author, "", "").send(author);
+            SantaEmbed.getHostMessage(languageManager, role, author, "", "").send(author);
         }
     }
 }

@@ -7,6 +7,7 @@ import org.javacord.api.entity.channel.ServerChannel;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,6 +61,29 @@ public class PlaceholderHandler {
                         context.getUser() != null ? context.getUser().getName() : ""),
                 entry("cb.user.id", () ->
                         context.getUser() != null ? context.getUser().getIdAsString() : ""),
+                entry("cb.user.id.accentcolour", () ->
+                        String.valueOf(Main.getColor(Objects.requireNonNull(context.getUser()).getIdAsString()))),
+                entry("cb.user.id.displayname.server", () -> {
+                    // 1) If explicitly provided via context, prefer that
+                    Object ctxVal = context.getData(ContextManager.ContextType.GENERIC, "user.id.displayname.server");
+                    if (ctxVal != null) {
+                        return String.valueOf(ctxVal);
+                    }
+
+                    // 2) Derive from author/user + server
+                    org.javacord.api.entity.server.Server server = context.getServer();
+                    org.javacord.api.entity.user.User author = context.getAuthor();
+                    if (author != null) {
+                        return (server != null) ? author.getDisplayName(server) : author.getName();
+                    }
+
+                    org.javacord.api.entity.user.User user = context.getUser();
+                    if (user != null) {
+                        return (server != null) ? user.getDisplayName(server) : user.getName();
+                    }
+
+                    return "";
+                }),
 
                 // Author placeholders
                 entry("cb.author.name", () ->
@@ -74,7 +98,32 @@ public class PlaceholderHandler {
                                 .map(ServerChannel::getName)
                                 .orElse("NOT FOUND")),
                 entry("cb.channel.id", () ->
-                        context.getChannel() != null ? context.getChannel().getIdAsString() : "")
+                        context.getChannel() != null ? context.getChannel().getIdAsString() : ""),
+                entry("cb.channel.id.mentiontag", () ->
+                        Optional.ofNullable(context.getData(ContextManager.ContextType.GENERIC, "channel.id.mentiontag"))
+                                .map(Object::toString)
+                                .orElseGet(() ->
+                                        Optional.ofNullable(context.getChannel())
+                                                .flatMap(ch -> ch.asServerChannel().map(sc -> "<#" + sc.getIdAsString() + ">"))
+                                                .orElse("")
+                                )),
+
+                // Command placeholders
+                entry("cb.help.commandname", () ->
+                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "commandname")))),
+                entry("cb.user.id.username", () ->
+                        Optional.ofNullable(context.getAuthor())
+                                .map(org.javacord.api.entity.user.User::getDiscriminatedName)
+                                .orElseGet(() -> {
+                                    Object v = context.getData(ContextManager.ContextType.GENERIC, "user.id.username");
+                                    return v != null ? v.toString() : "";
+                                })),
+
+                // Error code (supports both generic-scoped and flat key used in some strings)
+                entry("cb.generic.errorcode", () ->
+                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "errorcode")))),
+                entry("cb.errorcode", () ->
+                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "errorcode"))))
         );
     }
 
@@ -90,7 +139,7 @@ public class PlaceholderHandler {
 
         Pattern pattern = Pattern.compile("\\{([^}]+)\\}");
         Matcher matcher = pattern.matcher(input);
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         while (matcher.find()) {
             String placeholder = matcher.group(1);

@@ -3,10 +3,13 @@ package com.sidpatchy.clairebot.Listener;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.SantaEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.UserPreferencesEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.VotingEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
 import com.sidpatchy.clairebot.Util.SantaUtils;
 import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.Embed;
@@ -18,16 +21,25 @@ import org.javacord.api.event.interaction.ModalSubmitEvent;
 import org.javacord.api.interaction.ModalInteraction;
 import org.javacord.api.listener.interaction.ModalSubmitListener;
 
+import java.util.HashMap;
+
 public class ModalSubmit implements ModalSubmitListener {
+
+    private LanguageManager languageManager;
 
     @Override
     public void onModalSubmit(ModalSubmitEvent event) {
         ModalInteraction modalInteraction = event.getModalInteraction();
 
+        Server server = modalInteraction.getServer().orElse(null);
+        TextChannel textchannel = modalInteraction.getChannel().orElse(null);
         User user = modalInteraction.getUser();
         String modalID = modalInteraction.getCustomId();
 
         Main.getLogger().debug(modalID);
+
+        ContextManager context = new ContextManager(server, textchannel, user, user, null, new HashMap<>());
+        languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         String voteType = "";       // Allows the Poll/Request feature to distinguish between the two
 
@@ -77,7 +89,7 @@ public class ModalSubmit implements ModalSubmitListener {
                     Main.getLogger().debug(hexColour);
 
                     modalInteraction.createImmediateResponder()
-                        .addEmbed(UserPreferencesEmbed.getAcknowledgeAccentColourChange(user, hexColour))
+                        .addEmbed(UserPreferencesEmbed.getAcknowledgeAccentColourChange(languageManager, user, hexColour))
                         .setFlags(MessageFlag.EPHEMERAL)
                         .respond();
                 }
@@ -85,7 +97,6 @@ public class ModalSubmit implements ModalSubmitListener {
             case "request":
                 String question = modalInteraction.getTextInputValueByCustomId("question-modal").orElse("");
                 String description = modalInteraction.getTextInputValueByCustomId("details-modal").orElse("");
-                Server server = modalInteraction.getServer().orElse(null);
                 User author = modalInteraction.getUser();
 
                 if (server == null) {
@@ -95,15 +106,15 @@ public class ModalSubmit implements ModalSubmitListener {
                 if (voteType.equalsIgnoreCase("request")) {
                     ServerTextChannel requestsChannel = ChannelUtils.getRequestsChannel(server);
                     modalInteraction.createImmediateResponder()
-                            .addEmbed(VotingEmbed.getUserResponse(author, requestsChannel.getMentionTag()))
+                            .addEmbed(VotingEmbed.getUserResponse(languageManager, author, requestsChannel.getMentionTag()))
                             .setFlags(MessageFlag.EPHEMERAL)
                             .respond();
 
-                    requestsChannel.sendMessage(VotingEmbed.getPoll(voteType, question, description, false, null, server, author, 0));
+                    requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, voteType, question, description, false, null, server, author, 0));
                 }
                 else if (voteType.equalsIgnoreCase("poll")) {
                     modalInteraction.createImmediateResponder()
-                            .addEmbed(VotingEmbed.getPoll(voteType, question, description, false, null, server, author, 0))
+                            .addEmbed(VotingEmbed.getPoll(languageManager, voteType, question, description, false, null, server, author, 0))
                             .respond();
                 }
 
@@ -116,7 +127,7 @@ public class ModalSubmit implements ModalSubmitListener {
                 Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
                 assert role != null;
 
-                SantaEmbed.getHostMessage(role, user, extractionResult.rules, extractionResult.theme).send(user);
+                SantaEmbed.getHostMessage(languageManager, role, user, extractionResult.rules, extractionResult.theme).send(user);
                 santaMessage.delete();
         }
     }

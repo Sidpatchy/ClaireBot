@@ -3,6 +3,8 @@ package com.sidpatchy.clairebot.Listener;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.ServerPreferencesEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.UserPreferencesEmbed;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.ServerPreferencesComponents;
 import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponents;
@@ -17,8 +19,11 @@ import org.javacord.api.event.interaction.SelectMenuChooseEvent;
 import org.javacord.api.interaction.SelectMenuInteraction;
 import org.javacord.api.listener.interaction.SelectMenuChooseListener;
 
+import java.util.HashMap;
+
 public class SelectMenuChoose implements SelectMenuChooseListener {
     Logger logger = Main.getLogger();
+    private LanguageManager languageManager;
 
     @Override
     public void onSelectMenuChoose(SelectMenuChooseEvent event) {
@@ -28,6 +33,9 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
         User user = selectMenuInteraction.getUser();
         Server server = selectMenuInteraction.getServer().orElse(null);
         TextChannel channel = selectMenuInteraction.getChannel().orElse(null);
+
+        ContextManager context = new ContextManager(server, channel, user, user, null, new HashMap<>());
+        languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         // Not speaking of message author, rather, the header field
         EmbedAuthor embedAuthor = message.getEmbeds().get(0).getAuthor().orElse(null);
@@ -43,14 +51,14 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                 if (label.equalsIgnoreCase("Accent Colour")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(UserPreferencesEmbed.getAccentColourMenu(user))
+                            .addEmbed(UserPreferencesEmbed.getAccentColourMenu(languageManager, user))
                             .addComponents(UserPreferencesComponents.getAccentColourMenu())
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Language")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(UserPreferencesEmbed.getLanguageMenu(user))
+                            .addEmbed(UserPreferencesEmbed.getLanguageMenu(languageManager, user))
                             .addComponents()
                             .send();
                 }
@@ -59,7 +67,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                 if (label.equalsIgnoreCase("Select Common Colours")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(UserPreferencesEmbed.getAccentColourListMenu(user))
+                            .addEmbed(UserPreferencesEmbed.getAccentColourListMenu(languageManager, user))
                             .addComponents(UserPreferencesComponents.getAccentColourList())
                             .send();
                 }
@@ -83,7 +91,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                 else {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(UserPreferencesEmbed.getAcknowledgeAccentColourChange(user, accentColour))
+                            .addEmbed(UserPreferencesEmbed.getAcknowledgeAccentColourChange(languageManager, user, accentColour))
                             .addComponents()
                             .send();
                 }
@@ -96,28 +104,28 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                 if (server == null) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ServerPreferencesEmbed.getNotServerMenu())
+                            .addEmbed(ServerPreferencesEmbed.getNotServerMenu(languageManager))
                             .addComponents()
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Requests Channel")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ServerPreferencesEmbed.getRequestsChannelMenu(user))
+                            .addEmbed(ServerPreferencesEmbed.getRequestsChannelMenu(languageManager, user))
                             .addComponents(ServerPreferencesComponents.getRequestsChannelMenu(server))
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Moderator Messages Channel")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ServerPreferencesEmbed.getModeratorChannelMenu(user))
+                            .addEmbed(ServerPreferencesEmbed.getModeratorChannelMenu(languageManager, user))
                             .addComponents(ServerPreferencesComponents.getModeratorChannelMenu(server))
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Enforce Server Language")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ServerPreferencesEmbed.getEnforceServerLangMenu(user))
+                            .addEmbed(ServerPreferencesEmbed.getEnforceServerLangMenu(languageManager, user))
                             .addComponents(ServerPreferencesComponents.getEnforceServerLanguageMenu())
                             .send();
                 }
@@ -129,7 +137,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
 
                 selectMenuInteraction.createFollowupMessageBuilder()
                         .setFlags(MessageFlag.EPHEMERAL)
-                        .addEmbed(ServerPreferencesEmbed.getAcknowledgeRequestsChannelChange(server, user, channelID))
+                        .addEmbed(ServerPreferencesEmbed.getAcknowledgeRequestsChannelChange(languageManager, server, user, channelID))
                         .addComponents()
                         .send();
             }
@@ -140,7 +148,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
 
                 selectMenuInteraction.createFollowupMessageBuilder()
                         .setFlags(MessageFlag.EPHEMERAL)
-                        .addEmbed(ServerPreferencesEmbed.getAcknowledgeModeratorChannelChange(server, user, channelID))
+                        .addEmbed(ServerPreferencesEmbed.getAcknowledgeModeratorChannelChange(languageManager, server, user, channelID))
                         .addComponents()
                         .send();
             }
@@ -151,7 +159,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
 
                 selectMenuInteraction.createFollowupMessageBuilder()
                         .setFlags(MessageFlag.EPHEMERAL)
-                        .addEmbed(ServerPreferencesEmbed.getAcknowledgeEnforceServerLanguageUpdate(server, user, bool))
+                        .addEmbed(ServerPreferencesEmbed.getAcknowledgeEnforceServerLanguageUpdate(languageManager, server, user, bool))
                         .addComponents()
                         .send();
             }
