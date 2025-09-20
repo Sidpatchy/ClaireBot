@@ -15,7 +15,7 @@ contributors:
   - ["Sidpatchy", "https://github.com/Sidpatchy/"]
 
 # Any notes that translators feel the need to express, written in the target language.
-# At your option, you may leave this field blank if you feel that it is not needed. If updating the language file,
+# At your discretion, you may leave this field blank if you feel that it is not needed. If updating the language file,
 # feel free to modify or remove this (make it blank) if it no longer applies.
 #
 # If you are contributing, please provide the ClaireBot maintainer(s) with a translated version/explanation of this.
@@ -177,7 +177,7 @@ ClaireLang:
         HelpEmbed:
           Commands: "Commands"
           Usage: "Usage"
-          Error: "Unable to locate help data for \"{cb.help.commandname}\". Error code: {cb.generic.errorcode}"
+          Error: "Unable to locate help data for \"{cb.commandname}\". Error code: {cb.errorcode}"
         InfoEmbed:
           NeedHelp: "Need Help?"
           NeedHelpDetails: "You can get help by creating an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or by joining our [support server](https://support.clairebot.net/)"
@@ -206,7 +206,7 @@ ClaireLang:
           TestButton: "Send Sample"
           RandomizeButton: "Re-randomize"
           SentByAuthor: "Sent by"
-          GiverMessage: "Ho! Ho! Ho! You have recieved **{cb.user.id.displayname.server}** in the {cb.serverid.name} Secret Santa!"
+          GiverMessage: "Ho! Ho! Ho! You have recieved **{cb.user.id.displayname.server}** in the {cb.server.name} Secret Santa!"
         ServerInfoEmbed:
           ServerID: "Server ID"
           Owner: "Owner"
@@ -234,7 +234,7 @@ ClaireLang:
           AcknowledgeEnforceServerLanguageUpdateNotEnforced: "I will follow each individual user's language preference."
         UserInfoEmbed:
           Error_1: "The value for author was null when passed into UserInfo Embed. Error code: {cb.errorcode}"
-          Error_2: "Author: {cb.user.id.username}"
+          Error_2: "Author: {cb.user.name}"
           User: "User"
           DiscordID: "Discord ID"
           JoinDate: "Server Join Date"

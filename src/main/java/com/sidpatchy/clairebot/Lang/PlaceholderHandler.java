@@ -49,6 +49,7 @@ public class PlaceholderHandler {
                 entry("cb.bot.releasedate", Main::getBuildDate),
                 entry("cb.bot.startseconds", () -> Main.getStartMillis() / 1000),
                 entry("cb.bot.runtimedurationwords", () -> DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - Main.getStartMillis(), true, false)),
+                entry("cb.command.help.name", () -> String.valueOf(Main.getCommands().getHelp().getName())),
 
                 // Server placeholders
                 entry("cb.server.name", () ->
@@ -61,16 +62,11 @@ public class PlaceholderHandler {
                         context.getUser() != null ? context.getUser().getName() : ""),
                 entry("cb.user.id", () ->
                         context.getUser() != null ? context.getUser().getIdAsString() : ""),
+                entry("cb.user.id.mentiontag", () ->
+                        context.getUser() != null ? "<@" + context.getUser().getIdAsString() + ">" : ""),
                 entry("cb.user.id.accentcolour", () ->
                         String.valueOf(Main.getColor(Objects.requireNonNull(context.getUser()).getIdAsString()))),
                 entry("cb.user.id.displayname.server", () -> {
-                    // 1) If explicitly provided via context, prefer that
-                    Object ctxVal = context.getData(ContextManager.ContextType.GENERIC, "user.id.displayname.server");
-                    if (ctxVal != null) {
-                        return String.valueOf(ctxVal);
-                    }
-
-                    // 2) Derive from author/user + server
                     org.javacord.api.entity.server.Server server = context.getServer();
                     org.javacord.api.entity.user.User author = context.getAuthor();
                     if (author != null) {
@@ -100,16 +96,10 @@ public class PlaceholderHandler {
                 entry("cb.channel.id", () ->
                         context.getChannel() != null ? context.getChannel().getIdAsString() : ""),
                 entry("cb.channel.id.mentiontag", () ->
-                        Optional.ofNullable(context.getData(ContextManager.ContextType.GENERIC, "channel.id.mentiontag"))
-                                .map(Object::toString)
-                                .orElseGet(() ->
-                                        Optional.ofNullable(context.getChannel())
-                                                .flatMap(ch -> ch.asServerChannel().map(sc -> "<#" + sc.getIdAsString() + ">"))
-                                                .orElse("")
-                                )),
+                        context.getChannel() != null ? "<#" + context.getChannel().getIdAsString() + ">" : ""),
 
                 // Command placeholders
-                entry("cb.help.commandname", () ->
+                entry("cb.commandname", () ->
                         String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "commandname")))),
                 entry("cb.user.id.username", () ->
                         Optional.ofNullable(context.getAuthor())
@@ -118,10 +108,13 @@ public class PlaceholderHandler {
                                     Object v = context.getData(ContextManager.ContextType.GENERIC, "user.id.username");
                                     return v != null ? v.toString() : "";
                                 })),
+                // Voting placeholders
+                entry("cb.poll.id", () ->
+                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "poll.id")))),
+                entry("cb.voting.optionnumber", () ->
+                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "voting.optionnumber")))),
 
-                // Error code (supports both generic-scoped and flat key used in some strings)
-                entry("cb.generic.errorcode", () ->
-                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "errorcode")))),
+                // Error code
                 entry("cb.errorcode", () ->
                         String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "errorcode"))))
         );
