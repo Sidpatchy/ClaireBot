@@ -46,6 +46,37 @@ version: 1
 # -------------------------------------------------------------------------------------------------------------------- #
 
 ClaireLang:
+  # Generic Strings which are likely ot be used in multiple places.
+  Generic:
+    True: "True"
+    False: "False"
+    Yes: "Yes"
+    No: "No"
+    ClickToDisplaySettings: "Click to display settings"
+
+  Colors:
+    ClaireBotBlue: "ClaireBot Blue"
+    Red: "Red"
+    Pink: "Pink"
+    Purple: "Purple"
+    DeepPurple: "Deep Purple"
+    Indigo: "Indigo"
+    Blue: "Blue"
+    LightBlue: "Light Blue"
+    Cyan: "Cyan"
+    Teal: "Teal"
+    Green: "Green"
+    Olive: "Olive"
+    LightGreen: "Light Green"
+    Lime: "Lime"
+    Yellow: "Yellow"
+    Amber: "Amber"
+    NRAXOrange: "NRAX Orange"
+    DeepOrange: "Deep Orange"
+    White: "White"
+    Grey: "Grey"
+    Black: "Black"
+
   PlsBan:
     PlsBanTriggers:
       - "pls ban"
@@ -233,3 +264,44 @@ ClaireLang:
           UsageDesc: "Get started by running `{cb.command.help.name}`. Need more info on a command? Run `/{cb.command.help.name} <command name>` (ex. `/{cb.command.help.name} user`)"
           SupportTitle: "Get Support"
           SupportDesc: "You can get help on our [Discord]({cb.supportserver}), or by opening an issue on [GitHub]({cb.github})"
+
+      # Message Components (Buttons, Select Menus, etc.)
+      Components:
+        Regular:
+          SantaModal:
+            rules-row: "Rules..."
+            theme-row: "Theme..."
+          ServerPreferences:
+            Settings: "Settings"
+            RequestsChannel: "Requests Channel"
+            RequestsChannelDescription: "Choose where ClaireBot should post requests."
+            ModeratorMessagesChannel: "Moderator Messages Channel"
+            ModeratorMessagesChannelDescription: "Choose where ClaireBot should post moderator messages."
+            EnforceServerLanguage: "Enforce Server Language"
+            EnforceServerLanguageDescription: "Force ClaireBot to use the same language as the server regardless of user preference."
+            EnforceServerLanguagePlaceholder: "Click to select an option"
+            SelectAChannelPlaceholder: "Click to select a channel"
+          UserPreferences:
+            Settings: "Settings"
+            AccentColour: "Accent Colour"
+            AccentColourDescription: "For those who hate the colour blue"
+            Language: "Language"
+            LanguageDescription: "If you're offended by english"
+            AccentColourPlaceholder: "Click to choose option"
+            SelectCommonColours: "Select Common Colours"
+            SelectCommonColoursDescription: "Select from a list of common colours"
+            HexadecimalEntry: "Hexadecimal Entry"
+            HexadecimalEntryDescription: "Enter any hexadecimal colour"
+            HexEntryPlaceholder: "Enter a hex colour ex. #ff8800"
+          Voting:
+            Question: "Question"
+            Details: "Details"
+            MultipleChoicePlaceholder: "Click to choose option"
+            MultipleChoiceYesDescription: "Opens menu to select more options"
+            MultipleChoiceNoDescription: "Submits {cb.commandname} after clicking submit"
+            AllowMultipleChoices: "Allow selecting multiple choices?"
+            AllowMultipleChoicesPlaceholder: "Click to choose option"
+            AllowMultipleChoicesYesDescription: "Allows the respondent to select more than one option"
+            AllowMultipleChoicesNoDescription: "Only allows the respondent to select one option"
+            OptionLabelTemplate: "Option #{cb.voting.optionnumber}"
+
