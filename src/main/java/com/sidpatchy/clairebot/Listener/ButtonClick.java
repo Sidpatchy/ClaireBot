@@ -50,13 +50,13 @@ public class ButtonClick implements ButtonClickListener {
         switch (buttonID) {
             case "rules":
                 buttonInteraction.respondWithModal("santa-rules-" + message.getIdAsString(), "Update Rules",
-                        SantaModal.getRulesRow()
+                        SantaModal.getRulesRow(languageManager)
                 );
 
                 break;
             case "theme":
                 buttonInteraction.respondWithModal("santa-theme-" + message.getIdAsString(), "Update Theme",
-                        SantaModal.getThemeRow()
+                        SantaModal.getThemeRow(languageManager)
                 );
 
                 break;

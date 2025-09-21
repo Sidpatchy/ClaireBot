@@ -52,7 +52,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
                             .addEmbed(UserPreferencesEmbed.getAccentColourMenu(languageManager, user))
-                            .addComponents(UserPreferencesComponents.getAccentColourMenu())
+                            .addComponents(UserPreferencesComponents.getAccentColourMenu(languageManager))
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Language")) {
@@ -68,12 +68,12 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
                             .addEmbed(UserPreferencesEmbed.getAccentColourListMenu(languageManager, user))
-                            .addComponents(UserPreferencesComponents.getAccentColourList())
+                            .addComponents(UserPreferencesComponents.getAccentColourList(languageManager))
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Hexadecimal Entry")) {
                     message.delete();
-                    selectMenuInteraction.respondWithModal("hex-entry-modal", "Hex Colour Entry", UserPreferencesComponents.getAccentColourHexEntry());
+                    selectMenuInteraction.respondWithModal("hex-entry-modal", "Hex Colour Entry", UserPreferencesComponents.getAccentColourHexEntry(languageManager));
                 }
                 selectMenuInteraction.acknowledge();
             }
@@ -112,21 +112,21 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
                             .addEmbed(ServerPreferencesEmbed.getRequestsChannelMenu(languageManager, user))
-                            .addComponents(ServerPreferencesComponents.getRequestsChannelMenu(server))
+                            .addComponents(ServerPreferencesComponents.getRequestsChannelMenu(languageManager, server))
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Moderator Messages Channel")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
                             .addEmbed(ServerPreferencesEmbed.getModeratorChannelMenu(languageManager, user))
-                            .addComponents(ServerPreferencesComponents.getModeratorChannelMenu(server))
+                            .addComponents(ServerPreferencesComponents.getModeratorChannelMenu(languageManager, server))
                             .send();
                 }
                 else if (label.equalsIgnoreCase("Enforce Server Language")) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
                             .addEmbed(ServerPreferencesEmbed.getEnforceServerLangMenu(languageManager, user))
-                            .addComponents(ServerPreferencesComponents.getEnforceServerLanguageMenu())
+                            .addComponents(ServerPreferencesComponents.getEnforceServerLanguageMenu(languageManager))
                             .send();
                 }
             }

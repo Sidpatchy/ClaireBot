@@ -82,7 +82,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 slashCommandInteraction.createImmediateResponder()
                         .setFlags(MessageFlag.EPHEMERAL)
                         .addEmbed(UserPreferencesEmbed.getMainMenu(languageManager, author))
-                        .addComponents(UserPreferencesComponents.getMainMenu())
+                        .addComponents(UserPreferencesComponents.getMainMenu(languageManager))
                         .respond();
             }
             else if (mode.equalsIgnoreCase("server") && server != null) {
@@ -91,7 +91,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     slashCommandInteraction.createImmediateResponder()
                             .setFlags(MessageFlag.EPHEMERAL)
                             .addEmbed(ServerPreferencesEmbed.getMainMenu(languageManager, author))
-                            .addComponents(ServerPreferencesComponents.getMainMenu())
+                            .addComponents(ServerPreferencesComponents.getMainMenu(languageManager))
                             .respond();
                 }
                 else {
@@ -151,8 +151,8 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 try {
                     // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
                     CompletableFuture<Void> pollModal = slashCommandInteraction.respondWithModal("poll", "Create Poll",
-                            VotingComponents.getQuestionRow(),
-                            VotingComponents.getDetailsRow()
+                            VotingComponents.getQuestionRow(languageManager),
+                            VotingComponents.getDetailsRow(languageManager)
                     );
 
                     pollModal.exceptionally(e -> {
@@ -227,8 +227,8 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 try {
                     // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
                     CompletableFuture<Void> pollModal = slashCommandInteraction.respondWithModal("request", "Create Request",
-                            VotingComponents.getQuestionRow(),
-                            VotingComponents.getDetailsRow()
+                            VotingComponents.getQuestionRow(languageManager),
+                            VotingComponents.getDetailsRow(languageManager)
                     );
 
                     pollModal.exceptionally(e -> {
