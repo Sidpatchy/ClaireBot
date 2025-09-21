@@ -15,7 +15,7 @@ contributors:
   - ["Example", "https://github.com/Example/"]
 
 # Any notes that translators feel the need to express, written in the target language.
-# At your option, you may leave this field blank if you feel that it is not needed. If updating the language file,
+# At your discretion, you may leave this field blank if you feel that it is not needed. If updating the language file,
 # feel free to modify or remove this (make it blank) if it no longer applies.
 #
 # If you are contributing, please provide the ClaireBot maintainer(s) with a translated version/explanation of this.
@@ -46,6 +46,37 @@ version: 1
 # -------------------------------------------------------------------------------------------------------------------- #
 
 ClaireLang:
+  # Generic Strings which are likely ot be used in multiple places.
+  Generic:
+    True: ""
+    False: ""
+    Yes: ""
+    No: ""
+    ClickToDisplaySettings: ""
+
+  Colors:
+    ClaireBotBlue: ""
+    Red: ""
+    Pink: ""
+    Purple: ""
+    DeepPurple: ""
+    Indigo: ""
+    Blue: ""
+    LightBlue: ""
+    Cyan: ""
+    Teal: ""
+    Green: ""
+    Olive: ""
+    LightGreen: ""
+    Lime: ""
+    Yellow: ""
+    Amber: ""
+    NRAXOrange: ""
+    DeepOrange: ""
+    White: ""
+    Grey: ""
+    Black: ""
+
   PlsBan:
     PlsBanTriggers:
       - ""
@@ -67,82 +98,87 @@ ClaireLang:
           # Things ClaireBot should respond with when triggered by one of the OnTopTriggers
           ClaireBotOnTopResponses:
             - ""
-          # Note: The rest of the help is located separately within commands_en-US.yml
-          HelpEmbed:
-            Commands: ""
-          InfoEmbed:
-            NeedHelp: ""
-            NeedHelpDetails: ""
-            AddToServer: ""
-            AddToServerDetails: ""
-            GitHub: ""
-            GitHubDetails: ""
-            ServerCount: ""
-            ServerCountDetails: ""
-            Version: ""
-            VersionDetails: ""
-            Uptime: ""
-            UptimeValue: ""
-          LeaderboardEmbed:
-            LeaderboardForServer: ""
-            GlobalLeaderboard: ""
-          LevelEmbed: "" # Unused
-          QuoteEmbed: "" # Unused
-          SantaEmbed:
-            Confirmation: ""
-            RulesButton: ""
-            ThemeButton: ""
-            SendButton: ""
-            TestButton: ""
-            RandomizeButton: ""
-            SentByAuthor: ""
-            GiverMessage: ""
-          ServerInfoEmbed:
-            ServerID: ""
-            Owner: ""
-            RoleCount: ""
-            MemberCount: ""
-            ChannelCounts: ""
-            Categories: ""
-            TextChannels: ""
-            VoiceChannels: ""
-          ServerPreferencesEmbed:
-            MainMenuTitle: ""
-            NotAServer: ""
-            RequestsChannelMenuName: ""
-            RequestsChannelDescription: ""
-            ModeratorChannelMenuName: ""
-            ModeratorChannelDescription: ""
-            EnforceServerLanguageMenuName: ""
-            AcknowledgeRequestsChannelChangeTitle: "!"
-            AcknowledgeRequestsChannelChangeDescription: ""
-            AcknowledgeModeratorChannelChangeTitle: ""
-            AcknowledgeModeratorChannelChangeDescription: ""
-            AcknowledgeEnforceServerLanguageUpdateTitle: ""
-            AcknowledgeEnforceServerLanguageUpdateEnforced: ""
-            AcknowledgeEnforceServerLanguageUpdateNotEnforced: ""
-          UserInfoEmbed:
-            Error_1: ""
-            Error_2: ""
-            User: ""
-            DiscordID: ""
-            JoinDate: ""
-            CreationDate: ""
-          UserPreferencesEmbed:
-            MainMenuText: ""
-            AccentColourMenu: ""
-            AccentColourList: ""
-            AccentColourChanged: ""
-            AccentColourChangedDesc: ""
-            LanguageMenuTitle: ""
-            LanguageMenuDesc: ""
-          VotingEmbed:
-            PollRequest: ""
-            PollAsk: ""
-            Choices: ""
-            PollID: ""
-            UserResponseTitle: ""
-            UserResponseDescription: ""
+        # Note: The rest of the help is located separately within commands_XX-XX.yml
+        HelpEmbed:
+          Commands: ""
+          Usage: ""
+          Error: ""
+        InfoEmbed:
+          NeedHelp: ""
+          NeedHelpDetails: ""
+          AddToServer: ""
+          AddToServerDetails: ""
+          GitHub: ""
+          GitHubDetails: ""
+          ServerCount: ""
+          ServerCountDetails: ""
+          Version: ""
+          VersionDetails: ""
+          Uptime: ""
+          UptimeValue: ""
+        LeaderboardEmbed:
+          LeaderboardForServer: ""
+          GlobalLeaderboard: ""
+        LevelEmbed: "" # Unused
+        QuoteEmbed:
+          InvalidMessages: ""
+          JumpToOriginal: ""
+        SantaEmbed:
+          Confirmation: ""
+          RulesButton: ""
+          ThemeButton: ""
+          SendButton: ""
+          TestButton: ""
+          RandomizeButton: ""
+          SentByAuthor: ""
+          GiverMessage: ""
+        ServerInfoEmbed:
+          ServerID: ""
+          Owner: ""
+          CreationDate: ""
+          RoleCount: ""
+          MemberCount: ""
+          ChannelCounts: ""
+          Categories: ""
+          TextChannels: ""
+          VoiceChannels: ""
+        ServerPreferencesEmbed:
+          MainMenuTitle: ""
+          NotAServer: ""
+          RequestsChannelMenuName: ""
+          RequestsChannelDescription: ""
+          ModeratorChannelMenuName: ""
+          ModeratorChannelDescription: ""
+          EnforceServerLanguageMenuName: ""
+          AcknowledgeRequestsChannelChangeTitle: ""
+          AcknowledgeRequestsChannelChangeDescription: ""
+          AcknowledgeModeratorChannelChangeTitle: ""
+          AcknowledgeModeratorChannelChangeDescription: ""
+          AcknowledgeEnforceServerLanguageUpdateTitle: ""
+          AcknowledgeEnforceServerLanguageUpdateEnforced: ""
+          AcknowledgeEnforceServerLanguageUpdateNotEnforced: ""
+        UserInfoEmbed:
+          Error_1: ""
+          Error_2: ""
+          User: ""
+          DiscordID: ""
+          JoinDate: ""
+          CreationDate: ""
+        UserPreferencesEmbed:
+          MainMenuText: ""
+          AccentColourMenu: ""
+          AccentColourList: ""
+          AccentColourChanged: ""
+          AccentColourChangedDesc: ""
+          LanguageMenuTitle: ""
+          LanguageMenuDesc: ""
+        VotingEmbed:
+          PollRequest: ""
+          PollAsk: ""
+          Choices: ""
+          PollID: ""
+          UserResponseTitle: ""
+          UserResponseDescription: ""
         ErrorEmbed:
           Error: ""
           GenericDescription: ""
@@ -153,3 +189,43 @@ ClaireLang:
           UsageDesc: ""
           SupportTitle: ""
           SupportDesc: ""
+
+      # Message Components (Buttons, Select Menus, etc.)
+      Components:
+        Regular:
+          SantaModal:
+            rules-row: ""
+            theme-row: ""
+          ServerPreferences:
+            Settings: ""
+            RequestsChannel: ""
+            RequestsChannelDescription: ""
+            ModeratorMessagesChannel: ""
+            ModeratorMessagesChannelDescription: ""
+            EnforceServerLanguage: ""
+            EnforceServerLanguageDescription: ""
+            EnforceServerLanguagePlaceholder: ""
+            SelectAChannelPlaceholder: ""
+          UserPreferences:
+            Settings: ""
+            AccentColour: ""
+            AccentColourDescription: ""
+            Language: ""
+            LanguageDescription: ""
+            AccentColourPlaceholder: ""
+            SelectCommonColours: ""
+            SelectCommonColoursDescription: ""
+            HexadecimalEntry: ""
+            HexadecimalEntryDescription: ""
+            HexEntryPlaceholder: ""
+          Voting:
+            Question: ""
+            Details: ""
+            MultipleChoicePlaceholder: ""
+            MultipleChoiceYesDescription: ""
+            MultipleChoiceNoDescription: ""
+            AllowMultipleChoices: ""
+            AllowMultipleChoicesPlaceholder: ""
+            AllowMultipleChoicesYesDescription: ""
+            AllowMultipleChoicesNoDescription: ""
+            OptionLabelTemplate: ""
