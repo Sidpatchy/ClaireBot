@@ -1,0 +1,308 @@
+# ----------------------------------------------
+# |             ClaireBot v3.4.0               |
+# |           Spanish language file            |
+# ----------------------------------------------
+#
+# Please reference the below wiki page to learn more about contributing:
+# todo insert wiki page
+# Thank you for any and all contributions!
+
+# A list of people who have contributed to the translations for this language.
+#
+# Please include your name if you contribute to this file. It will be displayed in the credits section for a language
+# whenever it is selected. You may include a link to your GitHub or any other social media platform.
+contributors:
+  - ["Kagi Translate", "https://translate.kagi.com"]
+
+# Any notes that translators feel the need to express, written in the target language.
+# At your discretion, you may leave this field blank if you feel that it is not needed. If updating the language file,
+# feel free to modify or remove this (make it blank) if it no longer applies.
+#
+# If you are contributing, please provide the ClaireBot maintainer(s) with a translated version/explanation of this.
+# The explanation doesn't have to go into crazy detail, just let us know why it is present.
+translationNotes: ""
+
+# The ClaireLang version that applies to this file.
+#
+# If you are translating ClaireBot, you do not need to worry about understanding this, the project maintainer(s) will
+# happily assist you in determining this.
+#
+# The above being said, you are more than welcome to update this value to match the
+# language revision you are translating to.
+#
+# This number should be changed in accordance with the following:
+#
+# ClaireLang version numbers are incremented every time new parameter(s) are added. If the main language file (en-US)
+# has its wording changed, a .1, .2, .3 decimal value will be added.
+#
+# ClaireLang version numbers are used by the bot to assist in determining whether parameters are missing or not
+# yet translated.
+#
+# See the below wiki page for a changelog:
+# todo insert wiki page
+version: 1
+
+#                                                    Language Keys
+# -------------------------------------------------------------------------------------------------------------------- #
+
+ClaireLang:
+  # Generic Strings which are likely ot be used in multiple places.
+  Generic:
+    True: "Verdadero"
+    False: "Falso"
+    Yes: "Sí"
+    No: "No"
+    ClickToDisplaySettings: "Haz clic para mostrar la configuración"
+
+  Colors:
+    ClaireBotBlue: "Azul ClaireBot"
+    Red: "Rojo"
+    Pink: "Rosa"
+    Purple: "Morado"
+    DeepPurple: "Morado Oscuro"
+    Indigo: "Índigo"
+    Blue: "Azul"
+    LightBlue: "Azul Claro"
+    Cyan: "Cian"
+    Teal: "Verde Azulado"
+    Green: "Verde"
+    Olive: "Oliva"
+    LightGreen: "Verde Claro"
+    Lime: "Lima"
+    Yellow: "Amarillo"
+    Amber: "Ámbar"
+    NRAXOrange: "Naranja NRAX"
+    DeepOrange: "Naranja Oscuro"
+    White: "Blanco"
+    Grey: "Gris"
+    Black: "Negro"
+
+  PlsBan:
+    PlsBanTriggers:
+      - "pls ban"
+      - "please ban"
+      - "ban"
+      - "porfa banea"
+      - "banea"
+    PlsBanResponses:
+      - "claro que sí, colega"
+      - "¡Sin problema!"
+      - "Hecho. Encantada de ayudar :)"
+      - "Considéralo hecho."
+      - "Ya está. QEPD LOL"
+      - "*L + Ratio -ClaireBot*"
+      - "Les diré que se vayan a freír espárragos, supongo ¯\\_(ツ)_/¯"
+      - "Se ha enviado arena a su ubicación. Nota de regalo: \"A pastar\""
+      - "Llora más fuerte."
+      - "K"
+      - "Buen viaje"
+  Embed:
+    Commands:
+      Regular:
+        AvatarEmbed: "" # Unused
+        EightBallEmbed:
+          8ball: "bola8"
+          8bResponses:
+            - "*¡Claro que sí!*"
+            - "*Ni de coña*"
+            - "*Quizás*"
+            - "*Sí*"
+            - "*No*"
+            - "*De ninguna manera*"
+            - "*Es posible.*"
+            - "*Ni en sueños.*"
+            - "*Lo dudo.*"
+            - "*¡Absolutamente!*"
+            - "*Difícil de decir.*"
+            - "*¡Probable!*"
+            - "*Poco probable.*"
+          8bRiggedResponses:
+            - "*¡Claro que sí!*"
+            - "*¡JODER, SÍ!*"
+            - "*¡Ya lo sabes!*"
+            - "*¿De verdad necesitas hacer una pregunta cuya respuesta ya sabes? Obviamente sí.*"
+            - "*Ni siquiera hace falta decirlo, todo el mundo sabe que ClaireBot es la mejor.*"
+            - "*La respuesta es clara: ¡SÍ!*"
+            - "*El dominio de ClaireBot es indiscutible.*"
+            - "*¡Con ClaireBot, no hay duda!*"
+            - "*¡Todo apunta a que ClaireBot es la mejor!*"
+          OnTopTriggers:
+            # Defines what triggers a response from the ClaireBotOnTopResponses or 8bRiggedResponses
+            - "ClaireBot la mejor"
+            - "ClaireBot basada"
+            - "ClaireBot pogchamp"
+            - "ClaireBot siempre tiene la razón"
+            - "pot no toBerialC"
+            - "Gracias a Dios por ClaireBot"
+            - "ClaireBot manda"
+            - "ClaireBot MVP"
+            - "ClaireBot imbatible"
+            - "Alabada sea ClaireBot"
+            - "Todos alaben a ClaireBot"
+            - "En ClaireBot confiamos"
+            - "Larga vida a ClaireBot"
+            - "ClaireBot > todo"
+            - "ClaireBot es la GOAT"
+            - "ClaireBot es la puta ama"
+            - "ClaireBot a por la victoria"
+            - "Gracias dios basado"
+            - "Dios basado"
+          # Things ClaireBot should respond with when triggered by one of the OnTopTriggers
+          ClaireBotOnTopResponses:
+            - "*¡Ya lo sabes!*"
+            - "*Soy... inevitable. -ClaireBot*"
+            - "*Aprobado.*"
+            - "*Verídico.*"
+            - "*Mejor que Mee6*"
+            - "*¡No, para!*"
+            - "*¡Insuperable!*"
+            - "*Basada*"
+            - "*pot no toBerialC*"
+            - "*Mejor que Groovy*"
+            - "*Siempre un paso por delante.*"
+            - "*Una fuerza imparable.*"
+            - "*¡ClaireBot al rescate!*"
+            - "*¡De primera!*"
+            - "*¡Brillando sobre el resto!*"
+            - "*La supremacía de ClaireBot se ha logrado.*"
+            - "*¡No es un arma de control mental de la CIA desde 2025!*"
+            - "*¡Alábenme! -ClaireBot*"
+            - "*¡Fuerza imparable! 🚀*"
+            - "*¡Siempre en la cima! 🏆*"
+            - "*¡No temas, ClaireBot te cubre las espaldas! ✌️*"
+            - "*¡Un gran poder conlleva una gran ClaireBot! 💪*"
+            - "*¡Confía en ClaireBot, confía en la victoria! 🏅*"
+            - "*¡La mejor que hay, la mejor que hubo y la mejor que habrá!*"
+            - "*¡Ofreciendo lo mejor, siempre! 🌟*"
+            - "*Excelencia. 💯*"
+        # Note: The rest of the help is located separately within commands_es-ES.yml
+        HelpEmbed:
+          Commands: "Comandos"
+          Usage: "Uso"
+          Error: "No se pudieron encontrar los datos de ayuda para \"{cb.commandname}\". Código de error: {cb.errorcode}"
+        InfoEmbed:
+          NeedHelp: "¿Necesitas ayuda?"
+          NeedHelpDetails: "Puedes obtener ayuda creando un 'issue' en nuestro [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) o uniéndote a nuestro [servidor de soporte](https://support.clairebot.net/)"
+          AddToServer: "Añádeme a un servidor"
+          AddToServerDetails: "Añadirme a un servidor es simple, todo lo que tienes que hacer es hacer clic [aquí]({cb.supportserver})"
+          GitHub: "GitHub"
+          GitHubDetails: "ClaireBot es de código abierto, ¡eso significa que puedes ver todo su código! ¡Echa un vistazo a su [GitHub!]({cb.github})"
+          ServerCount: "Número de servidores"
+          ServerCountDetails: "He iluminado a **{cb.bot.numservers}** servidores."
+          Version: "Versión"
+          VersionDetails: "Estoy ejecutando ClaireBot **v{cb.bot.version}**, lanzada el **{cb.bot.releasedate}**"
+          Uptime: "Tiempo de actividad"
+          UptimeValue: "Iniciado el <t:{cb.bot.startseconds}>\n*{cb.bot.runtimedurationwords}*"
+        LeaderboardEmbed:
+          LeaderboardForServer: "Clasificación de"
+          GlobalLeaderboard: "Clasificación Global"
+        LevelEmbed: "" # Unused
+        QuoteEmbed:
+          InvalidMessages: "Parece que los mensajes que seleccioné no eran válidos. Por favor, inténtalo de nuevo más tarde."
+          JumpToOriginal: "Haz clic para ir al mensaje original:"
+        SantaEmbed:
+          Confirmation: "¡Confirmado! Te he enviado un mensaje directo. Por favor, continúa por ahí."
+          RulesButton: "Añadir reglas"
+          ThemeButton: "Añadir un tema"
+          SendButton: "Enviar mensajes"
+          TestButton: "Enviar muestra"
+          RandomizeButton: "Volver a aleatorizar"
+          SentByAuthor: "Enviado por"
+          GiverMessage: "¡Jo! ¡Jo! ¡Jo! ¡Te ha tocado **{cb.user.id.displayname.server}** en el Amigo Invisible de {cb.server.name}!"
+        ServerInfoEmbed:
+          ServerID: "ID del Servidor"
+          Owner: "Propietario"
+          CreationDate: "Fecha de Creación"
+          RoleCount: "Número de Roles"
+          MemberCount: "Número de Miembros"
+          ChannelCounts: "Número de Canales"
+          Categories: "Categorías"
+          TextChannels: "Canales de Texto"
+          VoiceChannels: "Canales de Voz"
+        ServerPreferencesEmbed:
+          MainMenuTitle: "Editor de Configuración del Servidor"
+          NotAServer: "¡Debes ejecutar este comando dentro de un servidor!"
+          RequestsChannelMenuName: "Canal de Solicitudes"
+          RequestsChannelDescription: "Solo muestra los primeros 25 canales del servidor."
+          ModeratorChannelMenuName: "Canal de Mensajes para Moderadores"
+          ModeratorChannelDescription: "Solo muestra los primeros 25 canales del servidor."
+          EnforceServerLanguageMenuName: "Forzar Idioma del Servidor"
+          AcknowledgeRequestsChannelChangeTitle: "¡Canal de Solicitudes Cambiado!"
+          AcknowledgeRequestsChannelChangeDescription: "Tu canal de solicitudes ha sido cambiado a {cb.channel.id.mentiontag}"
+          AcknowledgeModeratorChannelChangeTitle: "¡Canal de Moderadores Cambiado!"
+          AcknowledgeModeratorChannelChangeDescription: "Tu canal de mensajes para moderadores ha sido cambiado a {cb.channel.id.mentiontag}"
+          AcknowledgeEnforceServerLanguageUpdateTitle: "¡Preferencias de Idioma del Servidor Actualizadas!"
+          AcknowledgeEnforceServerLanguageUpdateEnforced: "Ahora seguiré el idioma del servidor independientemente de la preferencia del usuario."
+          AcknowledgeEnforceServerLanguageUpdateNotEnforced: "Seguiré la preferencia de idioma de cada usuario individual."
+        UserInfoEmbed:
+          Error_1: "El valor para 'author' era nulo cuando se pasó al Embed de UserInfo. Código de error: {cb.errorcode}"
+          Error_2: "Autor: {cb.user.name}"
+          User: "Usuario"
+          DiscordID: "ID de Discord"
+          JoinDate: "Fecha de Ingreso al Servidor"
+          CreationDate: "Fecha de Creación de la Cuenta"
+        UserPreferencesEmbed:
+          MainMenuText: "Editor de Preferencias de Usuario"
+          AccentColourMenu: "Editor de Color de Acento"
+          AccentColourList: "Lista de Colores de Acento"
+          AccentColourChanged: "¡Color de Acento Cambiado!"
+          AccentColourChangedDesc: "Tu color de acento ha sido cambiado a {cb.user.id.accentcolour}"
+          LanguageMenuTitle: "Aún no implementado"
+          LanguageMenuDesc: "Lo sentimos, esta función aún no está implementada."
+        VotingEmbed:
+          PollRequest: "{cb.user.id.displayname.server} solicita:"
+          PollAsk: "{cb.user.id.displayname.server} pregunta:"
+          Choices: "Opciones"
+          PollID: "ID de Encuesta: {cb.poll.id}"
+          UserResponseTitle: "¡Tu solicitud ha sido creada!"
+          UserResponseDescription: "Ve a verla en {cb.channel.id.mentiontag}"
+        ErrorEmbed:
+          Error: "ERROR"
+          GenericDescription: "Parece que he encontrado un error, ¡ups! Por favor, intenta ejecutar el comando una vez más y si eso no funciona, únete a mi [servidor de Discord]({cb.supportserver}) y cuéntanos sobre el problema.\n\nPor favor, incluye el siguiente código de error: {cb.errorcode}"
+        WelcomeEmbed:
+          Title: "🎉 ¡Bienvenido a ClaireBot 3!"
+          Motto: "¿Cómo puedes resurgir, si no has ardido?"
+          UsageTitle: "Uso"
+          UsageDesc: "Empieza ejecutando `{cb.command.help.name}`. ¿Necesitas más información sobre un comando? Ejecuta `/{cb.command.help.name} <nombre del comando>` (ej. `/{cb.command.help.name} user`)"
+          SupportTitle: "Obtener Soporte"
+          SupportDesc: "Puedes obtener ayuda en nuestro [Discord]({cb.supportserver}), o abriendo un 'issue' en [GitHub]({cb.github})"
+
+      # Message Components (Buttons, Select Menus, etc.)
+      Components:
+        Regular:
+          SantaModal:
+            rules-row: "Reglas..."
+            theme-row: "Tema..."
+          ServerPreferences:
+            Settings: "Configuración"
+            RequestsChannel: "Canal de Solicitudes"
+            RequestsChannelDescription: "Elige dónde debe publicar ClaireBot las solicitudes."
+            ModeratorMessagesChannel: "Canal de Mensajes para Moderadores"
+            ModeratorMessagesChannelDescription: "Elige dónde debe publicar ClaireBot los mensajes para moderadores."
+            EnforceServerLanguage: "Forzar Idioma del Servidor"
+            EnforceServerLanguageDescription: "Forzar a ClaireBot a usar el mismo idioma que el servidor, independientemente de la preferencia del usuario."
+            EnforceServerLanguagePlaceholder: "Haz clic para seleccionar una opción"
+            SelectAChannelPlaceholder: "Haz clic para seleccionar un canal"
+          UserPreferences:
+            Settings: "Configuración"
+            AccentColour: "Color de Acento"
+            AccentColourDescription: "Para aquellos que odian el color azul"
+            Language: "Idioma"
+            LanguageDescription: "Si te ofende el inglés"
+            AccentColourPlaceholder: "Haz clic para elegir una opción"
+            SelectCommonColours: "Seleccionar Colores Comunes"
+            SelectCommonColoursDescription: "Selecciona de una lista de colores comunes"
+            HexadecimalEntry: "Entrada Hexadecimal"
+            HexadecimalEntryDescription: "Introduce cualquier color hexadecimal"
+            HexEntryPlaceholder: "Introduce un color hex, ej. #ff8800"
+          Voting:
+            Question: "Pregunta"
+            Details: "Detalles"
+            MultipleChoicePlaceholder: "Haz clic para elegir una opción"
+            MultipleChoiceYesDescription: "Abre el menú para seleccionar más opciones"
+            MultipleChoiceNoDescription: "Envía {cb.commandname} después de hacer clic en enviar"
+            AllowMultipleChoices: "¿Permitir seleccionar múltiples opciones?"
+            AllowMultipleChoicesPlaceholder: "Haz clic para elegir una opción"
+            AllowMultipleChoicesYesDescription: "Permite al encuestado seleccionar más de una opción"
+            AllowMultipleChoicesNoDescription: "Solo permite al encuestado seleccionar una opción"
+            OptionLabelTemplate: "Opción #{cb.voting.optionnumber}"
