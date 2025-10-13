@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="cd"
+                 name="ClaireBot Docs"
+                 start-page="overview.md">
+
+    <toc-element topic="overview.md"/>
+    <toc-element topic="Contributing-guide.md"/>
+    <toc-element toc-title="ClaireBot">
+        <toc-element toc-title="Commands">
+            <toc-element topic="8ball.md"/>
+            <toc-element topic="avatar.md"/>
+            <toc-element topic="help.md"/>
+            <toc-element topic="info.md"/>
+            <toc-element topic="leaderboard.md"/>
+            <toc-element topic="level.md"/>
+            <toc-element topic="poll.md"/>
+            <toc-element topic="quote.md"/>
+            <toc-element topic="server.md"/>
+            <toc-element topic="user.md"/>
+            <toc-element topic="config.md">
+                <toc-element topic="config-user.md"/>
+                <toc-element topic="config-server.md"/>
+            </toc-element>
+            <toc-element topic="santa.md"/>
+        </toc-element>
+        <toc-element toc-title="Administrator's Guide">
+            <toc-element topic="Requests-Channel.md"/>
+        </toc-element>
+    </toc-element>
+    <toc-element toc-title="ClaireData">
+        <toc-element topic="API_Reference.md">
+            <toc-element toc-title="User">
+                <toc-element topic="Get_all_users.md"/>
+                <toc-element topic="Create_new_user.md"/>
+                <toc-element topic="Get_user_by_ID.md"/>
+                <toc-element topic="Update_user.md"/>
+                <toc-element topic="Delete_user.md"/>
+            </toc-element>
+            <toc-element toc-title="Guild">
+                <toc-element topic="Get_all_guilds.md"/>
+                <toc-element topic="Create_new_guild.md"/>
+                <toc-element topic="Get_guild_by_ID.md"/>
+                <toc-element topic="Update_guild.md"/>
+                <toc-element topic="Delete_guild.md"/>
+            </toc-element>
+        </toc-element>
+    </toc-element>
+    <toc-element toc-title="ClaireBot Docker"/>
+    <toc-element toc-title="Planning">
+        <toc-element topic="Beyond-Javacord.md"/>
+        <toc-element topic="Interface-Standardization-1.md"/>
+    </toc-element>
+    <toc-element topic="Archived-Overview.md"/>
+</instance-profile>
