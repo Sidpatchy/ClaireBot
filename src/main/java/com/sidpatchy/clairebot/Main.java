@@ -195,7 +195,7 @@ public class Main {
             color = config.getString("color");
             errorColor = config.getString("errorColor");
             errorGifs = config.getList("error_gifs", String.class);
-            fallbackLocale = Locale.forLanguageTag(config.getString("fallback_locale"));
+            fallbackLocale = Locale.forLanguageTag(config.getString("fallback_language"));
             zerfas = config.getList("zerfas", String.class);
             zerfasEmojiServerID = String.valueOf(config.getLong("zerfas_emoji_server_id"));
             zerfasEmojiID = String.valueOf(config.getLong("zerfas_emoji_id"));
