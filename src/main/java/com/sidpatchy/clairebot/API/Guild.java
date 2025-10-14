@@ -5,6 +5,7 @@ import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
+import com.sidpatchy.clairebot.Util.Network.UrlBuilder;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,7 +30,7 @@ public class Guild {
      */
     public void getGuild() throws IOException {
         try {
-            guild.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/guild" + guildID);
+            guild.loadFromURL(Main.getApiUser(), Main.getApiPassword(), UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID));
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -61,7 +62,7 @@ public class Guild {
                             String moderatorMessagesChannelID,
                             boolean enforceServerLanguage) throws IOException {
         POST post = new POST();
-        post.postToURL(Main.getApiPath() + "api/v1/guild", guildConstructor(
+        post.postToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild"), guildConstructor(
                 requestsChannelID,
                 moderatorMessagesChannelID,
                 enforceServerLanguage
@@ -86,7 +87,7 @@ public class Guild {
                             String moderatorMessagesChannelID,
                             boolean enforceServerLanguage) throws IOException {
         PUT put = new PUT();
-        put.putToURL(Main.getApiPath() + "api/v1/guild" + guildID, guildConstructor(
+        put.putToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID), guildConstructor(
                 requestsChannelID,
                 moderatorMessagesChannelID,
                 enforceServerLanguage
@@ -119,7 +120,7 @@ public class Guild {
 
     public void deleteGuild() throws IOException {
         DELETE delete = new DELETE();
-        delete.deleteToURL(Main.getApiPath() + "api/v1/guild" + guildID);
+        delete.deleteToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID));
     }
 
     public String guildConstructor(String requestsChannelID,
@@ -141,7 +142,7 @@ public class Guild {
         URL url;
         InputStreamReader reader;
 
-        String link = Main.getApiPath() + "api/v1/guild";
+        String link = UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild");
         try {
             url = new URL(link);
             URLConnection uc = url.openConnection();

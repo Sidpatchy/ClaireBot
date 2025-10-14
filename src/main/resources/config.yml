@@ -51,7 +51,7 @@ total_shards: 1
 # https://github.com/Sidpatchy/ClaireData
 
 # ClaireData's login information
-apiPath: https://api.example.com/
+apiPath: http://clairedata:8080/
 apiUser: clairedata
 apiPassword: examplePassword
 

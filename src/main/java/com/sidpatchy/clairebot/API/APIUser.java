@@ -8,6 +8,7 @@ import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
 import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
+import com.sidpatchy.clairebot.Util.Network.UrlBuilder;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +35,7 @@ public class APIUser {
      */
     public void getUser() throws IOException {
         try {
-            user.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/user" + userID);
+            user.loadFromURL(Main.getApiUser(), Main.getApiPassword(), UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/user", userID));
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -94,7 +95,7 @@ public class APIUser {
                            List<Integer> pointsMessages,
                            List<Integer> pointsVoiceChat) throws IOException {
         POST post = new POST();
-        post.postToURL(Main.getApiPath() + "api/v1/user", userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
+        post.postToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/user"), userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
     }
 
     public void createUserWithDefaults() {
@@ -126,7 +127,7 @@ public class APIUser {
         }
 
         PUT put = new PUT();
-        put.putToURL(Main.getApiPath() + "api/v1/user" + userID,
+        put.putToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/user", userID),
                 userConstructor(accentColour, language, pointsGuildID, pointsMessages, pointsVoiceChat));
     }
 
@@ -171,7 +172,7 @@ public class APIUser {
 
     public void deleteUser() throws IOException {
         DELETE delete = new DELETE();
-        delete.deleteToURL(Main.getApiPath() + "api/v1/user" + userID);
+        delete.deleteToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/user", userID));
     }
 
     /**
@@ -210,7 +211,7 @@ public class APIUser {
         URL url;
         InputStreamReader reader;
 
-        String link = Main.getApiPath() + "api/v1/user";
+        String link = UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/user");
         try {
             url = new URL(link);
             URLConnection uc = url.openConnection();
