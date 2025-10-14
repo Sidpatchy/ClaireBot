@@ -5,14 +5,16 @@ plugins {
 }
 
 jar {
-    manifest.attributes(
-            'Main-Class': 'com.sidpatchy.clairebot.Main',
-            'Multi-Release': 'true'
-    )
+    manifest {
+        attributes(
+                'Main-Class': 'com.sidpatchy.clairebot.Main',
+                'Multi-Release': 'true'
+        )
+    }
 }
 
-group 'com.sidpatchy'
-version '3.4.0-SNAPSHOT'
+group = 'com.sidpatchy'
+version = '3.4.0-SNAPSHOT'
 
 processResources {
     filesMatching('**/build.properties') {
@@ -30,8 +32,8 @@ kotlin {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://m2.dv8tion.net/releases' }
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://m2.dv8tion.net/releases' }
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
