@@ -1,12 +1,12 @@
 package com.sidpatchy.clairebot.Util.Leveling;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Main;
 import org.apache.logging.log4j.Logger;
-import org.yaml.snakeyaml.Yaml;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,8 +21,11 @@ public class LevelingTools {
         APIUser apiUser = new APIUser("");
 
         // Load the YAML data from an InputStream into a Java object
-        Yaml yaml = new Yaml();
-        List<Map<String, Object>> users = yaml.load(apiUser.getALLUsers());
+        YAMLMapper yamlMapper = new YAMLMapper();
+        List<Map<String, Object>> users = yamlMapper.readValue(
+                apiUser.getALLUsers(),
+                new TypeReference<List<Map<String, Object>>>() {}
+        );
 
         // Iterate over each user and calculate their total points
         HashMap<String, Integer> userPoints = new HashMap<>();
@@ -138,15 +141,10 @@ public class LevelingTools {
                 result.put("global", 0);
             } else {
                 // Otherwise, parse the JSON string and add it to the result list
-                try {
-                    // Parse the JSON string into a Map<String, Integer>
-                    Map<String, Integer> map = mapper.readValue(json, new TypeReference<Map<String, Integer>>() {});
-                    // Add all entries from the map to the result
-                    result.putAll(map);
-                } catch (IOException e) {
-                    // Handle the exception
-                    e.printStackTrace();
-                }
+                // Parse the JSON string into a Map<String, Integer>
+                Map<String, Integer> map = mapper.readValue(json, new TypeReference<Map<String, Integer>>() {});
+                // Add all entries from the map to the result
+                result.putAll(map);
             }
         }
         return result;

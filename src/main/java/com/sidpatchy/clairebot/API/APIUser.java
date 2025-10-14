@@ -1,7 +1,7 @@
 package com.sidpatchy.clairebot.API;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
