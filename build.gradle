@@ -24,7 +24,7 @@ processResources {
 }
 
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain(25)
 }
 
 repositories {
@@ -47,7 +47,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.25.2'
     implementation 'org.apache.commons:commons-lang3:3.19.0'
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.2.20'
+//    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.2.20' TODO this can be considered for re-addition once JDK 25 support is added
 
     implementation 'org.json:json:20250517'
     implementation 'tools.jackson.dataformat:jackson-dataformat-xml:3.0.0'

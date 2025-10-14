@@ -40,8 +40,8 @@ public class LanguageManager {
         this.context = context;
         this.fallbackLocale = fallbackLocale;
 
-        this.server = context.getServer();
-        this.user = context.getUser();
+        this.server = context.server();
+        this.user = context.user();
         this.placeholderHandler = new PlaceholderHandler(context);
     }
 
@@ -62,8 +62,8 @@ public class LanguageManager {
         this.context = context;
         this.fallbackLocale = fallbackLocale;
 
-        this.server = context.getServer();
-        this.user = context.getUser();
+        this.server = context.server();
+        this.user = context.user();
         this.placeholderHandler = new PlaceholderHandler(context);
     }
 

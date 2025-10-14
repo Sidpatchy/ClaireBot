@@ -53,27 +53,27 @@ public class PlaceholderHandler {
 
                 // Server placeholders
                 entry("cb.server.name", () ->
-                        context.getServer() != null ? context.getServer().getName() : ""),
+                        context.server() != null ? context.server().getName() : ""),
                 entry("cb.server.id", () ->
-                        context.getServer() != null ? context.getServer().getIdAsString() : ""),
+                        context.server() != null ? context.server().getIdAsString() : ""),
 
                 // User placeholders
                 entry("cb.user.name", () ->
-                        context.getUser() != null ? context.getUser().getName() : ""),
+                        context.user() != null ? context.user().getName() : ""),
                 entry("cb.user.id", () ->
-                        context.getUser() != null ? context.getUser().getIdAsString() : ""),
+                        context.user() != null ? context.user().getIdAsString() : ""),
                 entry("cb.user.id.mentiontag", () ->
-                        context.getUser() != null ? "<@" + context.getUser().getIdAsString() + ">" : ""),
+                        context.user() != null ? "<@" + context.user().getIdAsString() + ">" : ""),
                 entry("cb.user.id.accentcolour", () ->
-                        String.valueOf(Main.getColor(Objects.requireNonNull(context.getUser()).getIdAsString()))),
+                        String.valueOf(Main.getColor(Objects.requireNonNull(context.user()).getIdAsString()))),
                 entry("cb.user.id.displayname.server", () -> {
-                    org.javacord.api.entity.server.Server server = context.getServer();
-                    org.javacord.api.entity.user.User author = context.getAuthor();
+                    org.javacord.api.entity.server.Server server = context.server();
+                    org.javacord.api.entity.user.User author = context.author();
                     if (author != null) {
                         return (server != null) ? author.getDisplayName(server) : author.getName();
                     }
 
-                    org.javacord.api.entity.user.User user = context.getUser();
+                    org.javacord.api.entity.user.User user = context.user();
                     if (user != null) {
                         return (server != null) ? user.getDisplayName(server) : user.getName();
                     }
@@ -83,26 +83,26 @@ public class PlaceholderHandler {
 
                 // Author placeholders
                 entry("cb.author.name", () ->
-                        context.getAuthor() != null ? context.getAuthor().getName() : ""),
+                        context.author() != null ? context.author().getName() : ""),
                 entry("cb.author.id", () ->
-                        context.getAuthor() != null ? context.getAuthor().getIdAsString() : ""),
+                        context.author() != null ? context.author().getIdAsString() : ""),
 
                 // Channel placeholders
                 entry("cb.channel.name", () ->
-                        Optional.ofNullable(context.getChannel())
+                        Optional.ofNullable(context.channel())
                                 .flatMap(Channel::asServerChannel)
                                 .map(ServerChannel::getName)
                                 .orElse("NOT FOUND")),
                 entry("cb.channel.id", () ->
-                        context.getChannel() != null ? context.getChannel().getIdAsString() : ""),
+                        context.channel() != null ? context.channel().getIdAsString() : ""),
                 entry("cb.channel.id.mentiontag", () ->
-                        context.getChannel() != null ? "<#" + context.getChannel().getIdAsString() + ">" : ""),
+                        context.channel() != null ? "<#" + context.channel().getIdAsString() + ">" : ""),
 
                 // Command placeholders
                 entry("cb.commandname", () ->
                         String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "commandname")))),
                 entry("cb.user.id.username", () ->
-                        Optional.ofNullable(context.getAuthor())
+                        Optional.ofNullable(context.author())
                                 .map(org.javacord.api.entity.user.User::getDiscriminatedName)
                                 .orElseGet(() -> {
                                     Object v = context.getData(ContextManager.ContextType.GENERIC, "user.id.username");
