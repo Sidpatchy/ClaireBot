@@ -1,3 +1,3 @@
 #  Get guild by ID
 
-<api-endpoint openapi-path="../../../openapi.yml" method="GET" endpoint="/api/v1/guild/{guildID}"/>
+<api-endpoint openapi-path="openapi.yml" method="GET" endpoint="/api/v1/guild/{guildID}"/>
