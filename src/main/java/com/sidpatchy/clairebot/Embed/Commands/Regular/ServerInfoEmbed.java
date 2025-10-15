@@ -11,7 +11,8 @@ public class ServerInfoEmbed {
     public static EmbedBuilder getServerInfo(LanguageManager languageManager, Server server, String userID) {
         Color color = Main.getColor(userID);
         String authorName = server.getName();
-        String footerText = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.ServerID: " + server.getIdAsString());
+        String footerLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.ServerID");
+        String footerText = footerLabel + ": " + server.getIdAsString();
         String ownerLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.Owner");
         String creationDateLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.CreationDate");
         String roleCountLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.RoleCount");

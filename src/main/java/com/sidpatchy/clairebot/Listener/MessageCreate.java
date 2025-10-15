@@ -32,8 +32,7 @@ public class MessageCreate implements MessageCreateListener {
         TextChannel textChannel = message.getChannel();
 
         ContextManager context = new ContextManager(server, textChannel, user, user, message, new HashMap<>());
-        // Todo replace reference to en-US with config file parameter
-        LanguageManager languageManager = new LanguageManager(Locale.forLanguageTag("en-US"), context);
+        LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         // it seems as though the Javacord functions for this don't actually work, or I'm using them wrong
         if (messageAuthor.isBotUser() || messageAuthor.isYourself() || messageAuthor.getIdAsString().equalsIgnoreCase("704244031772950528") || messageAuthor.getIdAsString().equalsIgnoreCase("848024760789237810")) {

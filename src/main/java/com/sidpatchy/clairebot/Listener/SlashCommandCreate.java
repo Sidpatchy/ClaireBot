@@ -12,6 +12,7 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.Button;
@@ -255,16 +256,25 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     }
                 }
 
-                slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(VotingEmbed.getUserResponse(languageManager, author, ChannelUtils.getRequestsChannel(server).getMentionTag()))
-                        .setFlags(MessageFlag.EPHEMERAL)
-                        .respond();
+                // Resolve requests channel safely
+                ServerTextChannel requestsChannel = ChannelUtils.getRequestsChannel(server);
+                if (requestsChannel == null) {
+                    slashCommandInteraction.createImmediateResponder()
+                            .setFlags(MessageFlag.EPHEMERAL)
+                            .addEmbed(ErrorEmbed.getCustomError(Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
+                            .respond();
+                } else {
+                    slashCommandInteraction.createImmediateResponder()
+                            .addEmbed(VotingEmbed.getUserResponse(languageManager, author, requestsChannel.getMentionTag()))
+                            .setFlags(MessageFlag.EPHEMERAL)
+                            .respond();
 
-                ChannelUtils.getRequestsChannel(server).sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, numChoices)).thenAccept(message -> {
-                    message.addReaction("\uD83D\uDC4D");
-                    message.addReaction("\uD83D\uDC4E");
-                    message.addReaction(":vote:706373563564949566");
-                });
+                    requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, numChoices)).thenAccept(message -> {
+                        message.addReaction("\uD83D\uDC4D");
+                        message.addReaction("\uD83D\uDC4E");
+                        message.addReaction(":vote:706373563564949566");
+                    });
+                }
             }
         }
         else if (commandName.equalsIgnoreCase(commands.getServer().getName())) {
@@ -293,7 +303,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .addEmbed(embed)
                     .respond();
         }
-        else if (commandName.equalsIgnoreCase(commands.getInfo().getName())) {
+        else if (commandName.equalsIgnoreCase(commands.getUser().getName())) {
             slashCommandInteraction.createImmediateResponder()
                     .addEmbed(UserInfoEmbed.getUser(languageManager, user, author, server))
                     .respond();

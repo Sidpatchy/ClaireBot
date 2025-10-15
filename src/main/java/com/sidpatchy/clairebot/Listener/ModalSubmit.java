@@ -105,12 +105,19 @@ public class ModalSubmit implements ModalSubmitListener {
 
                 if (voteType.equalsIgnoreCase("request")) {
                     ServerTextChannel requestsChannel = ChannelUtils.getRequestsChannel(server);
-                    modalInteraction.createImmediateResponder()
-                            .addEmbed(VotingEmbed.getUserResponse(languageManager, author, requestsChannel.getMentionTag()))
-                            .setFlags(MessageFlag.EPHEMERAL)
-                            .respond();
+                    if (requestsChannel == null) {
+                        modalInteraction.createImmediateResponder()
+                                .addEmbed(com.sidpatchy.clairebot.Embed.ErrorEmbed.getCustomError(com.sidpatchy.clairebot.Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
+                                .setFlags(MessageFlag.EPHEMERAL)
+                                .respond();
+                    } else {
+                        modalInteraction.createImmediateResponder()
+                                .addEmbed(VotingEmbed.getUserResponse(languageManager, author, requestsChannel.getMentionTag()))
+                                .setFlags(MessageFlag.EPHEMERAL)
+                                .respond();
 
-                    requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, voteType, question, description, false, null, server, author, 0));
+                        requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, voteType, question, description, false, null, server, author, 0));
+                    }
                 }
                 else if (voteType.equalsIgnoreCase("poll")) {
                     modalInteraction.createImmediateResponder()
