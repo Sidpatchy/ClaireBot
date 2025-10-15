@@ -83,6 +83,7 @@ public class ErrorEmbed {
 
     // TODO - remove these legacy methods
 
+    @Deprecated
     public static EmbedBuilder getError(String errorCode) {
         ArrayList<String> errorGifs = (ArrayList<String>) Main.getErrorGifs();
         int rand = new Random().nextInt(errorGifs.size());
@@ -95,15 +96,18 @@ public class ErrorEmbed {
                 .setImage(errorGifs.get(rand));
     }
 
+    @Deprecated
     public static EmbedBuilder getError(String errorCode, String customMessage) {
         return getError(errorCode).setDescription(customMessage + "\n\nPlease try running the command once more and if that doesn't work, join my [Discord server](https://support.clairebot.net/) and let us know about the issue."
                 + "\n\nPlease include the following error code: " + errorCode);
     }
 
+    @Deprecated
     public static EmbedBuilder getCustomError(String errorCode, String message) {
         return getError(errorCode).setDescription(message);
     }
 
+    @Deprecated
     public static EmbedBuilder getLackingPermissions(String message) {
         // Fixed: remove accidental double getErrorCode call
         return getCustomError(Main.getErrorCode("noPerms"), message);
