@@ -126,7 +126,19 @@ public class LanguageManager {
         try {
             APIUser apiUser = new APIUser(user.getIdAsString());
             apiUser.getUser();
-            locale = Locale.forLanguageTag(apiUser.getLanguage());
+            String rawLang = apiUser.getLanguage();
+
+            // Normalize ClaireData language strings (e.g., en_US -> en-US). If empty/null, use fallback.
+            if (rawLang == null || rawLang.isBlank()) {
+                locale = fallbackLocale;
+            } else {
+                String normalizedTag = rawLang.replace('_', '-');
+                locale = Locale.forLanguageTag(normalizedTag);
+                // Guard against Locale.ROOT ("und") resulting from invalid tags
+                if (locale == null || locale.toLanguageTag().equals("und")) {
+                    locale = fallbackLocale;
+                }
+            }
 
             // todo, pending ClaireData update: allow server admins to specify a custom language string.
             // todo ref https://trello.com/c/vkQTCTMG
@@ -138,7 +150,10 @@ public class LanguageManager {
                     // todo this should not be determined here, but will be until the ClaireData implementation is completed.
                     // todo this should instead be determined when the Guild object is created in the database.
                     // todo ClaireData update on hold while still designing the major ClaireBot update that follows this one.
-                    locale = server.getPreferredLocale();
+                    Locale serverLocale = server.getPreferredLocale();
+                    if (serverLocale != null) {
+                        locale = serverLocale;
+                    }
                 }
             }
         } catch (IOException e) {
