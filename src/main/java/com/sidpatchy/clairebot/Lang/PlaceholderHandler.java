@@ -5,6 +5,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.ServerChannel;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,8 +65,10 @@ public class PlaceholderHandler {
                         context.user() != null ? context.user().getIdAsString() : ""),
                 entry("cb.user.id.mentiontag", () ->
                         context.user() != null ? "<@" + context.user().getIdAsString() + ">" : ""),
-                entry("cb.user.id.accentcolour", () ->
-                        String.valueOf(Main.getColor(Objects.requireNonNull(context.user()).getIdAsString()))),
+                entry("cb.user.id.accentcolour", () -> {
+                    Color color = Main.getColor(Objects.requireNonNull(context.user()).getIdAsString());
+                    return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+                }),
                 entry("cb.user.id.displayname.server", () -> {
                     org.javacord.api.entity.server.Server server = context.server();
                     org.javacord.api.entity.user.User author = context.author();
