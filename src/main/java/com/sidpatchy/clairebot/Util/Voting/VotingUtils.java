@@ -1,12 +1,8 @@
 package com.sidpatchy.clairebot.Util.Voting;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
 
 public class VotingUtils {
     public static String getPollID(Boolean allowMultipleChoices, String authorID, String numChoices) {

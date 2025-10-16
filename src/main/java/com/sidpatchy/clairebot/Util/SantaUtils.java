@@ -1,14 +1,16 @@
 package com.sidpatchy.clairebot.Util;
 
 import com.sidpatchy.clairebot.Main;
-import org.apache.commons.lang3.StringUtils;
 import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.message.embed.EmbedField;
 import org.javacord.api.entity.message.embed.EmbedFooter;
 import org.javacord.api.entity.user.User;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
 
 public class SantaUtils {
     public static class ExtractionResult {

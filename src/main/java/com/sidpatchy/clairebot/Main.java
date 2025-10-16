@@ -16,25 +16,27 @@ import org.javacord.api.DiscordApiBuilder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * ClaireBot - Simply the best.
- * Copyright (C) 2021  Sidpatchy
- *
+ * Copyright (C) 2021 Sidpatchy
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <<a href="https://www.gnu.org/licenses/">...</a>>.
  *
  * @since April 2020
  * @version 3.4.0-SNAPSHOT
@@ -57,7 +59,6 @@ public class Main {
     private static Map<String, Object> guildDefaults;
 
     // Various parameters extracted from config files
-    private static String botName;
     private static String color;
     private static String errorColor;
     private static List<String> errorGifs;
@@ -95,7 +96,7 @@ public class Main {
     private static String documentationWebsite;
     private static String inviteLink;
 
-    public static void main(String[] args) throws InvalidConfigurationException {
+    static void main(String[] args) throws InvalidConfigurationException {
         logger.info("ClaireBot loading...");
 
         // Make sure required resources are loaded
@@ -126,7 +127,7 @@ public class Main {
             System.exit(2);
         }
         else {
-            logger.info("Successfully connected to Discord on shard " + current_shard + " with a total shard count of " + total_shards);
+            logger.info("Successfully connected to Discord on shard {} with a total shard count of {}", current_shard, total_shards);
         }
 
         Clockwork.initClockwork();
@@ -186,7 +187,6 @@ public class Main {
         logger.info("Loading configuration files...");
 
         try {
-            botName = config.getString("botName");
             apiPath = config.getString("apiPath");
             apiUser = config.getString("apiUser");
             apiPassword = config.getString("apiPassword");
@@ -214,8 +214,7 @@ public class Main {
             inviteLink = config.getString("clairebot.inviteLink");
         }
         catch (Exception e) {
-            e.printStackTrace();
-            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be very broken.");
+            logger.error("There was an error while extracting parameters from the config. This isn't fatal but there's a good chance things will be very broken.", e);
         }
 
     }
@@ -255,9 +254,7 @@ public class Main {
             APIUser api = new APIUser("12345");
             api.getALLUsers();
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("ClaireBot was unable to access the APIUser table. See previous errors for more details.");
-            logger.error("This isn't strictly fatal, but things WILL be very broken.");
+            logger.error("ClaireBot was unable to access the APIUser table.", e);
         }
 
         // test Guild connectivity
@@ -265,9 +262,7 @@ public class Main {
             Guild api = new Guild("12345");
             api.getALLGuilds();
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("ClaireBot was unable to access the Guild table. See previous errors for more details.");
-            logger.error("This isn't strictly fatal, but things WILL be very broken.");
+            logger.error("ClaireBot was unable to access the Guild table.", e);
         }
     }
 
@@ -352,8 +347,6 @@ public class Main {
     }
 
     public static DiscordApi getApi() { return api; }
-
-    public static List<String> getVoteEmoji() { return Arrays.asList("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "\uD83D\uDC4D", "\uD83D\uDC4E"); }
 
     public static long getStartMillis() { return startMillis; }
 

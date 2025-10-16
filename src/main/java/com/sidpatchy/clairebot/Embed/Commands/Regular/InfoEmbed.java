@@ -1,9 +1,7 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
-import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 

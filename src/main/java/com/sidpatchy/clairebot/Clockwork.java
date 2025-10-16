@@ -31,7 +31,6 @@ public class Clockwork {
 
 }
 
-@SuppressWarnings("unchecked")
 class Helper extends TimerTask {
 
     RobinConfiguration config = new RobinConfiguration();

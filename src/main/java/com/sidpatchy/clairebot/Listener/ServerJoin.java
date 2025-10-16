@@ -1,7 +1,6 @@
 package com.sidpatchy.clairebot.Listener;
 
 import com.sidpatchy.clairebot.Embed.WelcomeEmbed;
-import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.ChannelUtils;

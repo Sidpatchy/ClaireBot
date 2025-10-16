@@ -4,7 +4,8 @@ import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
-import java.awt.Color;
+
+import java.awt.*;
 
 public class ServerInfoEmbed {
 

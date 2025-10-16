@@ -4,7 +4,6 @@ import com.sidpatchy.clairebot.Lang.LanguageManager;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.TextInput;
 import org.javacord.api.entity.message.component.TextInputStyle;
-import org.javacord.api.entity.user.User;
 
 public class SantaModal {
 

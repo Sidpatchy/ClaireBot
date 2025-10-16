@@ -11,7 +11,7 @@ import org.javacord.api.entity.server.Server;
 import java.io.IOException;
 
 public class WelcomeEmbed {
-    private static Logger logger = Main.getLogger();
+    private static final Logger logger = Main.getLogger();
 
 
     public static EmbedBuilder getWelcome(LanguageManager languageManager, Server server) {

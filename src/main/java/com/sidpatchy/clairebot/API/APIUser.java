@@ -1,7 +1,5 @@
 package com.sidpatchy.clairebot.API;
 
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.node.ObjectNode;
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
@@ -9,6 +7,8 @@ import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
 import com.sidpatchy.clairebot.Util.Network.UrlBuilder;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

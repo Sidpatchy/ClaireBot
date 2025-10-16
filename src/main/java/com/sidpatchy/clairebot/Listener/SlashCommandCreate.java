@@ -11,8 +11,8 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponen
 import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
 import org.apache.logging.log4j.Logger;
-import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.Button;
@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class SlashCommandCreate implements SlashCommandCreateListener {

@@ -1,10 +1,9 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
+
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.Icon;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.message.embed.EmbedFooter;
 import org.javacord.api.entity.server.Server;
