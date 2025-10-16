@@ -100,6 +100,15 @@ public class PlaceholderHandler {
                         context.channel() != null ? context.channel().getIdAsString() : ""),
                 entry("cb.channel.id.mentiontag", () ->
                         context.channel() != null ? "<#" + context.channel().getIdAsString() + ">" : ""),
+                // Specific placeholders used by acknowledgements when the selected channel differs from invoking channel
+                entry("cb.channel.requests.mentiontag", () -> {
+                    Object v = context.getData(ContextManager.ContextType.GENERIC, "cb.channel.requests.mentiontag");
+                    return v != null ? v.toString() : "";
+                }),
+                entry("cb.channel.moderator.mentiontag", () -> {
+                    Object v = context.getData(ContextManager.ContextType.GENERIC, "cb.channel.moderator.mentiontag");
+                    return v != null ? v.toString() : "";
+                }),
 
                 // Command placeholders
                 entry("cb.commandname", () ->

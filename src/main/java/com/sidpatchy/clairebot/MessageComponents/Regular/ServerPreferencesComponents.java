@@ -28,7 +28,7 @@ public class ServerPreferencesComponents {
 
         return new ActionRowBuilder()
                 .addComponents(
-                        SelectMenu.create("settings", placeholder, 1, 1,
+                        SelectMenu.create("server-settings", placeholder, 1, 1,
                                 Arrays.asList(
                                         // Keep values stable for interaction handlers
                                         SelectMenuOption.create(requestsLabel, "Requests Channel", requestsDesc),
@@ -55,8 +55,9 @@ public class ServerPreferencesComponents {
                 .addComponents(
                         SelectMenu.create("enforceServerLanguage", placeholder, 1, 1,
                                 Arrays.asList(
-                                        SelectMenuOption.create("True", trueText),
-                                        SelectMenuOption.create("False", falseText)
+                                        // Localized labels with stable boolean values
+                                        SelectMenuOption.create(trueText, "true"),
+                                        SelectMenuOption.create(falseText, "false")
                                 ))
                 ).build();
     }

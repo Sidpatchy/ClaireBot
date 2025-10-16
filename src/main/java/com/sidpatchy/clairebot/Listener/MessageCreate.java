@@ -31,6 +31,11 @@ public class MessageCreate implements MessageCreateListener {
         APIUser apiUser = new APIUser(messageAuthor.getIdAsString());
         TextChannel textChannel = message.getChannel();
 
+        // Some messages (e.g., webhooks/system) have no user; skip processing to avoid NPEs in localization
+        if (user == null) {
+            return;
+        }
+
         ContextManager context = new ContextManager(server, textChannel, user, user, message, new HashMap<>());
         LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 

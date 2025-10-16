@@ -66,7 +66,7 @@ public class ServerPreferencesEmbed {
             // Temp/localized variables
             String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeRequestsChannelChangeTitle");
             String mention = "<#" + channel.getIdAsString() + ">";
-            languageManager.addContext(ContextManager.ContextType.GENERIC, "channel.id.mentiontag", mention);
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.requests.mentiontag", mention);
             String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeRequestsChannelChangeDescription");
 
             return new EmbedBuilder()
@@ -94,7 +94,7 @@ public class ServerPreferencesEmbed {
             // Temp/localized variables
             String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeModeratorChannelChangeTitle");
             String mention = "<#" + channel.getIdAsString() + ">";
-            languageManager.addContext(ContextManager.ContextType.GENERIC, "channel.id.mentiontag", mention);
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.moderator.mentiontag", mention);
             String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeModeratorChannelChangeDescription");
 
             return new EmbedBuilder()
