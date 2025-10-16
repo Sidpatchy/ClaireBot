@@ -14,7 +14,7 @@ jar {
 }
 
 group = 'com.sidpatchy'
-version = '3.4.0-alpha.6'
+version = '3.4.0-alpha.7'
 
 processResources {
     filesMatching('**/build.properties') {
