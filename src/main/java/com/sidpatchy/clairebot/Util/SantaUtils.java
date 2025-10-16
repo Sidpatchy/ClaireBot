@@ -7,10 +7,8 @@ import org.javacord.api.entity.message.embed.EmbedField;
 import org.javacord.api.entity.message.embed.EmbedFooter;
 import org.javacord.api.entity.user.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.util.*;
 
 public class SantaUtils {
     public static class ExtractionResult {
@@ -60,16 +58,32 @@ public class SantaUtils {
     }
 
     public static String getSantaID(String serverID, String authorID, String roleID) {
-        return serverID + ":" + authorID + ":" + roleID;
+        long serverIdLong = Long.parseLong(serverID);
+        long authorIdLong = Long.parseLong(authorID);
+        long roleIdLong = Long.parseLong(roleID);
+
+        // Pack into bytes: 8 bytes per ID = 24 bytes total
+        ByteBuffer buffer = ByteBuffer.allocate(24);
+        buffer.putLong(serverIdLong);
+        buffer.putLong(authorIdLong);
+        buffer.putLong(roleIdLong);
+
+        // Base64 encode (URL-safe, no padding)
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(buffer.array());
     }
 
     public static HashMap<String, String> parseSantaID(String id) {
-        List<String> entries = Arrays.asList(StringUtils.splitPreserveAllTokens(id, ":"));
+        byte[] bytes = Base64.getUrlDecoder().decode(id);
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+
+        long serverId = buffer.getLong();
+        long authorId = buffer.getLong();
+        long roleId = buffer.getLong();
 
         return new HashMap<>() {{
-            put("serverID", entries.get(0));
-            put("authorID", entries.get(1));
-            put("roleID", entries.get(2));
+            put("serverID", String.valueOf(serverId));
+            put("authorID", String.valueOf(authorId));
+            put("roleID", String.valueOf(roleId));
         }};
     }
 }
