@@ -253,7 +253,7 @@ ClaireLang:
           Choices: "Choices"
           PollID: "Poll ID: {cb.poll.id}"
           UserResponseTitle: "Your request has been created!"
-          UserResponseDescription: "Go check it out in {cb.channel.id.mentiontag}"
+          UserResponseDescription: "Go check it out in {cb.channel.requests.mentiontag}"
         ErrorEmbed:
           Error: "ERROR"
           GenericDescription: "It appears that I've encountered an error, oops! Please try running the command once more and if that doesn't work, join my [Discord server]({cb.supportserver) and let us know about the issue.\n\nPlease include the following error code: {cb.errorcode}"

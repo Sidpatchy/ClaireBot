@@ -184,9 +184,17 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
                     interactionOriginalResponseUpdater.addEmbed(VotingEmbed.getPoll(languageManager, "POLL", question, allowMultipleChoices, choices, server, author, finalNumChoices))
                             .update().thenAccept(message -> {
-                                message.addReaction("\uD83D\uDC4D"); // 👍 emoji
-                                message.addReaction("\uD83D\uDC4E"); // 👎 emoji
-                                message.addReaction(":vote:706373563564949566"); // Custom emoji
+                                if (finalNumChoices > 0) {
+                                    String[] numberEmojis = new String[]{"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"};
+                                    int limit = Math.min(finalNumChoices, numberEmojis.length);
+                                    for (int i = 0; i < limit; i++) {
+                                        message.addReaction(numberEmojis[i]);
+                                    }
+                                } else {
+                                    message.addReaction("\uD83D\uDC4D"); // 👍 emoji
+                                    message.addReaction("\uD83D\uDC4E"); // 👎 emoji
+                                    message.addReaction(":vote:706373563564949566"); // Custom emoji
+                                }
                             });
                 });
             }
@@ -269,10 +277,19 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                             .setFlags(MessageFlag.EPHEMERAL)
                             .respond();
 
-                    requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, numChoices)).thenAccept(message -> {
-                        message.addReaction("\uD83D\uDC4D");
-                        message.addReaction("\uD83D\uDC4E");
-                        message.addReaction(":vote:706373563564949566");
+                    final int finalNumChoicesReq = numChoices;
+                    requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, finalNumChoicesReq)).thenAccept(message -> {
+                        if (finalNumChoicesReq > 0) {
+                            String[] numberEmojis = new String[]{"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"};
+                            int limit = Math.min(finalNumChoicesReq, numberEmojis.length);
+                            for (int i = 0; i < limit; i++) {
+                                message.addReaction(numberEmojis[i]);
+                            }
+                        } else {
+                            message.addReaction("\uD83D\uDC4D");
+                            message.addReaction("\uD83D\uDC4E");
+                            message.addReaction(":vote:706373563564949566");
+                        }
                     });
                 }
             }

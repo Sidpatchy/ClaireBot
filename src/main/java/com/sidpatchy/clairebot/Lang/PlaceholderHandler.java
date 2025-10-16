@@ -112,7 +112,7 @@ public class PlaceholderHandler {
 
                 // Command placeholders
                 entry("cb.commandname", () ->
-                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "commandname")))),
+                        String.valueOf(Objects.requireNonNull((Object) context.getData(ContextManager.ContextType.GENERIC, "commandname")))),
                 entry("cb.user.id.username", () ->
                         Optional.ofNullable(context.author())
                                 .map(org.javacord.api.entity.user.User::getDiscriminatedName)
@@ -122,13 +122,13 @@ public class PlaceholderHandler {
                                 })),
                 // Voting placeholders
                 entry("cb.poll.id", () ->
-                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "poll.id")))),
+                        String.valueOf(Objects.requireNonNull((Object) context.getData(ContextManager.ContextType.GENERIC, "poll.id")))),
                 entry("cb.voting.optionnumber", () ->
-                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "voting.optionnumber")))),
+                        String.valueOf(Objects.requireNonNull((Object) context.getData(ContextManager.ContextType.GENERIC, "voting.optionnumber")))),
 
                 // Error code
                 entry("cb.errorcode", () ->
-                        String.valueOf(Objects.requireNonNull(context.getData(ContextManager.ContextType.GENERIC, "errorcode"))))
+                        String.valueOf(Objects.requireNonNull((Object) context.getData(ContextManager.ContextType.GENERIC, "errorcode"))))
         );
     }
 

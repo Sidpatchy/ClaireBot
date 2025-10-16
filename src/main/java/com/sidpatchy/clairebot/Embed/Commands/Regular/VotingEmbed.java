@@ -64,7 +64,7 @@ public class VotingEmbed {
             }
         }
 
-        if (choiceBuilder.length() == 0) {
+        if (choiceBuilder.isEmpty()) {
             allowMultipleChoices = false;
         } else {
             embed.addField(choicesLabel, choiceBuilder.toString());
@@ -115,7 +115,7 @@ public class VotingEmbed {
     public static EmbedBuilder getUserResponse(LanguageManager languageManager, User author, String requestsChannelMentionTag) {
         // Temp/localized variables block
         String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.VotingEmbed.UserResponseTitle");
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "channel.id.mentiontag", requestsChannelMentionTag);
+        languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.requests.mentiontag", requestsChannelMentionTag);
         String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.VotingEmbed.UserResponseDescription");
 
         return new EmbedBuilder()
