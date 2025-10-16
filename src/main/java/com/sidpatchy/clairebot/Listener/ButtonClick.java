@@ -75,8 +75,10 @@ public class ButtonClick implements ButtonClickListener {
             case "randomize":
                 buttonInteraction.acknowledge();
                 Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
-                buttonInteraction.getMessage().delete();
-                SantaEmbed.getHostMessage(languageManager, role, buttonAuthor, extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+                // Edit the existing host message in place with a fresh randomized pairing
+                buttonInteraction.getMessage().edit(
+                        SantaEmbed.buildHostEmbedRandomized(languageManager, role, author, extractionResult.rules, extractionResult.theme)
+                );
 
                 break;
 

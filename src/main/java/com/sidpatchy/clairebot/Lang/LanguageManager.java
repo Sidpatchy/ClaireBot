@@ -124,19 +124,25 @@ public class LanguageManager {
     private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
         Locale locale;
         try {
-            APIUser apiUser = new APIUser(user.getIdAsString());
-            apiUser.getUser();
-            String rawLang = apiUser.getLanguage();
-
-            // Normalize ClaireData language strings (e.g., en_US -> en-US). If empty/null, use fallback.
-            if (rawLang == null || rawLang.isBlank()) {
+            // If user is null (e.g., triggered by a system action or missing context),
+            // default to fallback locale and continue to evaluate server-level overrides.
+            if (user == null) {
                 locale = fallbackLocale;
             } else {
-                String normalizedTag = rawLang.replace('_', '-');
-                locale = Locale.forLanguageTag(normalizedTag);
-                // Guard against Locale.ROOT ("und") resulting from invalid tags
-                if (locale == null || locale.toLanguageTag().equals("und")) {
+                APIUser apiUser = new APIUser(user.getIdAsString());
+                apiUser.getUser();
+                String rawLang = apiUser.getLanguage();
+
+                // Normalize ClaireData language strings (e.g., en_US -> en-US). If empty/null, use fallback.
+                if (rawLang == null || rawLang.isBlank()) {
                     locale = fallbackLocale;
+                } else {
+                    String normalizedTag = rawLang.replace('_', '-');
+                    locale = Locale.forLanguageTag(normalizedTag);
+                    // Guard against Locale.ROOT ("und") resulting from invalid tags
+                    if (locale == null || locale.toLanguageTag().equals("und")) {
+                        locale = fallbackLocale;
+                    }
                 }
             }
 

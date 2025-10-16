@@ -19,9 +19,11 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.ModalSubmitEvent;
 import org.javacord.api.interaction.ModalInteraction;
+import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 import org.javacord.api.listener.interaction.ModalSubmitListener;
 
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 public class ModalSubmit implements ModalSubmitListener {
 
@@ -127,15 +129,26 @@ public class ModalSubmit implements ModalSubmitListener {
 
                 break;
             case "santa-rules", "santa-theme":
-                modalInteraction.createImmediateResponder().respond();
+                // Silently defer the modal response (no visible message), then update the existing host message in place
+                CompletableFuture<InteractionOriginalResponseUpdater> deferred = modalInteraction.respondLater();
+
                 extractionResult.rules = modalInteraction.getTextInputValueByCustomId("rules-row").orElse(extractionResult.rules);
                 extractionResult.theme = modalInteraction.getTextInputValueByCustomId("theme-row").orElse(extractionResult.theme);
 
                 Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
                 assert role != null;
 
-                SantaEmbed.getHostMessage(languageManager, role, user, extractionResult.rules, extractionResult.theme).send(user);
-                santaMessage.delete();
+                // Rebuild the host embed with the existing giver/receiver pairs and edit the original message
+                santaMessage.edit(SantaEmbed.buildHostEmbedFromPairs(languageManager, role, user, extractionResult.rules, extractionResult.theme, extractionResult.givers, extractionResult.receivers));
+                // Finalize and immediately delete the deferred response to avoid leaving a "Bot is thinking…" stub
+                deferred.thenAccept(interactionOriginalResponseUpdater -> {
+                    try {
+                        interactionOriginalResponseUpdater.setContent("\u200B").update().thenAccept(msg -> {
+                            try { msg.delete(); } catch (Exception ignored2) {}
+                        });
+                    } catch (Exception ignored) {}
+                });
+                break;
         }
     }
 }

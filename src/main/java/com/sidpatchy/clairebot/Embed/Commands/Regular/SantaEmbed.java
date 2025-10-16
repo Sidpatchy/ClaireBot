@@ -42,8 +42,14 @@ public class SantaEmbed {
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(author.getIdAsString()))
-                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
-                .setFooter(SantaUtils.getSantaID(server.getIdAsString(), author.getIdAsString(), role.getIdAsString()), server.getIcon().orElse(null));
+                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
+
+        String footerText = SantaUtils.getSantaID(server.getIdAsString(), author.getIdAsString(), role.getIdAsString());
+        if (server.getIcon().isPresent()) {
+            embed.setFooter(footerText, server.getIcon().get());
+        } else {
+            embed.setFooter(footerText);
+        }
 
         if (!theme.isEmpty()) {
             embed.addField("Theme", theme, false);
@@ -125,5 +131,71 @@ public class SantaEmbed {
         }
 
         return users;
+    }
+
+    public static EmbedBuilder buildHostEmbedFromPairs(LanguageManager languageManager, Role role, User author, String rules, String theme, java.util.List<User> givers, java.util.List<User> receivers) {
+        Server server = role.getServer();
+
+        EmbedBuilder embed = new EmbedBuilder()
+                .setColor(Main.getColor(author.getIdAsString()))
+                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
+
+        String footerText = SantaUtils.getSantaID(server.getIdAsString(), author.getIdAsString(), role.getIdAsString());
+        if (server.getIcon().isPresent()) {
+            embed.setFooter(footerText, server.getIcon().get());
+        } else {
+            embed.setFooter(footerText);
+        }
+
+        if (!theme.isEmpty()) {
+            embed.addField("Theme", theme, false);
+        }
+
+        if (!rules.isEmpty()) {
+            embed.addField("Rules", rules, false);
+        }
+
+        for (int i = 0; i < Math.min(givers.size(), receivers.size()); i++) {
+            User giver = givers.get(i);
+            User receiver = receivers.get(i);
+            embed.addField(giver.getIdAsString(), giver.getNicknameMentionTag() + " → " + receiver.getNicknameMentionTag(), false);
+        }
+
+        return embed;
+    }
+
+    // Builds a fresh randomized host embed (re-rolls pairs) and preserves footer/format
+    public static EmbedBuilder buildHostEmbedRandomized(LanguageManager languageManager, Role role, User author, String rules, String theme) {
+        Server server = role.getServer();
+
+        EmbedBuilder embed = new EmbedBuilder()
+                .setColor(Main.getColor(author.getIdAsString()))
+                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
+
+        String footerText = SantaUtils.getSantaID(server.getIdAsString(), author.getIdAsString(), role.getIdAsString());
+        if (server.getIcon().isPresent()) {
+            embed.setFooter(footerText, server.getIcon().get());
+        } else {
+            embed.setFooter(footerText);
+        }
+
+        if (!theme.isEmpty()) {
+            embed.addField("Theme", theme, false);
+        }
+
+        if (!rules.isEmpty()) {
+            embed.addField("Rules", rules, false);
+        }
+
+        // Re-randomize using the role's current users
+        Set<User> users = role.getUsers();
+        HashMap<User, User> santaList = assignSecretSanta(users);
+        for (Map.Entry<User, User> userPair : santaList.entrySet()) {
+            User giver = userPair.getKey();
+            User receiver = userPair.getValue();
+            embed.addField(giver.getIdAsString(), giver.getNicknameMentionTag() + " → " + receiver.getNicknameMentionTag(), false);
+        }
+
+        return embed;
     }
 }
