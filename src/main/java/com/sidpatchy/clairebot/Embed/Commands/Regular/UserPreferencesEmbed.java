@@ -62,8 +62,7 @@ public class UserPreferencesEmbed {
                     .setAuthor(title)
                     .setDescription(desc);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateAccentColour"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateAccentColour"));
         }
     }
 

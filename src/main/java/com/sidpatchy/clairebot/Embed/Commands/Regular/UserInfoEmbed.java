@@ -35,7 +35,7 @@ public class UserInfoEmbed {
             String err2 = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserInfoEmbed.Error_2");
             Main.getLogger().error(err1);
             Main.getLogger().error(err2);
-            return ErrorEmbed.getError(errorCode);
+            return ErrorEmbed.getError(languageManager, errorCode);
         }
 
         String footerText = author.getDiscriminatedName() + " (" + author.getIdAsString() + ")";

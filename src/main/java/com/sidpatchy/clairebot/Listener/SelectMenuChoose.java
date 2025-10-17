@@ -116,7 +116,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                 if (accentColour.isEmpty()) {
                     selectMenuInteraction.createFollowupMessageBuilder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ErrorEmbed.getError(Main.getErrorCode("accentColourParse")))
+                            .addEmbed(ErrorEmbed.getError(languageManager, Main.getErrorCode("accentColourParse")))
                             .send();
                 } else {
                     selectMenuInteraction.createFollowupMessageBuilder()

@@ -63,7 +63,7 @@ public class HelpEmbed {
             languageManager.addContext(ContextManager.ContextType.GENERIC, "errorcode", errorCode);
             String errorLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Error");
             Main.getLogger().error(errorLangString);
-            return ErrorEmbed.getError(errorCode);
+            return ErrorEmbed.getError(languageManager, errorCode);
         } else {
             return new EmbedBuilder()
                     .setColor(Main.getColor(userID))

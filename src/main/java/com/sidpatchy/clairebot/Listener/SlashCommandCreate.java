@@ -65,7 +65,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     interactionResponse.addEmbed(EightBallEmbed.getEightBall(languageManager, query, author));
                     interactionResponse.update();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error while creating eightball embed: ", e);
                 }
             });
         }
@@ -97,7 +97,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 else {
                     slashCommandInteraction.createImmediateResponder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ErrorEmbed.getLackingPermissions("You do not have permission to run that command!"))
+                            .addEmbed(ErrorEmbed.getLackingPermissions(languageManager, "You do not have permission to run that command!"))
                             .respond();
                 }
             }
@@ -156,12 +156,12 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     );
 
                     pollModal.exceptionally(e -> {
-                        e.printStackTrace();
+                        logger.error("Error while creating poll modal: ", e);
                         return null;
                     });
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error while creating poll modal: ", e);
                 }
             }
             else {
@@ -202,14 +202,14 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             TextChannel channel = slashCommandInteraction.getChannel().orElse(null);
             if (channel == null) {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(ErrorEmbed.getError("NotInAChannel"))
+                        .addEmbed(ErrorEmbed.getError(languageManager, "NotInAChannel"))
                         .respond();
                 return;
             }
 
             // Construct response and update message
             slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
-                QuoteEmbed.getQuote(server, user, channel).thenAccept(embed -> {
+                QuoteEmbed.getQuote(languageManager, server, user, channel).thenAccept(embed -> {
                     // Create an ActionRow with a button
                     ActionRow actionRow = ActionRow.of(
                             Button.primary("view_original", "View Original")
@@ -225,7 +225,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
         else if (commandName.equalsIgnoreCase(commands.getRequest().getName())) {
             if (server == null) {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(ErrorEmbed.getCustomError(Main.getErrorCode("notaserver"),
+                        .addEmbed(ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("notaserver"),
                                 "You must run this command inside a server!"))
                         .respond();
                 return;
@@ -240,12 +240,12 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     );
 
                     pollModal.exceptionally(e -> {
-                        e.printStackTrace();
+                        logger.error("Error while creating request modal: ", e);
                         return null;
                     });
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error while creating request modal: ", e);
                 }
             }
             else {
@@ -268,7 +268,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 if (requestsChannel == null) {
                     slashCommandInteraction.createImmediateResponder()
                             .setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(ErrorEmbed.getCustomError(Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
+                            .addEmbed(ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
                             .respond();
                 } else {
                     slashCommandInteraction.createImmediateResponder()
@@ -280,8 +280,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, finalNumChoicesReq)).thenAccept(message -> {
                         if (finalNumChoicesReq > 0) {
                             String[] numberEmojis = new String[]{"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"};
-                            int limit = Math.min(finalNumChoicesReq, numberEmojis.length);
-                            for (int i = 0; i < limit; i++) {
+                            for (int i = 0; i < finalNumChoicesReq; i++) {
                                 message.addReaction(numberEmojis[i]);
                             }
                         } else {
@@ -299,7 +298,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             String guildID = slashCommandInteraction.getArgumentStringValueByName("guildID").orElse(null);
 
             if (server == null && guildID == null) {
-                embed = ErrorEmbed.getCustomError(Main.getErrorCode("no-guild-present"), "A guild must be specified. Either run this command in a server or specify a guild ID.");
+                embed = ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("no-guild-present"), "A guild must be specified. Either run this command in a server or specify a guild ID.");
             }
 
             if (guildID != null) {
@@ -308,7 +307,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     embed = ServerInfoEmbed.getServerInfo(languageManager, fromGuildID, user.getIdAsString());
                 }
                 else {
-                    embed = ErrorEmbed.getCustomError(Main.getErrorCode("guildID-invalid"), "Either that guild ID is invalid or I'm not a member of the server.");
+                    embed = ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("guildID-invalid"), "Either that guild ID is invalid or I'm not a member of the server.");
                 }
             }
             else if (server != null) {
@@ -329,14 +328,14 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
             if (role == null) {
                 slashCommandInteraction.createImmediateResponder().addEmbed(
-                        ErrorEmbed.getError(Main.getErrorCode("RoleMissing"))
+                        ErrorEmbed.getError(languageManager, Main.getErrorCode("RoleMissing"))
                 ).respond();
                 return;
             }
 
             if (!author.canManageRole(role)) {
                 slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(ErrorEmbed.getLackingPermissions("Sorry! You don't have the permission to run this " +
+                        .addEmbed(ErrorEmbed.getLackingPermissions(languageManager, "Sorry! You don't have the permission to run this " +
                                 "command. You must be able to manage the role " + role.getMentionTag() + "."))
                         .respond();
                 return;

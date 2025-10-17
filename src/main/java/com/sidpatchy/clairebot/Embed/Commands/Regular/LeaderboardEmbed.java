@@ -26,11 +26,10 @@ public class LeaderboardEmbed {
         try {
             unsortedLevelMap = LevelingTools.rankUsers(serverID);
         } catch (IOException e) {
-            e.printStackTrace();
             String errorCode = Main.getErrorCode("loclead");
 
-            Main.getLogger().error("Failed to query database while generating leaderboard. Ref: " + errorCode);
-            return ErrorEmbed.getError(errorCode);
+            Main.getLogger().error("Failed to query database while generating leaderboard. Ref: {}", errorCode, e);
+            return ErrorEmbed.getError(languageManager, errorCode);
         }
         Map<String, Integer> namedMap = convertUserIDstoNames(unsortedLevelMap);
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);
@@ -48,11 +47,10 @@ public class LeaderboardEmbed {
         try {
             unsortedLevelMap = LevelingTools.rankUsers(serverID);
         } catch (IOException e) {
-            e.printStackTrace();
             String errorCode = Main.getErrorCode("globlead");
 
-            Main.getLogger().error("Failed to query database while generating leaderboard. Ref: " + errorCode);
-            return ErrorEmbed.getError(errorCode);
+            Main.getLogger().error("Failed to query database while generating leaderboard. Ref: {}", errorCode, e);
+            return ErrorEmbed.getError(languageManager, errorCode);
         }
         Map<String, Integer> namedMap = convertUserIDstoNames(unsortedLevelMap);
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);

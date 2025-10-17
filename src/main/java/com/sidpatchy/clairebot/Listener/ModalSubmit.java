@@ -3,6 +3,7 @@ package com.sidpatchy.clairebot.Listener;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.SantaEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.UserPreferencesEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.VotingEmbed;
+import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
@@ -70,7 +71,7 @@ public class ModalSubmit implements ModalSubmitListener {
             santaMessage = Main.getApi().getCachedMessageById(santaMessageID).orElse(null);
             assert santaMessage != null;
 
-            Embed embed = santaMessage.getEmbeds().get(0);
+            Embed embed = santaMessage.getEmbeds().getFirst();
             EmbedFooter footer = embed.getFooter().orElse(null);
 
             extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);
@@ -109,7 +110,7 @@ public class ModalSubmit implements ModalSubmitListener {
                     ServerTextChannel requestsChannel = ChannelUtils.getRequestsChannel(server);
                     if (requestsChannel == null) {
                         modalInteraction.createImmediateResponder()
-                                .addEmbed(com.sidpatchy.clairebot.Embed.ErrorEmbed.getCustomError(com.sidpatchy.clairebot.Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
+                                .addEmbed(ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
                                 .setFlags(MessageFlag.EPHEMERAL)
                                 .respond();
                     } else {
@@ -132,6 +133,7 @@ public class ModalSubmit implements ModalSubmitListener {
                 // Silently defer the modal response (no visible message), then update the existing host message in place
                 CompletableFuture<InteractionOriginalResponseUpdater> deferred = modalInteraction.respondLater();
 
+                assert extractionResult != null;
                 extractionResult.rules = modalInteraction.getTextInputValueByCustomId("rules-row").orElse(extractionResult.rules);
                 extractionResult.theme = modalInteraction.getTextInputValueByCustomId("theme-row").orElse(extractionResult.theme);
 

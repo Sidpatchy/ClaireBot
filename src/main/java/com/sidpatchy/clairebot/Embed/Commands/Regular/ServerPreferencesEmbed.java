@@ -23,7 +23,7 @@ public class ServerPreferencesEmbed {
         // Temp/localized variables
         String notServerMsg = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.NotAServer");
 
-        return ErrorEmbed.getCustomError(Main.getErrorCode("notaserver"), notServerMsg);
+        return ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("notaserver"), notServerMsg);
     }
 
     public static EmbedBuilder getRequestsChannelMenu(LanguageManager languageManager, User author) {
@@ -55,7 +55,7 @@ public class ServerPreferencesEmbed {
         // Resolve channel
         ServerTextChannel channel = Main.getApi().getServerTextChannelById(requestsChannelID).orElse(null);
         if (channel == null) {
-            return ErrorEmbed.getError(Main.getErrorCode("channelNotExists"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("channelNotExists"));
         }
 
         try {
@@ -75,7 +75,7 @@ public class ServerPreferencesEmbed {
                     .setDescription(desc);
         } catch (Exception e) {
             e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateRequestsChannel"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateRequestsChannel"));
         }
     }
 
@@ -83,7 +83,7 @@ public class ServerPreferencesEmbed {
         // Resolve channel
         ServerTextChannel channel = Main.getApi().getServerTextChannelById(moderatorChannelID).orElse(null);
         if (channel == null) {
-            return ErrorEmbed.getError(Main.getErrorCode("channelNotExists"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("channelNotExists"));
         }
 
         try {
@@ -103,7 +103,7 @@ public class ServerPreferencesEmbed {
                     .setDescription(desc);
         } catch (Exception e) {
             e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateModeratorChannel"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateModeratorChannel"));
         }
     }
 
@@ -128,7 +128,7 @@ public class ServerPreferencesEmbed {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateEnforceServerLang"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateEnforceServerLang"));
         }
     }
 
