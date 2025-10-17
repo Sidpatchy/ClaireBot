@@ -238,6 +238,10 @@ ClaireLang:
           AcknowledgeEnforceServerLanguageUpdateTitle: "サーバー言語設定が更新されました！"
           AcknowledgeEnforceServerLanguageUpdateEnforced: "これからは、ユーザー設定に関わらずサーバーの言語に従います。"
           AcknowledgeEnforceServerLanguageUpdateNotEnforced: "これからは、個々のユーザーの言語設定に従います。"
+          ServerLanguageMenuTitle: "サーバー言語"
+          ServerLanguageMenuDesc: "強制が有効な場合、ClaireBotがこのサーバーで使用するデフォルト言語を選択してください。"
+          ServerLanguageChanged: "サーバー言語が更新されました！"
+          ServerLanguageChangedDesc: "サーバーの言語設定が更新されました。"
         UserInfoEmbed:
           Error_1: "UserInfo Embedに渡されたauthorの値がnullでした。エラーコード: {cb.errorcode}"
           Error_2: "作成者: {cb.user.name}"
@@ -289,6 +293,9 @@ ClaireLang:
             EnforceServerLanguageDescription: "ユーザー設定に関わらず、ClaireBotにサーバーと同じ言語を使用させます。"
             EnforceServerLanguagePlaceholder: "クリックしてオプションを選択"
             SelectAChannelPlaceholder: "クリックしてチャンネルを選択"
+            ServerLanguage: "サーバーの言語"
+            ServerLanguageDescription: "このサーバーでClaireBotが使用するデフォルト言語を選択してください。"
+            ServerLanguagePlaceholder: "クリックしてサーバーの言語を選択"
           UserPreferences:
             Settings: "設定"
             AccentColour: "アクセントカラー"

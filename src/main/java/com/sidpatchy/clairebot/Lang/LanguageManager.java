@@ -75,12 +75,20 @@ public class LanguageManager {
      * @throws IOException if an I/O error occurs while retrieving the localized string
      */
     public String getLocalizedString(String key) {
-        RobinConfiguration languageFile = parseUserAndServerOptions(server, user);
-        String localizedString = languageFile.getString(key);
-        logger.debug(localizedString);
-        String rawLanguageString = localizedString != null ? localizedString : key;
+        Locale locale = resolveEffectiveLocale(server, user);
+        // Load primary and fallback separately to support per-key fallback
+        RobinConfiguration primary = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml"));
+        RobinConfiguration fallback = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml"));
 
-        return placeholderHandler.process(rawLanguageString);
+        String localized = null;
+        if (primary != null) {
+            localized = primary.getString(key);
+        }
+        if (localized == null && fallback != null) {
+            localized = fallback.getString(key);
+        }
+        String raw = localized != null ? localized : key;
+        return placeholderHandler.process(raw);
     }
 
     /**
@@ -102,11 +110,18 @@ public class LanguageManager {
      * @throws IOException if an I/O error occurs while retrieving the localized string
      */
     public List<String> getLocalizedList(String key) {
-        RobinConfiguration languageFile = parseUserAndServerOptions(server, user);
-        List<String> localizedList = languageFile.getList(key, String.class);
-        logger.debug(localizedList);
-        List<String> rawLanguageString = localizedList != null ? localizedList : List.of(key);
+        Locale locale = resolveEffectiveLocale(server, user);
+        RobinConfiguration primary = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml"));
+        RobinConfiguration fallback = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml"));
 
+        List<String> localizedList = null;
+        if (primary != null) {
+            localizedList = primary.getList(key, String.class);
+        }
+        if (localizedList == null && fallback != null) {
+            localizedList = fallback.getList(key, String.class);
+        }
+        List<String> rawLanguageString = localizedList != null ? localizedList : List.of(key);
         return placeholderHandler.process(rawLanguageString);
     }
 
@@ -119,6 +134,57 @@ public class LanguageManager {
      */
     public List<String> getLocalizedList(String basePath, String key) {
         return getLocalizedList(basePath + "." + key);
+    }
+
+    private Locale resolveEffectiveLocale(Server server, User user) {
+        Locale locale;
+        try {
+            if (user == null) {
+                locale = fallbackLocale;
+            } else {
+                APIUser apiUser = new APIUser(user.getIdAsString());
+                apiUser.getUser();
+                String rawLang = apiUser.getLanguage();
+
+                if (rawLang == null || rawLang.isBlank()) {
+                    locale = fallbackLocale;
+                } else {
+                    String normalizedTag = rawLang.replace('_', '-');
+                    locale = Locale.forLanguageTag(normalizedTag);
+                    if (locale == null || locale.toLanguageTag().equals("und")) {
+                        locale = fallbackLocale;
+                    }
+                }
+            }
+
+            if (server != null) {
+                Guild guild = new Guild(server.getIdAsString());
+                guild.getGuild();
+
+                if (guild.isEnforceSeverLanguage()) {
+                    String guildLocaleTag = guild.getLocale();
+                    if (guildLocaleTag != null && !guildLocaleTag.isBlank()) {
+                        String normalized = guildLocaleTag.replace('_', '-');
+                        Locale parsed = Locale.forLanguageTag(normalized);
+                        if (parsed != null && !"und".equals(parsed.toLanguageTag())) {
+                            locale = parsed;
+                        } else if (server.getPreferredLocale() != null) {
+                            locale = server.getPreferredLocale();
+                        } else {
+                            locale = fallbackLocale;
+                        }
+                    } else if (server.getPreferredLocale() != null) {
+                        locale = server.getPreferredLocale();
+                    } else {
+                        locale = fallbackLocale;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            logger.error("ClaireData failed to return a response for Locale information. Are we cooked?");
+            locale = fallbackLocale;
+        }
+        return locale;
     }
 
     private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
@@ -153,12 +219,23 @@ public class LanguageManager {
                 guild.getGuild();
 
                 if (guild.isEnforceSeverLanguage()) {
-                    // todo this should not be determined here, but will be until the ClaireData implementation is completed.
-                    // todo this should instead be determined when the Guild object is created in the database.
-                    // todo ClaireData update on hold while still designing the major ClaireBot update that follows this one.
-                    Locale serverLocale = server.getPreferredLocale();
-                    if (serverLocale != null) {
-                        locale = serverLocale;
+                    // Respect stored guild locale when enforcement is enabled.
+                    String guildLocaleTag = guild.getLocale();
+                    if (guildLocaleTag != null && !guildLocaleTag.isBlank()) {
+                        String normalized = guildLocaleTag.replace('_', '-');
+                        Locale parsed = Locale.forLanguageTag(normalized);
+                        if (parsed != null && !"und".equals(parsed.toLanguageTag())) {
+                            locale = parsed;
+                        } else if (server.getPreferredLocale() != null) {
+                            locale = server.getPreferredLocale();
+                        } else {
+                            locale = fallbackLocale;
+                        }
+                    } else if (server.getPreferredLocale() != null) {
+                        // Fallback to Discord server preferred locale if guild setting is absent
+                        locale = server.getPreferredLocale();
+                    } else {
+                        locale = fallbackLocale;
                     }
                 }
             }

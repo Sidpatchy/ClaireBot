@@ -154,6 +154,12 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                         .addEmbed(ServerPreferencesEmbed.getEnforceServerLangMenu(languageManager, user))
                         .addComponents(ServerPreferencesComponents.getEnforceServerLanguageMenu(languageManager))
                         .send();
+            } else if ("Server Language".equalsIgnoreCase(value)) {
+                selectMenuInteraction.createFollowupMessageBuilder()
+                        .setFlags(MessageFlag.EPHEMERAL)
+                        .addEmbed(ServerPreferencesEmbed.getServerLanguageMenu(languageManager, user))
+                        .addComponents(ServerPreferencesComponents.getServerLanguageMenu(languageManager))
+                        .send();
             }
         }
         // Server channel selection submenus
@@ -181,6 +187,15 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
             selectMenuInteraction.createFollowupMessageBuilder()
                     .setFlags(MessageFlag.EPHEMERAL)
                     .addEmbed(ServerPreferencesEmbed.getAcknowledgeEnforceServerLanguageUpdate(languageManager, server, user, bool))
+                    .addComponents()
+                    .send();
+        }
+        else if ("server-language".equalsIgnoreCase(customId)) {
+            String languageTag = value;
+            selectMenuInteraction.acknowledge();
+            selectMenuInteraction.createFollowupMessageBuilder()
+                    .setFlags(MessageFlag.EPHEMERAL)
+                    .addEmbed(ServerPreferencesEmbed.getAcknowledgeServerLanguageChange(languageManager, server, user, languageTag))
                     .addComponents()
                     .send();
         }

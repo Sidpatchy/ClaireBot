@@ -232,6 +232,10 @@ ClaireLang:
           AcknowledgeEnforceServerLanguageUpdateTitle: "Server Language Preferences Updated!"
           AcknowledgeEnforceServerLanguageUpdateEnforced: "I will now follow the server's language regardless of user preference."
           AcknowledgeEnforceServerLanguageUpdateNotEnforced: "I will follow each individual user's language preference."
+          ServerLanguageMenuTitle: "Server Language"
+          ServerLanguageMenuDesc: "Choose the default language ClaireBot should use for this server when enforcement is enabled."
+          ServerLanguageChanged: "Server Language Updated!"
+          ServerLanguageChangedDesc: "The server's language preference has been updated."
         UserInfoEmbed:
           Error_1: "The value for author was null when passed into UserInfo Embed. Error code: {cb.errorcode}"
           Error_2: "Author: {cb.user.name}"
@@ -283,6 +287,9 @@ ClaireLang:
             EnforceServerLanguageDescription: "Force ClaireBot to use the same language as the server regardless of user preference."
             EnforceServerLanguagePlaceholder: "Click to select an option"
             SelectAChannelPlaceholder: "Click to select a channel"
+            ServerLanguage: "Server Language"
+            ServerLanguageDescription: "Choose the default language ClaireBot should use in this server."
+            ServerLanguagePlaceholder: "Click to select a server language"
           UserPreferences:
             Settings: "Settings"
             AccentColour: "Accent Colour"

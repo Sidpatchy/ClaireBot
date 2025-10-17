@@ -51,6 +51,12 @@ public class ServerPreferencesEmbed {
         return createGenericMenuEmbed(author, menuName);
     }
 
+    public static EmbedBuilder getServerLanguageMenu(LanguageManager languageManager, User author) {
+        String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageMenuTitle");
+        String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageMenuDesc");
+        return createGenericMenuEmbed(author, title).setDescription(desc);
+    }
+
     public static EmbedBuilder getAcknowledgeRequestsChannelChange(LanguageManager languageManager, Server server, User author, String requestsChannelID) {
         // Resolve channel
         ServerTextChannel channel = Main.getApi().getServerTextChannelById(requestsChannelID).orElse(null);
@@ -129,6 +135,25 @@ public class ServerPreferencesEmbed {
         } catch (Exception e) {
             e.printStackTrace();
             return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateEnforceServerLang"));
+        }
+    }
+
+    public static EmbedBuilder getAcknowledgeServerLanguageChange(LanguageManager languageManager, Server server, User author, String languageTag) {
+        try {
+            Guild guild = new Guild(server.getIdAsString());
+            guild.getGuild();
+            guild.updateLocale(languageTag);
+
+            String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageChanged");
+            String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageChangedDesc");
+
+            return new EmbedBuilder()
+                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setAuthor(title)
+                    .setDescription(desc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateServerLocale"));
         }
     }
 

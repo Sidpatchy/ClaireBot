@@ -58,14 +58,20 @@ public class Guild {
         return (boolean) guild.getObj("enforceServerLanguage");
     }
 
+    public String getLocale() {
+        return guild.getString("locale");
+    }
+
     public void createGuild(String requestsChannelID,
                             String moderatorMessagesChannelID,
-                            boolean enforceServerLanguage) throws IOException {
+                            boolean enforceServerLanguage,
+                            String locale) throws IOException {
         POST post = new POST();
         post.postToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild"), guildConstructor(
                 requestsChannelID,
                 moderatorMessagesChannelID,
-                enforceServerLanguage
+                enforceServerLanguage,
+                locale
         ));
     }
 
@@ -75,22 +81,25 @@ public class Guild {
         try {
             createGuild((String) defaults.get("requestsChannelID"),
                     (String) defaults.get("moderatorMessagesChannelID"),
-                    (boolean) defaults.get("enforceServerLanguage"));
+                    (boolean) defaults.get("enforceServerLanguage"),
+                    (String) defaults.get("locale"));
         }
         // top 10 bad ideas #1
-        catch (Exception ignored) {
-            Main.getLogger().error("Unable to create user with defaults.");
+        catch (Exception e) {
+            Main.getLogger().error("Unable to create user with defaults.", e);
         }
     }
 
     public void updateGuild(String requestsChannelID,
                             String moderatorMessagesChannelID,
-                            boolean enforceServerLanguage) throws IOException {
+                            boolean enforceServerLanguage,
+                            String locale) throws IOException {
         PUT put = new PUT();
         put.putToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID), guildConstructor(
                 requestsChannelID,
                 moderatorMessagesChannelID,
-                enforceServerLanguage
+                enforceServerLanguage,
+                locale
         ));
     }
 
@@ -98,7 +107,8 @@ public class Guild {
         updateGuild(
                 requestsChannelID,
                 getModeratorMessagesChannelID(),
-                isEnforceSeverLanguage()
+                isEnforceSeverLanguage(),
+                getLocale()
         );
     }
 
@@ -106,7 +116,8 @@ public class Guild {
         updateGuild(
                 getRequestsChannelID(),
                 moderatorMessagesChannelID,
-                isEnforceSeverLanguage()
+                isEnforceSeverLanguage(),
+                getLocale()
         );
     }
 
@@ -114,7 +125,17 @@ public class Guild {
         updateGuild(
                 getRequestsChannelID(),
                 getModeratorMessagesChannelID(),
-                enforceServerLanguage
+                enforceServerLanguage,
+                getLocale()
+        );
+    }
+
+    public void updateLocale(String locale) throws IOException {
+        updateGuild(
+                getRequestsChannelID(),
+                getModeratorMessagesChannelID(),
+                isEnforceSeverLanguage(),
+                locale
         );
     }
 
@@ -125,12 +146,14 @@ public class Guild {
 
     public String guildConstructor(String requestsChannelID,
                                    String moderatorMessagesChannelID,
-                                   boolean enforceServerLanguage) {
+                                   boolean enforceServerLanguage,
+                                   String locale) {
         return "{" +
                 "\"guildID\":\"" + guildID + "\"," +
                 "\"requestsChannelID\":\""+ requestsChannelID + "\"," +
                 "\"moderatorMessagesChannelID\":\"" + moderatorMessagesChannelID + "\"," +
-                "\"enforceServerLanguage\":\"" + enforceServerLanguage + "\"" +
+                "\"enforceServerLanguage\":\"" + enforceServerLanguage + "\"," +
+                "\"locale\":\"" + locale + "\"" +
                 "}";
     }
 

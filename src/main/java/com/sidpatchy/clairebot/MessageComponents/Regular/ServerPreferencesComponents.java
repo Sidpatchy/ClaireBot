@@ -26,6 +26,9 @@ public class ServerPreferencesComponents {
         String enforceLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.EnforceServerLanguage");
         String enforceDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.EnforceServerLanguageDescription");
 
+        String serverLangLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.ServerLanguage");
+        String serverLangDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.ServerLanguageDescription");
+
         return new ActionRowBuilder()
                 .addComponents(
                         SelectMenu.create("server-settings", placeholder, 1, 1,
@@ -33,7 +36,8 @@ public class ServerPreferencesComponents {
                                         // Keep values stable for interaction handlers
                                         SelectMenuOption.create(requestsLabel, "Requests Channel", requestsDesc),
                                         SelectMenuOption.create(modLabel, "Moderator Messages Channel", modDesc),
-                                        SelectMenuOption.create(enforceLabel, "Enforce Server Language", enforceDesc)
+                                        SelectMenuOption.create(enforceLabel, "Enforce Server Language", enforceDesc),
+                                        SelectMenuOption.create(serverLangLabel, "Server Language", serverLangDesc)
                                 ))
                 ).build();
     }
@@ -60,6 +64,33 @@ public class ServerPreferencesComponents {
                                         SelectMenuOption.create(falseText, "false")
                                 ))
                 ).build();
+    }
+
+    public static ActionRow getServerLanguageMenu(LanguageManager languageManager) {
+        // Server language placeholder
+        String placeholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.ServerLanguagePlaceholder");
+
+        java.io.File dir = new java.io.File(com.sidpatchy.clairebot.Main.getTranslationsPath());
+        List<SelectMenuOption> options = new ArrayList<>();
+        if (dir.exists() && dir.isDirectory()) {
+            java.io.File[] files = dir.listFiles((d, name) -> name.startsWith("lang_") && name.endsWith(".yml"));
+            if (files != null) {
+                Arrays.sort(files, java.util.Comparator.comparing(java.io.File::getName));
+                for (java.io.File f : files) {
+                    String name = f.getName();
+                    String tag = name.substring("lang_".length(), name.length() - ".yml".length());
+                    String label = tag;
+                    options.add(SelectMenuOption.create(label, tag));
+                }
+            }
+        }
+        if (options.isEmpty()) {
+            String tag = com.sidpatchy.clairebot.Main.getFallbackLocale().toLanguageTag();
+            options.add(SelectMenuOption.create(tag, tag));
+        }
+        return new ActionRowBuilder()
+                .addComponents(SelectMenu.create("server-language", placeholder, 1, 1, options))
+                .build();
     }
 
     /**
