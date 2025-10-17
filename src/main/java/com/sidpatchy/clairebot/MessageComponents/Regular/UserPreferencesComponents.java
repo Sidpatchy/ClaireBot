@@ -1,8 +1,10 @@
 package com.sidpatchy.clairebot.MessageComponents.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
+import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.component.*;
 
+import java.io.File;
 import java.util.*;
 
 public class UserPreferencesComponents {
@@ -126,6 +128,40 @@ public class UserPreferencesComponents {
         String label = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.HexEntryPlaceholder");
         return new ActionRowBuilder()
                 .addComponents(TextInput.create(TextInputStyle.SHORT, "hex-entry-field", label))
+                .build();
+    }
+
+    public static ActionRow getLanguageMenu(LanguageManager languageManager) {
+        String placeholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.LanguagePlaceholder");
+
+        // Discover available language files under config/translations
+        File dir = new File(Main.getTranslationsPath());
+        List<SelectMenuOption> options = new ArrayList<>();
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles((d, name) -> name.startsWith("lang_") && name.endsWith(".yml"));
+            if (files != null) {
+                // Keep deterministic order
+                Arrays.sort(files, Comparator.comparing(File::getName));
+                for (File f : files) {
+                    String name = f.getName();
+                    // Example: lang_en-US.yml -> en-US
+                    String tag = name.substring("lang_".length(), name.length() - ".yml".length());
+                    // Try to read friendly display name from file header or use tag as fallback
+                    String label = tag; // Minimal; can be localized in future via file metadata
+                    // Value must be stable and languageManager-independent; use tag
+                    options.add(SelectMenuOption.create(label, tag));
+                }
+            }
+        }
+
+        if (options.isEmpty()) {
+            // Fallback to at least allow selecting fallback locale
+            String tag = Main.getFallbackLocale().toLanguageTag();
+            options.add(SelectMenuOption.create(tag, tag));
+        }
+
+        return new ActionRowBuilder()
+                .addComponents(SelectMenu.create("user-language", placeholder, 1, 1, options))
                 .build();
     }
 }

@@ -16,10 +16,18 @@ import org.javacord.api.DiscordApiBuilder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
+import java.net.URL;
+import java.net.JarURLConnection;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * ClaireBot - Simply the best.
@@ -103,7 +111,7 @@ public class Main {
         ResourceLoader loader = new ResourceLoader();
         loader.saveResource(configFile, false);
         loader.saveResource(commandsFile, false);
-        loader.saveResource("translations/lang_en-US.yml", true); // TODO make this false, handle non en-US files.
+        loadAllBundledTranslations(loader, true); // TODO make this false once language files are stable
 
         // Init config handlers
         config = new RobinConfiguration("config/" + configFile);
@@ -227,6 +235,75 @@ public class Main {
         } catch (IOException e) {
             logger.fatal("There was a fatal error while registering slash commands", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    private static void loadAllBundledTranslations(ResourceLoader loader, boolean replace) {
+        String resourceDir = "translations";
+        Set<String> resourcePaths = new HashSet<>();
+        try {
+            ClassLoader cl = Main.class.getClassLoader();
+            Enumeration<URL> urls = cl.getResources(resourceDir);
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                String protocol = url.getProtocol();
+                if ("file".equals(protocol)) {
+                    try {
+                        File dir = new File(url.toURI());
+                        File[] files = dir.listFiles((d, name) -> name.endsWith(".yml"));
+                        if (files != null) {
+                            for (File f : files) {
+                                resourcePaths.add(resourceDir + "/" + f.getName());
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Failed to enumerate file resources for translations: {}", e.getMessage());
+                    }
+                } else if ("jar".equals(protocol)) {
+                    try {
+                        JarURLConnection conn = (JarURLConnection) url.openConnection();
+                        try (JarFile jarFile = conn.getJarFile()) {
+                            Enumeration<JarEntry> entries = jarFile.entries();
+                            while (entries.hasMoreElements()) {
+                                JarEntry entry = entries.nextElement();
+                                String name = entry.getName();
+                                if (!entry.isDirectory() && name.startsWith(resourceDir + "/") && name.endsWith(".yml")) {
+                                    resourcePaths.add(name);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Failed to enumerate JAR resources for translations: {}", e.getMessage());
+                    }
+                } else {
+                    logger.debug("Unsupported classpath URL protocol for translations: {}", protocol);
+                }
+            }
+        } catch (IOException e) {
+            logger.warn("Unable to list translation resources: {}", e.getMessage());
+        }
+
+        if (resourcePaths.isEmpty()) {
+            // Fallback: attempt known default file to ensure at least the template exists on first run
+            logger.warn("No translation resources discovered via classpath enumeration. Falling back to default copy of en-US and TEMPLATE if present.");
+            String[] fallbacks = new String[] {"translations/lang_en-US.yml", "translations/lang_TEMPLATE.yml"};
+            for (String path : fallbacks) {
+                try {
+                    loader.saveResource(path, replace);
+                } catch (Exception e) {
+                    logger.debug("Fallback translation '{}' not present in resources: {}", path, e.getMessage());
+                }
+            }
+            return;
+        }
+
+        for (String path : resourcePaths) {
+            try {
+                loader.saveResource(path, replace);
+                logger.debug("Ensured translation resource available: {}", path);
+            } catch (Exception e) {
+                logger.warn("Failed to save translation resource '{}': {}", path, e.getMessage());
+            }
         }
     }
 

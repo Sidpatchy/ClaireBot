@@ -76,4 +76,29 @@ public class UserPreferencesEmbed {
                 .setAuthor(title)
                 .setDescription(desc);
     }
+
+    /**
+     * Response when a language has been selected. Updates language based on the selected locale tag.
+     *
+     * @param author User updating their language
+     * @param languageTag IETF BCP 47 tag (e.g., en-US)
+     * @return embed
+     */
+    public static EmbedBuilder getAcknowledgeLanguageChange(LanguageManager languageManager, User author, String languageTag) {
+        try {
+            APIUser apiUser = new APIUser(author.getIdAsString());
+            apiUser.getUser();
+            apiUser.updateUserLanguage(languageTag);
+
+            String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.LanguageChanged");
+            String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.LanguageChangedDesc");
+
+            return new EmbedBuilder()
+                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setAuthor(title)
+                    .setDescription(desc);
+        } catch (Exception e) {
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateLanguage"));
+        }
+    }
 }

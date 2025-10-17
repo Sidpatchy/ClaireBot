@@ -56,7 +56,7 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
                 selectMenuInteraction.createFollowupMessageBuilder()
                         .setFlags(MessageFlag.EPHEMERAL)
                         .addEmbed(UserPreferencesEmbed.getLanguageMenu(languageManager, user))
-                        .addComponents()
+                        .addComponents(UserPreferencesComponents.getLanguageMenu(languageManager))
                         .send();
             }
             else if ("Requests Channel".equalsIgnoreCase(value)
@@ -181,6 +181,16 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
             selectMenuInteraction.createFollowupMessageBuilder()
                     .setFlags(MessageFlag.EPHEMERAL)
                     .addEmbed(ServerPreferencesEmbed.getAcknowledgeEnforceServerLanguageUpdate(languageManager, server, user, bool))
+                    .addComponents()
+                    .send();
+        }
+        else if ("user-language".equalsIgnoreCase(customId)) {
+            // Value is the IETF language tag (e.g., en-US)
+            String languageTag = value;
+            selectMenuInteraction.acknowledge();
+            selectMenuInteraction.createFollowupMessageBuilder()
+                    .setFlags(MessageFlag.EPHEMERAL)
+                    .addEmbed(UserPreferencesEmbed.getAcknowledgeLanguageChange(languageManager, user, languageTag))
                     .addComponents()
                     .send();
         }

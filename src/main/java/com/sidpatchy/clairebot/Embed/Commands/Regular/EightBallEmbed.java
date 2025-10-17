@@ -18,7 +18,7 @@ public class EightBallEmbed {
         List<String> onTopTriggers = languageManager.getLocalizedList("ClaireLang.Embed.Commands.Regular.EightBallEmbed.OnTopTriggers");
         String ateBallLanguageString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.EightBallEmbed.8ball");
 
-        Main.getLogger().error(onTopTriggers.toString());
+        Main.getLogger().debug(onTopTriggers.toString());
 
         Random random = new Random();
         int rand = random.nextInt(eightBall.size());
