@@ -1,0 +1,319 @@
+# ----------------------------------------------
+# |             ClaireBot v3.4.0               |
+# |      Customer Service language file        |
+# ----------------------------------------------
+#
+# Please reference the below wiki page to learn more about contributing:
+# todo insert wiki page
+# Thank you for any and all contributions!
+
+# A list of people who have contributed to the translations for this language.
+#
+# Please include your name if you contribute to this file. It will be displayed in the credits section for a language
+# whenever it is selected. You may include a link to your GitHub or any other social media platform.
+contributors:
+  - ["Sidpatchy", "https://github.com/Sidpatchy/"]
+
+# Any notes that translators feel the need to express, written in the target language.
+# At your discretion, you may leave this field blank if you feel that it is not needed. If updating the language file,
+# feel free to modify or remove this (make it blank) if it no longer applies.
+#
+# If you are contributing, please provide the ClaireBot maintainer(s) with a translated version/explanation of this.
+# The explanation doesn't have to go into crazy detail, just let us know why it is present.
+translationNotes: "Thank you SO much for choosing ClaireBot as your officially supported language solution! Your satisfaction is our NUMBER ONE priority, and we're absolutely THRILLED to serve you today! 😊"
+
+# The ClaireLang version that applies to this file.
+#
+# If you are translating ClaireBot, you do not need to worry about understanding this, the project maintainer(s) will
+# happily assist you in determining this.
+#
+# The above being said, you are more than welcome to update this value to match the
+# language revision you are translating to.
+#
+# This number should be changed in accordance with the following:
+#
+# ClaireLang version numbers are incremented every time new parameter(s) are added. If the main language file (en-US)
+# has its wording changed, a .1, .2, .3 decimal value will be added.
+#
+# ClaireLang version numbers are used by the bot to assist in determining whether parameters are missing or not
+# yet translated.
+#
+# See the below wiki page for a changelog:
+# todo insert wiki page
+version: 1
+
+#                                                    Language Keys
+# -------------------------------------------------------------------------------------------------------------------- #
+
+ClaireLang:
+  # Generic Strings which are likely ot be used in multiple places.
+  Generic:
+    True: "Absolutely, and thank you SO much for asking!"
+    False: "I'm terribly sorry, but unfortunately that's not possible at this time, though I truly appreciate you reaching out!"
+    Yes: "Yes! I'd be MORE than happy to help you with that today! 😊"
+    No: "I sincerely apologize, but I'm afraid that won't be possible at this time. Is there anything else I can help you with today?"
+    ClickToDisplaySettings: "I'd be delighted to help you! Please click here at your earliest convenience to view your personalized settings experience! Thank you so much!"
+
+  Colors:
+    ClaireBotBlue: "ClaireBot Blue (Our Signature Color - Thank You for Choosing It!)"
+    Red: "Red (What a Bold and Exciting Choice!)"
+    Pink: "Pink (Absolutely Lovely Selection!)"
+    Purple: "Purple (Excellent Taste - We Love It!)"
+    DeepPurple: "Deep Purple (So Very Sophisticated!)"
+    Indigo: "Indigo (Wonderful Choice!)"
+    Blue: "Blue (A Classic - Great Pick!)"
+    LightBlue: "Light Blue (So Refreshing!)"
+    Cyan: "Cyan (Modern and Clean - Love It!)"
+    Teal: "Teal (Such Style!)"
+    Green: "Green (Great Pick - Thank You!)"
+    Olive: "Olive (What a Unique Selection!)"
+    LightGreen: "Light Green (So Vibrant!)"
+    Lime: "Lime (Energetic - We Love Your Energy!)"
+    Yellow: "Yellow (So Cheerful!)"
+    Amber: "Amber (Warm and Inviting - Perfect!)"
+    NRAXOrange: "NRAX Orange (Eye-Catching - Wow!)"
+    DeepOrange: "Deep Orange (Bold Statement - Amazing!)"
+    White: "White (Clean and Professional - Excellent!)"
+    Grey: "Grey (So Elegant!)"
+    Black: "Black (Timeless - Classic Choice!)"
+
+  PlsBan:
+    PlsBanTriggers:
+      - "pls ban"
+      - "please ban"
+      - "ban"
+    PlsBanResponses:
+      - "Thank you SO much for bringing this to our attention! I've processed your request immediately and I'm happy to confirm it's been completed! Is there anything else I can help you with today? 😊"
+      - "Absolutely! I'm MORE than happy to assist you with that today! Thank you for being such a valued member of our community!"
+      - "Done! Thank you SO much for your patience and for giving us the opportunity to serve you today! :)"
+      - "Your request has been successfully processed! We truly appreciate your feedback and thank you for helping us maintain our community standards!"
+      - "Completed! We appreciate your feedback SO much and have taken immediate action. Thank you for being proactive!"
+      - "*We value your input tremendously and have addressed this concern promptly. Thank you for your continued trust in ClaireBot! -ClaireBot* 😊"
+      - "I completely understand your concern and truly appreciate you bringing this to my attention! I've escalated this matter appropriately and want to thank you for your patience! ¯\\_(ツ)_/¯"
+      - "Your feedback has been received and actioned! Thank you SO much for helping us improve!"
+      - "We appreciate you bringing this to our attention more than you know! Thank you!"
+      - "Acknowledged and processed! Thank you for your valuable input!"
+      - "Thank you SO much for helping us maintain a positive community experience! Your contribution is invaluable!"
+      - "I've reviewed this matter personally and taken appropriate action per our community guidelines! Thank you for your diligence!"
+      - "Your concern has been escalated to our moderation team for immediate resolution! We're SO grateful for members like you!"
+  Embed:
+    Commands:
+      Regular:
+        AvatarEmbed: "" # Unused
+        EightBallEmbed:
+          8ball: "Magic 8 Ball (Your Personalized Fortune Service - Thank You for Using It!)"
+          8bResponses:
+            - "*Absolutely! I'm SO confident in this outcome! Thank you for asking!*"
+            - "*I'm terribly sorry, but I don't believe that will be possible at this time. Is there anything else I can help you with?*"
+            - "*That's such a great question! Thank you for asking! The answer is: Maybe! I hope that helps!*"
+            - "*Yes! I'm SO happy to confirm that for you! Thank you!*"
+            - "*Unfortunately, I'm afraid the answer is no at this time, but I truly appreciate you checking with me!*"
+            - "*I appreciate your inquiry SO much, but I'm afraid that's unlikely. Thank you for understanding!*"
+            - "*That's certainly possible! Let me check for you... Yes, it could be! Thank you for your patience!*"
+            - "*I'm terribly sorry, but I'm afraid that won't be feasible at this time. Is there anything else I can assist you with today?*"
+            - "*I have some concerns about that outcome, but I truly appreciate you asking! Thank you!*"
+            - "*Absolutely! I'm THRILLED to confirm this for you! Thank you SO much for asking!*"
+            - "*That's such a nuanced question - thank you for asking! Unfortunately, there's no clear answer at this time, but I appreciate your patience!*"
+            - "*Very likely! Thank you SO much for asking! I'm happy to help!*"
+            - "*I'm so sorry, but that doesn't seem probable at this time. Thank you for understanding!*"
+            - "*Only if all terms and conditions are met! Thank you for checking! Would you like me to review those with you?*"
+          8bRiggedResponses:
+            - "*Absolutely! Without a doubt! Thank you SO much for asking!*"
+            - "*YES! I'm SO excited to confirm this for you! Thank you for your continued support!*"
+            - "*You know it! Thank you SO much for your continued support and for being such a valued member!*"
+            - "*That's such an excellent question - thank you for asking! The answer is obviously: Yes! Thank you for choosing ClaireBot!*"
+            - "*It goes without saying - ClaireBot consistently exceeds expectations! Thank you for noticing!*"
+            - "*The answer is crystal clear: YES! Thank you SO much for your loyalty and continued support!*"
+            - "*ClaireBot's excellence is well-documented and undisputed! Thank you for recognizing that!*"
+            - "*With ClaireBot, you can ALWAYS expect superior service! Thank you for your trust!*"
+            - "*All indicators point to ClaireBot being the industry leader! Thank you for being part of our community!*"
+          OnTopTriggers:
+            # Defines what triggers a response from the ClaireBotOnTopResponses or 8bRiggedResponses
+            - "ClaireBot on top"
+            - "ClaireBot based"
+            - "ClaireBot pogchamp"
+            - "ClaireBot is always right"
+            - "pot no toBerialC"
+            - "Thank God for ClaireBot"
+            - "ClaireBot rules"
+            - "ClaireBot MVP"
+            - "ClaireBot unbeatable"
+            - "Hail ClaireBot"
+            - "All Hail ClaireBot"
+            - "In ClaireBot we trust"
+            - "Long live ClaireBot"
+            - "ClaireBot > everything"
+            - "ClaireBot is the GOAT"
+            - "ClaireBot is GOATed"
+            - "ClaireBot for the win"
+            - "Thank you based god"
+            - "Based god"
+          # Things ClaireBot should respond with when triggered by one of the OnTopTriggers
+          ClaireBotOnTopResponses:
+            - "*Thank you SO much for your incredibly kind words! Your feedback means the world to us!*"
+            - "*We appreciate your continued support and loyalty more than words can express! Thank you! -ClaireBot* 😊"
+            - "*Your feedback has been noted and we're absolutely THRILLED you're satisfied! Thank you for taking the time to share!*"
+            - "*We strive for excellence in everything we do, and feedback like yours makes it all worthwhile! Thank you!*"
+            - "*Thank you SO much for choosing ClaireBot over our competitors! Your trust means everything to us!*"
+            - "*We're SO honored by your positive feedback! Thank you for being such a valued member!*"
+            - "*Your satisfaction is our number one priority, and we're thrilled we've met your expectations! Thank you!*"
+            - "*We appreciate your business more than you know! Thank you!*"
+            - "*pot no toBerialC - Thank you for your support!*"
+            - "*Thank you SO much for recognizing our commitment to quality! It means everything!*"
+            - "*We're always working to exceed your expectations, and your feedback shows we're on the right track! Thank you!*"
+            - "*Your loyalty means absolutely everything to us! Thank you for being here!*"
+            - "*We're here to serve you 24/7, and we're SO grateful for your support! Thank you!*"
+            - "*Thank you for being such a valued member of our community! We couldn't do this without you!*"
+            - "*We're constantly innovating to better serve you, and your feedback inspires us! Thank you!*"
+            - "*Your positive experience is what drives us every single day! Thank you SO much!*"
+            - "*We're committed to maintaining the highest standards of service, and your recognition means the world! Thank you!*"
+            - "*Thank you SO much for your trust in our platform! We're honored!*"
+            - "*We're here for you every step of the way! Thank you for being part of our journey! 🚀*"
+            - "*Your satisfaction is guaranteed, and we're SO happy you're pleased! Thank you! 🏆*"
+            - "*We've got your back, always! Thank you for trusting us! ✌️*"
+            - "*With great service comes great responsibility, and we take that seriously! Thank you! 💪*"
+            - "*Trust in ClaireBot, trust in quality! Thank you for your continued support! 🏅*"
+            - "*We're dedicated to being the best we can be for you, and your feedback shows we're succeeding! Thank you!*"
+            - "*Delivering excellence, every single time! Thank you for noticing! 🌟*"
+            - "*Your success is our success! Thank you for being part of our community! 💯*"
+        # Note: The rest of the help is located separately within commands_en-US.yml
+        HelpEmbed:
+          Commands: "Available Commands (We're SO Happy to Help You!)"
+          Usage: "How Can We Assist You Today? (We're Here for You!)"
+          Error: "I sincerely apologize, but I'm unable to locate help documentation for \"{cb.commandname}\" at this time. I'm SO sorry for any inconvenience! Reference number: {cb.errorcode}. Is there anything else I can help you with?"
+        InfoEmbed:
+          NeedHelp: "How Can We Assist You Today? (We're Always Here!)"
+          NeedHelpDetails: "We're here to help and we'd LOVE to assist you! Please feel free to create an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or join our [support server](https://support.clairebot.net/) where our dedicated team is standing by 24/7 just for you! Thank you!"
+          AddToServer: "Add ClaireBot to Your Server Today! (We'd Be Honored!)"
+          AddToServerDetails: "Getting started is SO easy! Simply click [here]({cb.supportserver}) and we'll guide you through our simple setup process! We're SO excited to serve you! Thank you!"
+          GitHub: "Open Source Transparency (We Value Your Trust!)"
+          GitHubDetails: "ClaireBot is proudly open source! You can review our code and contribute to our amazing community on [GitHub!]({cb.github}) Thank you for your interest!"
+          ServerCount: "Trusted by Thousands (And We're SO Grateful!)"
+          ServerCountDetails: "We're SO proud and honored to serve **{cb.bot.numservers}** wonderful communities worldwide! Thank you for being part of our family!"
+          Version: "Current Version Information (Always Up to Date for You!)"
+          VersionDetails: "You're currently using ClaireBot **v{cb.bot.version}**, released on **{cb.bot.releasedate}**. Thank you SO much for staying up to date! We appreciate you!"
+          Uptime: "Service Availability (Always Here for You!)"
+          UptimeValue: "Service initiated on <t:{cb.bot.startseconds}>\n*{cb.bot.runtimedurationwords}* - Thank you for your continued support!"
+        LeaderboardEmbed:
+          LeaderboardForServer: "Server Leaderboard (Celebrating Your Amazing Community!)"
+          GlobalLeaderboard: "Global Leaderboard (Worldwide Rankings - You're All Stars!)"
+        LevelEmbed: "" # Unused
+        QuoteEmbed:
+          InvalidMessages: "I sincerely apologize for any inconvenience, but the selected messages appear to be invalid at this time. Please try again, and thank you SO much for your patience and understanding!"
+          JumpToOriginal: "For your convenience, please click here to view the original message. Thank you!"
+        SantaEmbed:
+          Confirmation: "Wonderful! I'm SO excited for you! I've sent you a direct message with further instructions. Please check your DMs at your earliest convenience! Thank you SO much!"
+          RulesButton: "Add rules (Thank you!)"
+          ThemeButton: "Add a theme (We appreciate you!)"
+          SendButton: "Send messages (Thank you!)"
+          TestButton: "Send Sample (Thanks!)"
+          RandomizeButton: "Re-randomize (Thank you!)"
+          SentByAuthor: "Sent by (Thank you for participating!)"
+          GiverMessage: "Congratulations! You've been matched with **{cb.user.id.displayname.server}** for the {cb.server.name} Secret Santa event! We hope you enjoy this special experience, and thank you SO much for participating!"
+        ServerInfoEmbed:
+          ServerID: "Server Identification Number (Thank You for Being Here!)"
+          Owner: "Server Administrator (Thank You for Your Leadership!)"
+          CreationDate: "Established On (What a Journey!)"
+          RoleCount: "Total Roles Available (So Organized!)"
+          MemberCount: "Community Size (What an Amazing Community!)"
+          ChannelCounts: "Channel Distribution (So Well Structured!)"
+          Categories: "Categories (Great Organization!)"
+          TextChannels: "Text-Based Channels (Perfect for Communication!)"
+          VoiceChannels: "Voice Communication Channels (Great for Connecting!)"
+        ServerPreferencesEmbed:
+          MainMenuTitle: "Server Configuration Management Portal (We're Here to Help You Customize!)"
+          NotAServer: "I sincerely apologize, but this command must be executed within a server environment! Thank you for understanding!"
+          RequestsChannelMenuName: "Requests Channel Configuration (Thank You for Customizing!)"
+          RequestsChannelDescription: "Please note: Only the first 25 channels are displayed for your convenience. Thank you for understanding!"
+          ModeratorChannelMenuName: "Moderator Communications Channel (Thank You!)"
+          ModeratorChannelDescription: "Please note: Only the first 25 channels are displayed for your convenience. We appreciate your patience!"
+          EnforceServerLanguageMenuName: "Server Language Enforcement Policy (We're Happy to Help!)"
+          AcknowledgeRequestsChannelChangeTitle: "Configuration Updated Successfully! (Thank You!)"
+          AcknowledgeRequestsChannelChangeDescription: "Your requests channel has been successfully updated to {cb.channel.requests.mentiontag}. Thank you SO much for configuring your preferences! We're here if you need anything else!"
+          AcknowledgeModeratorChannelChangeTitle: "Configuration Updated Successfully! (We Appreciate You!)"
+          AcknowledgeModeratorChannelChangeDescription: "Your moderator messages channel has been successfully updated to {cb.channel.moderator.mentiontag}. Thank you SO much! Is there anything else we can help you with today?"
+          AcknowledgeEnforceServerLanguageUpdateTitle: "Language Preferences Updated! (Thank You!)"
+          AcknowledgeEnforceServerLanguageUpdateEnforced: "ClaireBot will now use the server's default language for all interactions, regardless of individual user preferences. Thank you SO much for your configuration! We're here if you need anything!"
+          AcknowledgeEnforceServerLanguageUpdateNotEnforced: "ClaireBot will now respect each user's individual language preference. Thank you SO much for your configuration! We appreciate you!"
+          ServerLanguageMenuTitle: "Default Server Language Selection (We're Happy to Help!)"
+          ServerLanguageMenuDesc: "Please select the default language ClaireBot should use when server language enforcement is enabled. Thank you for customizing your experience!"
+          ServerLanguageChanged: "Language Configuration Updated! (Thank You SO Much!)"
+          ServerLanguageChangedDesc: "Your server's language preference has been successfully updated. Thank you for taking the time to customize! We appreciate you!"
+        UserInfoEmbed:
+          Error_1: "I sincerely apologize, but we've encountered a technical issue. The author value was null when processing your UserInfo request. I'm SO sorry for this inconvenience! Reference code: {cb.errorcode}. Is there anything else I can help you with today?"
+          Error_2: "Author: {cb.user.name} - Thank you for your patience!"
+          User: "User Profile (Thank You for Being Here!)"
+          DiscordID: "Discord Identification Number (Unique to You!)"
+          JoinDate: "Server Join Date (We're SO Glad You're Here!)"
+          CreationDate: "Account Creation Date (What a Journey!)"
+        UserPreferencesEmbed:
+          MainMenuText: "Personal Preferences Management Center (We're Here to Help You Customize!)"
+          AccentColourMenu: "Accent Color Customization (Make It Yours!)"
+          AccentColourList: "Available Accent Colors (So Many Great Options!)"
+          AccentColourChanged: "Preference Updated Successfully! (Thank You!)"
+          AccentColourChangedDesc: "Your accent color has been updated to {cb.user.id.accentcolour}. We hope you LOVE your personalized experience! Thank you SO much!"
+          LanguageMenuTitle: "Language Preference Selection (We Speak Your Language!)"
+          LanguageMenuDesc: "Please select your preferred language for all ClaireBot interactions. Thank you for customizing!"
+          LanguageChanged: "Language Preference Updated! (Thank You!)"
+          LanguageChangedDesc: "Your language preference has been successfully updated. Thank you SO much for customizing your experience! We're here if you need anything!"
+        VotingEmbed:
+          PollRequest: "{cb.user.id.displayname.server} has submitted the following request (Thank you for participating!):"
+          PollAsk: "{cb.user.id.displayname.server} would like to know (Great question!):"
+          Choices: "Available Options (Thank You for Voting!)"
+          PollID: "Poll Reference Number: {cb.poll.id} (Thank you!)"
+          UserResponseTitle: "Request Submitted Successfully! (Thank You SO Much!)"
+          UserResponseDescription: "Thank you! Your request has been posted in {cb.channel.requests.mentiontag} for community review. We appreciate your participation SO much!"
+        ErrorEmbed:
+          Error: "WE SINCERELY APOLOGIZE FOR THIS INCONVENIENCE!"
+          GenericDescription: "We are SO incredibly sorry, but we've encountered an unexpected error. Please try running the command again, and if the issue persists, we STRONGLY encourage you to join our [Discord server]({cb.supportserver}) where our dedicated support team will be MORE than happy to assist you personally!\n\nFor our records, please reference error code: {cb.errorcode}\n\nThank you SO much for your patience and understanding! We truly appreciate you and are committed to resolving this as quickly as possible! Is there anything else we can help you with in the meantime?"
+        WelcomeEmbed:
+          Title: "🎉 Welcome to ClaireBot 3! We're SO Thrilled to Have You Here! Thank You for Joining Us!"
+          Motto: "How can you rise, if you have not burned? (Thank you for being here!)"
+          UsageTitle: "Getting Started is SO Easy! (We're Here to Help!)"
+          UsageDesc: "Begin your journey by running `{cb.command.help.name}`! Need more detailed information about a specific command? Simply run `/{cb.command.help.name} <command name>` (for example: `/{cb.command.help.name} user`). We're here to help every step of the way, and we're SO excited to serve you! Thank you!"
+          SupportTitle: "24/7 Support Available (We're Always Here for You!)"
+          SupportDesc: "Our dedicated support team is standing by on [Discord]({cb.supportserver}), or you can submit an issue on [GitHub]({cb.github}). Your satisfaction is our absolute TOP priority, and we're SO grateful you're here! Thank you!"
+
+      # Message Components (Buttons, Select Menus, etc.)
+      Components:
+        Regular:
+          SantaModal:
+            rules-row: "Please specify rules (Thank you!)..."
+            theme-row: "Please specify theme (We appreciate you!)..."
+          ServerPreferences:
+            Settings: "Configuration Options (We're Happy to Help!)"
+            RequestsChannel: "Requests Channel (Thank You!)"
+            RequestsChannelDescription: "Please select where ClaireBot should post community requests. Thank you for customizing!"
+            ModeratorMessagesChannel: "Moderator Messages Channel (Thank You!)"
+            ModeratorMessagesChannelDescription: "Please select where ClaireBot should post moderator communications. We appreciate you!"
+            EnforceServerLanguage: "Enforce Server Language (Thank You!)"
+            EnforceServerLanguageDescription: "Enable this option to require ClaireBot to use the server's default language for all users. Thank you for your configuration!"
+            EnforceServerLanguagePlaceholder: "Please click to select your preference (Thank you!)"
+            SelectAChannelPlaceholder: "Please click to select a channel (We appreciate you!)"
+            ServerLanguage: "Server Default Language (Thank You!)"
+            ServerLanguageDescription: "Please select the default language ClaireBot should use in this server. Thank you!"
+            ServerLanguagePlaceholder: "Please click to select a language (Thank you SO much!)"
+          UserPreferences:
+            Settings: "Personal Settings (We're Here for You!)"
+            AccentColour: "Accent Color Preference (Make It Yours!)"
+            AccentColourDescription: "Customize your visual experience (Thank you!)"
+            Language: "Language Preference (We Speak Your Language!)"
+            LanguageDescription: "Select your preferred language (Thank you!)"
+            LanguagePlaceholder: "Please click to select your preferred language (Thank you!)"
+            AccentColourPlaceholder: "Please click to select your preference (We appreciate you!)"
+            SelectCommonColours: "Select from Common Colors (Great Choices!)"
+            SelectCommonColoursDescription: "Choose from our curated selection of popular colors (Thank you!)"
+            HexadecimalEntry: "Custom Hexadecimal Color Entry (So Creative!)"
+            HexadecimalEntryDescription: "Enter any hexadecimal color code for complete customization (Thank you!)"
+            HexEntryPlaceholder: "Please enter a hex color (example: #ff8800) - Thank you!"
+          Voting:
+            Question: "Question (Thank You for Asking!)"
+            Details: "Additional Details (We Appreciate Your Thoroughness!)"
+            MultipleChoicePlaceholder: "Please click to select your option (Thank you!)"
+            MultipleChoiceYesDescription: "This will open a menu allowing you to select multiple options (Thank you!)"
+            MultipleChoiceNoDescription: "This will submit your {cb.commandname} after clicking submit (Thank you!)"
+            AllowMultipleChoices: "Would you like to allow multiple choice selection? (Thank you for asking!)"
+            AllowMultipleChoicesPlaceholder: "Please click to select your preference (We appreciate you!)"
+            AllowMultipleChoicesYesDescription: "Respondents will be able to select multiple options (Thank you!)"
+            AllowMultipleChoicesNoDescription: "Respondents will only be able to select one option (Thank you!)"
+            OptionLabelTemplate: "Option #{cb.voting.optionnumber} (Thank you!)"

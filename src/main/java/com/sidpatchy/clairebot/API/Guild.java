@@ -5,6 +5,7 @@ import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Network.DELETE;
 import com.sidpatchy.clairebot.Util.Network.POST;
 import com.sidpatchy.clairebot.Util.Network.PUT;
+import com.sidpatchy.clairebot.Util.Network.UrlBuilder;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,7 +30,7 @@ public class Guild {
      */
     public void getGuild() throws IOException {
         try {
-            guild.loadFromURL(Main.getApiUser(), Main.getApiPassword(), Main.getApiPath() + "api/v1/guild/" + guildID);
+            guild.loadFromURL(Main.getApiUser(), Main.getApiPassword(), UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID));
         }
         catch (Exception e) {
             if (createNewWithDefaults) {
@@ -57,14 +58,20 @@ public class Guild {
         return (boolean) guild.getObj("enforceServerLanguage");
     }
 
+    public String getLocale() {
+        return guild.getString("locale");
+    }
+
     public void createGuild(String requestsChannelID,
                             String moderatorMessagesChannelID,
-                            boolean enforceServerLanguage) throws IOException {
+                            boolean enforceServerLanguage,
+                            String locale) throws IOException {
         POST post = new POST();
-        post.postToURL(Main.getApiPath() + "api/v1/guild/", guildConstructor(
+        post.postToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild"), guildConstructor(
                 requestsChannelID,
                 moderatorMessagesChannelID,
-                enforceServerLanguage
+                enforceServerLanguage,
+                locale
         ));
     }
 
@@ -74,22 +81,25 @@ public class Guild {
         try {
             createGuild((String) defaults.get("requestsChannelID"),
                     (String) defaults.get("moderatorMessagesChannelID"),
-                    (boolean) defaults.get("enforceServerLanguage"));
+                    (boolean) defaults.get("enforceServerLanguage"),
+                    (String) defaults.get("locale"));
         }
         // top 10 bad ideas #1
-        catch (Exception ignored) {
-            Main.getLogger().error("Unable to create user with defaults.");
+        catch (Exception e) {
+            Main.getLogger().error("Unable to create user with defaults.", e);
         }
     }
 
     public void updateGuild(String requestsChannelID,
                             String moderatorMessagesChannelID,
-                            boolean enforceServerLanguage) throws IOException {
+                            boolean enforceServerLanguage,
+                            String locale) throws IOException {
         PUT put = new PUT();
-        put.putToURL(Main.getApiPath() + "api/v1/guild/" + guildID, guildConstructor(
+        put.putToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID), guildConstructor(
                 requestsChannelID,
                 moderatorMessagesChannelID,
-                enforceServerLanguage
+                enforceServerLanguage,
+                locale
         ));
     }
 
@@ -97,7 +107,8 @@ public class Guild {
         updateGuild(
                 requestsChannelID,
                 getModeratorMessagesChannelID(),
-                isEnforceSeverLanguage()
+                isEnforceSeverLanguage(),
+                getLocale()
         );
     }
 
@@ -105,7 +116,8 @@ public class Guild {
         updateGuild(
                 getRequestsChannelID(),
                 moderatorMessagesChannelID,
-                isEnforceSeverLanguage()
+                isEnforceSeverLanguage(),
+                getLocale()
         );
     }
 
@@ -113,23 +125,35 @@ public class Guild {
         updateGuild(
                 getRequestsChannelID(),
                 getModeratorMessagesChannelID(),
-                enforceServerLanguage
+                enforceServerLanguage,
+                getLocale()
+        );
+    }
+
+    public void updateLocale(String locale) throws IOException {
+        updateGuild(
+                getRequestsChannelID(),
+                getModeratorMessagesChannelID(),
+                isEnforceSeverLanguage(),
+                locale
         );
     }
 
     public void deleteGuild() throws IOException {
         DELETE delete = new DELETE();
-        delete.deleteToURL(Main.getApiPath() + "api/v1/guild/" + guildID);
+        delete.deleteToURL(UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID));
     }
 
     public String guildConstructor(String requestsChannelID,
                                    String moderatorMessagesChannelID,
-                                   boolean enforceServerLanguage) {
+                                   boolean enforceServerLanguage,
+                                   String locale) {
         return "{" +
                 "\"guildID\":\"" + guildID + "\"," +
                 "\"requestsChannelID\":\""+ requestsChannelID + "\"," +
                 "\"moderatorMessagesChannelID\":\"" + moderatorMessagesChannelID + "\"," +
-                "\"enforceServerLanguage\":\"" + enforceServerLanguage + "\"" +
+                "\"enforceServerLanguage\":\"" + enforceServerLanguage + "\"," +
+                "\"locale\":\"" + locale + "\"" +
                 "}";
     }
 
@@ -141,7 +165,7 @@ public class Guild {
         URL url;
         InputStreamReader reader;
 
-        String link = Main.getApiPath() + "api/v1/guild/";
+        String link = UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild");
         try {
             url = new URL(link);
             URLConnection uc = url.openConnection();

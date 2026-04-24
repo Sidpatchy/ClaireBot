@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  title: ClaireData API
+  version: 1.0.0
+  description: Spring Boot REST API for managing users and guilds
+
+tags:
+  - name: User Controller
+    description: Endpoints for user management
+  - name: Guild Controller
+    description: Endpoints for guild management
+
+paths:
+  /api/v1/user:
+    get:
+      tags:
+        - User Controller
+      operationId: getAllUsers
+      summary: Get all users
+      responses:
+        '200':
+          description: List of all users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      tags:
+        - User Controller
+      operationId: addUser
+      summary: Create new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User created successfully
+
+  /api/v1/user/{userID}:
+    get:
+      tags:
+        - User Controller
+      operationId: getUserById
+      summary: Get user by ID
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+    put:
+      tags:
+        - User Controller
+      operationId: updateUser
+      summary: Update user
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+
+    delete:
+      tags:
+        - User Controller
+      operationId: deleteUserById
+      summary: Delete user
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+
+  /api/v1/guild:
+    get:
+      tags:
+        - Guild Controller
+      operationId: getAllGuilds
+      summary: Get all guilds
+      responses:
+        '200':
+          description: List of all guilds retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Guild'
+
+    post:
+      tags:
+        - Guild Controller
+      operationId: addGuild
+      summary: Create new guild
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guild'
+      responses:
+        '200':
+          description: Guild created successfully
+
+  /api/v1/guild/{guildID}:
+    get:
+      tags:
+        - Guild Controller
+      operationId: getGuildById
+      summary: Get guild by ID
+      parameters:
+        - name: guildID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Guild found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Guild'
+        '404':
+          description: Guild not found
+
+    put:
+      tags:
+        - Guild Controller
+      operationId: updateGuild
+      summary: Update guild
+      parameters:
+        - name: guildID
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Guild'
+      responses:
+        '200':
+          description: Guild updated successfully
+
+    delete:
+      tags:
+        - Guild Controller
+      operationId: deleteGuildById
+      summary: Delete guild
+      parameters:
+        - name: guildID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Guild deleted successfully
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+        accentColour:
+          type: string
+          description: Hex color code with '#' prefix
+          example: "#FF0000"
+        language:
+          type: string
+          description: ISO 639-3 language code
+          example: "eng"
+        pointsGuildID:
+          type: array
+          items:
+            type: string
+        pointsMessages:
+          type: array
+          items:
+            type: integer
+          deprecated: true
+        pointsVoiceChat:
+          type: array
+          items:
+            type: integer
+          deprecated: true
+
+    Guild:
+      type: object
+      required:
+        - guildID
+      properties:
+        guildID:
+          type: string
+        requestsChannelID:
+          type: string
+          description: Discord channel ID for requests
+        moderatorMessagesChannelID:
+          type: string
+          description: Discord channel ID for moderator messages
+        enforceServerLanguage:
+          type: boolean
+          description: Whether to enforce server language settings
+
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+security:
+  - BasicAuth: []

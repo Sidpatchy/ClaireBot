@@ -31,7 +31,6 @@ public class Clockwork {
 
 }
 
-@SuppressWarnings("unchecked")
 class Helper extends TimerTask {
 
     RobinConfiguration config = new RobinConfiguration();
@@ -40,7 +39,7 @@ class Helper extends TimerTask {
     public void run() {
         try {
             config.loadFromURL("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
-            Clockwork.setPhishingDomains(config.getList("domains")
+            Clockwork.setPhishingDomains(config.getList("domains", String.class)
                     .stream()
                     .map(Object::toString)
                     .collect(Collectors.toList()));

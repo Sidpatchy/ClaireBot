@@ -1,0 +1,322 @@
+# ----------------------------------------------
+# |             ClaireBot v3.4.0               |
+# |           Japanese language file           |
+# ----------------------------------------------
+#
+# Please reference the below wiki page to learn more about contributing:
+# todo insert wiki page
+# Thank you for any and all contributions!
+
+# A list of people who have contributed to the translations for this language.
+#
+# Please include your name if you contribute to this file. It will be displayed in the credits section for a language
+# whenever it is selected. You may include a link to your GitHub or any other social media platform.
+contributors:
+  - ["Sidpatchy", "https://github.com/Sidpatchy/"]
+
+# Any notes that translators feel the need to express, written in the target language.
+# At your discretion, you may leave this field blank if you feel that it is not needed. If updating the language file,
+# feel free to modify or remove this (make it blank) if it no longer applies.
+#
+# If you are contributing, please provide the ClaireBot maintainer(s) with a translated version/explanation of this.
+# The explanation doesn't have to go into crazy detail, just let us know why it is present.
+translationNotes: "ClaireBotが公式にサポートしている言語です。"
+
+# The ClaireLang version that applies to this file.
+#
+# If you are translating ClaireBot, you do not need to worry about understanding this, the project maintainer(s) will
+# happily assist you in determining this.
+#
+# The above being said, you are more than welcome to update this value to match the
+# language revision you are translating to.
+#
+# This number should be changed in accordance with the following:
+#
+# ClaireLang version numbers are incremented every time new parameter(s) are added. If the main language file (en-US)
+# has its wording changed, a .1, .2, .3 decimal value will be added.
+#
+# ClaireLang version numbers are used by the bot to assist in determining whether parameters are missing or not
+# yet translated.
+#
+# See the below wiki page for a changelog:
+# todo insert wiki page
+version: 1
+
+#                                                    Language Keys
+# -------------------------------------------------------------------------------------------------------------------- #
+
+ClaireLang:
+  # Generic Strings which are likely ot be used in multiple places.
+  Generic:
+    True: "真"
+    False: "偽"
+    Yes: "はい"
+    No: "いいえ"
+    ClickToDisplaySettings: "クリックして設定を表示"
+
+  Colors:
+    ClaireBotBlue: "クレアボットブルー"
+    Red: "赤"
+    Pink: "ピンク"
+    Purple: "紫"
+    DeepPurple: "ディープパープル"
+    Indigo: "インディゴ"
+    Blue: "青"
+    LightBlue: "ライトブルー"
+    Cyan: "シアン"
+    Teal: "ティール"
+    Green: "緑"
+    Olive: "オリーブ"
+    LightGreen: "ライトグリーン"
+    Lime: "ライム"
+    Yellow: "黄"
+    Amber: "アンバー"
+    NRAXOrange: "NRAXオレンジ"
+    DeepOrange: "ディープオレンジ"
+    White: "白"
+    Grey: "灰色"
+    Black: "黒"
+
+  PlsBan:
+    PlsBanTriggers:
+      - "pls ban"
+      - "please ban"
+      - "ban"
+      - "バンして"
+      - "バンお願いします"
+    PlsBanResponses:
+      - "任せろ"
+      - "お安い御用！"
+      - "完了。手伝えて何より :)"
+      - "完了したと思ってください。"
+      - "終わったよ。RIP BOZO"
+      - "*L + Ratio -ClaireBot*"
+      - "出てけって言っとくよ ¯\\_(ツ)_/¯"
+      - "砂を相手の所在地に発送しました。ギフトメモ: \"Pound sand\""
+      - "もっと泣けよ。"
+      - "り"
+      - "せいせいする"
+  Embed:
+    Commands:
+      Regular:
+        AvatarEmbed: "" # Unused
+        EightBallEmbed:
+          8ball: "エイトボール"
+          8bResponses:
+            - "*もちろん！*"
+            - "*ありえない*"
+            - "*多分ね*"
+            - "*はい*"
+            - "*いいえ*"
+            - "*とんでもない*"
+            - "*可能性はある*"
+            - "*万に一つもない*"
+            - "*疑わしいね*"
+            - "*絶対に！*"
+            - "*なんとも言えない*"
+            - "*ありえそう！*"
+            - "*なさそう*"
+          8bRiggedResponses:
+            - "*当たり前だろ！*"
+            - "*あったりめえよ！*"
+            - "*わかってるくせに！*"
+            - "*答えを知ってる質問をする必要ある？当然イエスだろ*"
+            - "*言うまでもない、ClaireBotが最強なのは誰もが知っている*"
+            - "*答えは明白: YES!*"
+            - "*ClaireBotの支配は揺るがない*"
+            - "*ClaireBotがいれば、疑問の余地なし！*"
+            - "*全ての兆候がClaireBotの優位を示している！*"
+          OnTopTriggers:
+            # Defines what triggers a response from the ClaireBotOnTopResponses or 8bRiggedResponses
+            - "ClaireBot on top"
+            - "ClaireBot based"
+            - "ClaireBot pogchamp"
+            - "ClaireBot is always right"
+            - "pot no toBerialC"
+            - "Thank God for ClaireBot"
+            - "ClaireBot rules"
+            - "ClaireBot MVP"
+            - "ClaireBot unbeatable"
+            - "Hail ClaireBot"
+            - "All Hail ClaireBot"
+            - "In ClaireBot we trust"
+            - "Long live ClaireBot"
+            - "ClaireBot > everything"
+            - "ClaireBot is the GOAT"
+            - "ClaireBot is GOATed"
+            - "ClaireBot for the win"
+            - "Thank you based god"
+            - "Based god"
+            - "クレアボット最強"
+            - "クレアボットしか勝たん"
+            - "クレアボット最高"
+            - "クレアボットの言うことは絶対"
+          # Things ClaireBot should respond with when triggered by one of the OnTopTriggers
+          ClaireBotOnTopResponses:
+            - "*当然！*"
+            - "*私は…必然だ。 -ClaireBot*"
+            - "*承認*"
+            - "*事実だ*"
+            - "*Mee6よりマシ*"
+            - "*やめろ！*"
+            - "*負け知らず！*"
+            - "*わかってるじゃん*"
+            - "*pot no toBerialC*"
+            - "*Groovyよりマシ*"
+            - "*常に一歩先を行く*"
+            - "*止められない力*"
+            - "*ClaireBotが助けに来たぞ！*"
+            - "*最高級！*"
+            - "*他を圧倒する輝き！*"
+            - "*ClaireBotによる支配は達成された*"
+            - "*2025年以降、CIAの洗脳兵器ではありません！*"
+            - "*我を崇めよ！ -ClaireBot*"
+            - "*止められない力！🚀*"
+            - "*永遠に最強！🏆*"
+            - "*恐れるな、ClaireBotがついている！✌️*"
+            - "*大いなる力には、大いなるClaireBotが伴う！💪*"
+            - "*ClaireBotを信じよ、勝利を信じよ！🏅*"
+            - "*過去最高、現在最高、未来永劫最高の存在！*"
+            - "*常に最高をお届け！🌟*"
+            - "*完璧。💯*"
+        # Note: The rest of the help is located separately within commands_ja.yml
+        HelpEmbed:
+          Commands: "コマンド"
+          Usage: "使い方"
+          Error: "\"{cb.commandname}\" のヘルプデータが見つかりませんでした。エラーコード: {cb.errorcode}"
+        InfoEmbed:
+          NeedHelp: "お困りですか？"
+          NeedHelpDetails: "[GitHub](https://github.com/Sidpatchy/ClaireBot/issues)でissueを作成するか、[サポートサーバー](https://support.clairebot.net/)に参加することでヘルプを得られます。"
+          AddToServer: "サーバーに私を追加"
+          AddToServerDetails: "私をサーバーに追加するのは簡単です。[ここ]({cb.supportserver})をクリックするだけです。"
+          GitHub: "GitHub"
+          GitHubDetails: "ClaireBotはオープンソースです。つまり、全てのコードを閲覧できます！[GitHub]({cb.github})をチェックしてみてください！"
+          ServerCount: "サーバー数"
+          ServerCountDetails: "私は **{cb.bot.numservers}** 個のサーバーを啓蒙しました。"
+          Version: "バージョン"
+          VersionDetails: "私は **{cb.bot.releasedate}** にリリースされたClaireBot **v{cb.bot.version}** を実行しています。"
+          Uptime: "稼働時間"
+          UptimeValue: "<t:{cb.bot.startseconds}> に起動\n*稼働時間: {cb.bot.runtimedurationwords}*"
+        LeaderboardEmbed:
+          LeaderboardForServer: "サーバーのリーダーボード"
+          GlobalLeaderboard: "グローバルリーダーボード"
+        LevelEmbed: "" # Unused
+        QuoteEmbed:
+          InvalidMessages: "選択したメッセージが無効だったようです。後でもう一度お試しください。"
+          JumpToOriginal: "クリックして元のメッセージにジャンプ:"
+        SantaEmbed:
+          Confirmation: "確認しました！ダイレクトメッセージを送信しました。そちらで続けてください。"
+          RulesButton: "ルールを追加"
+          ThemeButton: "テーマを追加"
+          SendButton: "メッセージを送信"
+          TestButton: "サンプルを送信"
+          RandomizeButton: "再抽選"
+          SentByAuthor: "送信者"
+          GiverMessage: "ホー！ホー！ホー！ {cb.server.name} のシークレットサンタで、あなたは **{cb.user.id.displayname.server}** さんを引き当てました！"
+        ServerInfoEmbed:
+          ServerID: "サーバーID"
+          Owner: "オーナー"
+          CreationDate: "作成日"
+          RoleCount: "ロール数"
+          MemberCount: "メンバー数"
+          ChannelCounts: "チャンネル数"
+          Categories: "カテゴリ"
+          TextChannels: "テキストチャンネル"
+          VoiceChannels: "ボイスチャンネル"
+        ServerPreferencesEmbed:
+          MainMenuTitle: "サーバー設定エディタ"
+          NotAServer: "このコマンドはサーバー内で実行する必要があります！"
+          RequestsChannelMenuName: "リクエストチャンネル"
+          RequestsChannelDescription: "サーバー内の最初の25チャンネルのみをリスト表示します。"
+          ModeratorChannelMenuName: "モデレーターメッセージチャンネル"
+          ModeratorChannelDescription: "サーバー内の最初の25チャンネルのみをリスト表示します。"
+          EnforceServerLanguageMenuName: "サーバー言語を強制"
+          AcknowledgeRequestsChannelChangeTitle: "リクエストチャンネルが変更されました！"
+          AcknowledgeRequestsChannelChangeDescription: "リクエストチャンネルが {cb.channel.requests.mentiontag} に変更されました。"
+          AcknowledgeModeratorChannelChangeTitle: "モデレーターチャンネルが変更されました！"
+          AcknowledgeModeratorChannelChangeDescription: "モデレーターメッセージチャンネルが {cb.channel.moderator.mentiontag} に変更されました。"
+          AcknowledgeEnforceServerLanguageUpdateTitle: "サーバー言語設定が更新されました！"
+          AcknowledgeEnforceServerLanguageUpdateEnforced: "これからは、ユーザー設定に関わらずサーバーの言語に従います。"
+          AcknowledgeEnforceServerLanguageUpdateNotEnforced: "これからは、個々のユーザーの言語設定に従います。"
+          ServerLanguageMenuTitle: "サーバー言語"
+          ServerLanguageMenuDesc: "強制が有効な場合、ClaireBotがこのサーバーで使用するデフォルト言語を選択してください。"
+          ServerLanguageChanged: "サーバー言語が更新されました！"
+          ServerLanguageChangedDesc: "サーバーの言語設定が更新されました。"
+        UserInfoEmbed:
+          Error_1: "UserInfo Embedに渡されたauthorの値がnullでした。エラーコード: {cb.errorcode}"
+          Error_2: "作成者: {cb.user.name}"
+          User: "ユーザー"
+          DiscordID: "Discord ID"
+          JoinDate: "サーバー参加日"
+          CreationDate: "アカウント作成日"
+        UserPreferencesEmbed:
+          MainMenuText: "ユーザー設定エディタ"
+          AccentColourMenu: "アクセントカラーエディタ"
+          AccentColourList: "アクセントカラーリスト"
+          AccentColourChanged: "アクセントカラーが変更されました！"
+          AccentColourChangedDesc: "あなたのアクセントカラーが {cb.user.id.accentcolour} に変更されました。"
+          LanguageMenuTitle: "言語設定"
+          LanguageMenuDesc: "ClaireBotがあなたとやり取りするときに使用する言語を選択してください。"
+          LanguageChanged: "言語が更新されました！"
+          LanguageChangedDesc: "あなたの優先言語が更新されました。"
+        VotingEmbed:
+          PollRequest: "{cb.user.id.displayname.server} からのリクエスト:"
+          PollAsk: "{cb.user.id.displayname.server} からの質問:"
+          Choices: "選択肢"
+          PollID: "投票ID: {cb.poll.id}"
+          UserResponseTitle: "リクエストが作成されました！"
+          UserResponseDescription: "{cb.channel.requests.mentiontag} で確認してください。"
+        ErrorEmbed:
+          Error: "エラー"
+          GenericDescription: "おっと、エラーが発生したようです！もう一度コマンドを実行してみてください。それでもうまくいかない場合は、私の[Discordサーバー]({cb.supportserver})に参加して、問題についてお知らせください。\n\n以下のエラーコードを含めてください: {cb.errorcode}"
+        WelcomeEmbed:
+          Title: "🎉 ClaireBot 3へようこそ！"
+          Motto: "燃え尽きずして、どうして立ち上がれようか？"
+          UsageTitle: "使い方"
+          UsageDesc: "`{cb.command.help.name}` を実行して始めましょう。コマンドについてさらに情報が必要な場合は、`/{cb.command.help.name} <コマンド名>` (例: `/{cb.command.help.name} user`) を実行してください。"
+          SupportTitle: "サポート"
+          SupportDesc: "[Discord]({cb.supportserver})でヘルプを得るか、[GitHub]({cb.github})でissueを開くことができます。"
+
+      # Message Components (Buttons, Select Menus, etc.)
+      Components:
+        Regular:
+          SantaModal:
+            rules-row: "ルール..."
+            theme-row: "テーマ..."
+          ServerPreferences:
+            Settings: "設定"
+            RequestsChannel: "リクエストチャンネル"
+            RequestsChannelDescription: "ClaireBotがリクエストを投稿する場所を選択します。"
+            ModeratorMessagesChannel: "モデレーターメッセージチャンネル"
+            ModeratorMessagesChannelDescription: "ClaireBotがモデレーターメッセージを投稿する場所を選択します。"
+            EnforceServerLanguage: "サーバー言語を強制"
+            EnforceServerLanguageDescription: "ユーザー設定に関わらず、ClaireBotにサーバーと同じ言語を使用させます。"
+            EnforceServerLanguagePlaceholder: "クリックしてオプションを選択"
+            SelectAChannelPlaceholder: "クリックしてチャンネルを選択"
+            ServerLanguage: "サーバーの言語"
+            ServerLanguageDescription: "このサーバーでClaireBotが使用するデフォルト言語を選択してください。"
+            ServerLanguagePlaceholder: "クリックしてサーバーの言語を選択"
+          UserPreferences:
+            Settings: "設定"
+            AccentColour: "アクセントカラー"
+            AccentColourDescription: "青色が嫌いなあなたへ"
+            Language: "言語"
+            LanguageDescription: "英語に不快感を覚えるなら"
+            LanguagePlaceholder: "クリックして言語を選択"
+            AccentColourPlaceholder: "クリックしてオプションを選択"
+            SelectCommonColours: "一般的な色を選択"
+            SelectCommonColoursDescription: "一般的な色のリストから選択します"
+            HexadecimalEntry: "16進数で入力"
+            HexadecimalEntryDescription: "任意の16進数カラーを入力します"
+            HexEntryPlaceholder: "16進数カラーを入力 (例: #ff8800)"
+          Voting:
+            Question: "質問"
+            Details: "詳細"
+            MultipleChoicePlaceholder: "クリックしてオプションを選択"
+            MultipleChoiceYesDescription: "他のオプションを選択するためのメニューを開きます"
+            MultipleChoiceNoDescription: "送信をクリックすると {cb.commandname} を送信します"
+            AllowMultipleChoices: "複数選択を許可しますか？"
+            AllowMultipleChoicesPlaceholder: "クリックしてオプションを選択"
+            AllowMultipleChoicesYesDescription: "回答者が複数の選択肢を選べるようにします"
+            AllowMultipleChoicesNoDescription: "回答者が一つの選択肢しか選べないようにします"
+            OptionLabelTemplate: "選択肢 #{cb.voting.optionnumber}"

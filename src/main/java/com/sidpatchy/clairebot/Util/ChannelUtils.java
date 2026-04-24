@@ -65,7 +65,8 @@ public class ChannelUtils {
         }
 
         if (apiFailed || channel == null) {
-            channel = server.getTextChannelsByName("requests").get(0);
+            var byName = server.getTextChannelsByName("requests");
+            channel = byName.isEmpty() ? null : byName.get(0);
         }
 
         return channel;

@@ -2,6 +2,8 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -10,33 +12,56 @@ import org.javacord.api.entity.user.User;
 
 public class ServerPreferencesEmbed {
 
-    public static EmbedBuilder getMainMenu(User author) {
-        return createGenericMenuEmbed(author, "Server Configuration Editor");
+    public static EmbedBuilder getMainMenu(LanguageManager languageManager, User author) {
+        // Temp/localized variables
+        String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.MainMenuTitle");
+
+        return createGenericMenuEmbed(author, title);
     }
 
-    public static EmbedBuilder getNotServerMenu() {
-        return ErrorEmbed.getCustomError(Main.getErrorCode("notaserver"),
-                "You must run this command inside a server!");
+    public static EmbedBuilder getNotServerMenu(LanguageManager languageManager) {
+        // Temp/localized variables
+        String notServerMsg = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.NotAServer");
+
+        return ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("notaserver"), notServerMsg);
     }
 
-    public static EmbedBuilder getRequestsChannelMenu(User author) {
-        return createGenericMenuEmbed(author, "Requests Channel")
-                .setDescription("Only lists the first 25 channels in the server.");
+    public static EmbedBuilder getRequestsChannelMenu(LanguageManager languageManager, User author) {
+        // Temp/localized variables
+        String menuName = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.RequestsChannelMenuName");
+        String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.RequestsChannelDescription");
+
+        return createGenericMenuEmbed(author, menuName)
+                .setDescription(desc);
     }
 
-    public static EmbedBuilder getModeratorChannelMenu(User author) {
-        return createGenericMenuEmbed(author, "Moderator Messages Channel")
-                .setDescription("Only lists the first 25 channels in the server.");
+    public static EmbedBuilder getModeratorChannelMenu(LanguageManager languageManager, User author) {
+        // Temp/localized variables
+        String menuName = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ModeratorChannelMenuName");
+        String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ModeratorChannelDescription");
+
+        return createGenericMenuEmbed(author, menuName)
+                .setDescription(desc);
     }
 
-    public static EmbedBuilder getEnforceServerLangMenu(User author) {
-        return createGenericMenuEmbed(author, "Enforce Server Language");
+    public static EmbedBuilder getEnforceServerLangMenu(LanguageManager languageManager, User author) {
+        // Temp/localized variables
+        String menuName = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.EnforceServerLanguageMenuName");
+
+        return createGenericMenuEmbed(author, menuName);
     }
 
-    public static EmbedBuilder getAcknowledgeRequestsChannelChange(Server server, User author, String requestsChannelID) {
+    public static EmbedBuilder getServerLanguageMenu(LanguageManager languageManager, User author) {
+        String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageMenuTitle");
+        String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageMenuDesc");
+        return createGenericMenuEmbed(author, title).setDescription(desc);
+    }
+
+    public static EmbedBuilder getAcknowledgeRequestsChannelChange(LanguageManager languageManager, Server server, User author, String requestsChannelID) {
+        // Resolve channel
         ServerTextChannel channel = Main.getApi().getServerTextChannelById(requestsChannelID).orElse(null);
         if (channel == null) {
-            return ErrorEmbed.getError(Main.getErrorCode("channelNotExists"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("channelNotExists"));
         }
 
         try {
@@ -44,20 +69,27 @@ public class ServerPreferencesEmbed {
             guild.getGuild();
             guild.updateRequestsChannelID(requestsChannelID);
 
+            // Temp/localized variables
+            String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeRequestsChannelChangeTitle");
+            String mention = "<#" + channel.getIdAsString() + ">";
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.requests.mentiontag", mention);
+            String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeRequestsChannelChangeDescription");
+
             return new EmbedBuilder()
                     .setColor(Main.getColor(author.getIdAsString()))
-                    .setAuthor("Requests Channel Changed!")
-                    .setDescription("Your requests channel has been changed to " + channel.getMentionTag());
+                    .setAuthor(title)
+                    .setDescription(desc);
         } catch (Exception e) {
             e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateRequestsChannel"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateRequestsChannel"));
         }
     }
 
-    public static EmbedBuilder getAcknowledgeModeratorChannelChange(Server server, User author, String moderatorChannelID) {
+    public static EmbedBuilder getAcknowledgeModeratorChannelChange(LanguageManager languageManager, Server server, User author, String moderatorChannelID) {
+        // Resolve channel
         ServerTextChannel channel = Main.getApi().getServerTextChannelById(moderatorChannelID).orElse(null);
         if (channel == null) {
-            return ErrorEmbed.getError(Main.getErrorCode("channelNotExists"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("channelNotExists"));
         }
 
         try {
@@ -65,17 +97,24 @@ public class ServerPreferencesEmbed {
             guild.getGuild();
             guild.updateModeratorMessagesChannelID(moderatorChannelID);
 
+            // Temp/localized variables
+            String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeModeratorChannelChangeTitle");
+            String mention = "<#" + channel.getIdAsString() + ">";
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.moderator.mentiontag", mention);
+            String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeModeratorChannelChangeDescription");
+
             return new EmbedBuilder()
                     .setColor(Main.getColor(author.getIdAsString()))
-                    .setAuthor("Moderator Channel Changed!")
-                    .setDescription("Your moderator messages channel has been changed to " + channel.getMentionTag());
+                    .setAuthor(title)
+                    .setDescription(desc);
         } catch (Exception e) {
             e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateModeratorChannel"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateModeratorChannel"));
         }
     }
 
-    public static EmbedBuilder getAcknowledgeEnforceServerLanguageUpdate(Server server, User author, String newValue) {
+    public static EmbedBuilder getAcknowledgeEnforceServerLanguageUpdate(LanguageManager languageManager, Server server, User author, String newValue) {
+        // Temp/localized variables
         boolean value = Boolean.parseBoolean(newValue);
 
         try {
@@ -83,22 +122,38 @@ public class ServerPreferencesEmbed {
             guild.getGuild();
             guild.updateEnforceServerLanguage(value);
 
-            EmbedBuilder embed = new EmbedBuilder()
+            String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeEnforceServerLanguageUpdateTitle");
+            String desc = value
+                    ? languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeEnforceServerLanguageUpdateEnforced")
+                    : languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeEnforceServerLanguageUpdateNotEnforced");
+
+            return new EmbedBuilder()
                     .setColor(Main.getColor(author.getIdAsString()))
-                    .setAuthor("Server Language Preferences Updated!");
-
-            if (value) {
-                embed.setDescription("I will now follow the server's language regardless of user preference.");
-            }
-            else {
-                embed.setDescription("I will allow users to set their own language preferences.");
-            }
-
-            return embed;
+                    .setAuthor(title)
+                    .setDescription(desc);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ErrorEmbed.getError(Main.getErrorCode("updateEnforceServerLang"));
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateEnforceServerLang"));
+        }
+    }
+
+    public static EmbedBuilder getAcknowledgeServerLanguageChange(LanguageManager languageManager, Server server, User author, String languageTag) {
+        try {
+            Guild guild = new Guild(server.getIdAsString());
+            guild.getGuild();
+            guild.updateLocale(languageTag);
+
+            String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageChanged");
+            String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageChangedDesc");
+
+            return new EmbedBuilder()
+                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setAuthor(title)
+                    .setDescription(desc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ErrorEmbed.getError(languageManager, Main.getErrorCode("updateServerLocale"));
         }
     }
 
