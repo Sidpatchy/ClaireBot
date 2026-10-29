@@ -187,6 +187,13 @@ public class LanguageManager {
         return locale;
     }
 
+    /**
+     * Returns the locale currently used for localized content.
+     */
+    public Locale getEffectiveLocale() {
+        return resolveEffectiveLocale(server, user);
+    }
+
     private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
         Locale locale;
         try {

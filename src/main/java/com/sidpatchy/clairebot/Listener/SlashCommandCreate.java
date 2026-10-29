@@ -25,7 +25,6 @@ import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,16 +102,11 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
             }
         }
         else if (commandName.equalsIgnoreCase(commands.getHelp().getName())) {
-            String command = slashCommandInteraction.getArgumentStringValueByIndex(0).orElse("help");
-
-            try {
-                slashCommandInteraction.createImmediateResponder()
-                        .addEmbed(HelpEmbed.getHelp(languageManager, command, user.getIdAsString()))
-                        .respond();
-            } catch (FileNotFoundException e) {
-                Main.getLogger().error(e);
-                Main.getLogger().error("There was an issue locating the commands file at some point in the chain while the help command was running, good luck!");
-            }
+            String command = slashCommandInteraction.getArgumentStringValueByIndex(0)
+                    .orElse(commands.getHelp().getName());
+            slashCommandInteraction.createImmediateResponder()
+                    .addEmbed(HelpEmbed.getHelp(languageManager, command, user.getIdAsString()))
+                    .respond();
         }
         else if (commandName.equalsIgnoreCase(commands.getInfo().getName())) {
             slashCommandInteraction.createImmediateResponder()

@@ -8,44 +8,42 @@ import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.util.Map;
 
 public class HelpEmbed {
 
-    private static final Commands commands = Main.getCommands();
-    private static String commandsLangString;
-    private static String usageLangString;
-
-    public static EmbedBuilder getHelp(LanguageManager languageManager, String commandName, String userID) throws FileNotFoundException {
-        // Language Strings
-        commandsLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Commands");
-        usageLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Usage");
+    public static EmbedBuilder getHelp(LanguageManager languageManager, String commandName, String userID) {
+        String commandsLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Commands");
+        String usageLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Usage");
         languageManager.addContext(ContextManager.ContextType.GENERIC, "commandname", commandName);
 
-        HashMap<String, Command> allCommands = new HashMap<>();
-        HashMap<String, Command> regularCommands = new HashMap<>();
+        Commands canonicalCommands = Main.getCommands();
+        Commands localizedCommands = Main.getCommands(languageManager.getEffectiveLocale());
+        Map<String, Command> canonicalByKey = canonicalCommands.getCommandsByKey();
+        Map<String, Command> localizedByKey = localizedCommands.getCommandsByKey();
 
-        for (Command command : commands.getAllCommands()) {
-            allCommands.put(command.getName(), command);
-            regularCommands.put(command.getName(), command);
+        if (commandName.equalsIgnoreCase(canonicalCommands.getHelp().getName())) {
+            return buildHelpEmbed(userID, commandsLangString, canonicalByKey);
         }
 
-        if (commandName.equalsIgnoreCase("help")) {
-            return buildHelpEmbed(userID, regularCommands);
-        } else {
-            return buildCommandDetailEmbed(commandName, userID, allCommands, languageManager);
+        for (Map.Entry<String, Command> entry : canonicalByKey.entrySet()) {
+            if (entry.getValue().getName().equalsIgnoreCase(commandName)) {
+                Command localized = localizedByKey.getOrDefault(entry.getKey(), entry.getValue());
+                return buildCommandDetailEmbed(entry.getValue(), localized, userID, commandsLangString, usageLangString);
+            }
         }
+
+        return buildUnknownCommandEmbed(languageManager);
     }
 
-    private static EmbedBuilder buildHelpEmbed(String userID, HashMap<String, Command> regularCommands) {
+    private static EmbedBuilder buildHelpEmbed(String userID, String commandsLangString, Map<String, Command> commandsByKey) {
         StringBuilder commandsList = new StringBuilder("```");
 
-        for (String commandName : regularCommands.keySet()) {
+        for (Command command : commandsByKey.values()) {
             if (commandsList.length() > 3) {
                 commandsList.append(", ");
             }
-            commandsList.append(commandName);
+            commandsList.append(command.getName());
         }
 
         commandsList.append("```");
@@ -55,22 +53,20 @@ public class HelpEmbed {
                 .addField(commandsLangString, commandsList.toString(), false);
     }
 
-    private static EmbedBuilder buildCommandDetailEmbed(String commandName, String userID, HashMap<String, Command> allCommands, LanguageManager languageManager) {
-        Command command = allCommands.get(commandName);
+    private static EmbedBuilder buildCommandDetailEmbed(Command canonicalCommand, Command localizedCommand,
+                                                        String userID, String commandsLangString, String usageLangString) {
+        return new EmbedBuilder()
+                .setColor(Main.getColor(userID))
+                .setAuthor(canonicalCommand.getName().toUpperCase())
+                .setDescription(localizedCommand.getHelp())
+                .addField(commandsLangString, usageLangString + "\n```" + localizedCommand.getUsage() + "```");
+    }
 
-        if (command == null) {
-            String errorCode = Main.getErrorCode("help_command");
-            languageManager.addContext(ContextManager.ContextType.GENERIC, "errorcode", errorCode);
-            String errorLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Error");
-            Main.getLogger().error(errorLangString);
-            return ErrorEmbed.getError(languageManager, errorCode);
-        } else {
-            return new EmbedBuilder()
-                    .setColor(Main.getColor(userID))
-                    .setAuthor(commandName.toUpperCase())
-                    .setDescription(command.getOverview().isEmpty() ? command.getHelp() : command.getOverview())
-                    .addField(commandsLangString, usageLangString + "\n```" + command.getUsage() + "```");
-        }
+    private static EmbedBuilder buildUnknownCommandEmbed(LanguageManager languageManager) {
+        String errorCode = Main.getErrorCode("help_command");
+        languageManager.addContext(ContextManager.ContextType.GENERIC, "errorcode", errorCode);
+        String errorLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Error");
+        Main.getLogger().error("{}", errorLangString);
+        return ErrorEmbed.getError(languageManager, errorCode);
     }
 }
-

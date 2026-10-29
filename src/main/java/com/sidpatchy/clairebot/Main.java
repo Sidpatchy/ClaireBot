@@ -14,6 +14,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -90,6 +92,7 @@ public class Main {
     private static final String translationsPath = "config/translations/";
     private static RobinConfiguration config;
     private static Commands commands;
+    private static final Map<String, Commands> localizedCommands = new ConcurrentHashMap<>();
     private static final Properties buildProperties = new Properties() {{
         try (InputStream input = Main.class.getClassLoader().getResourceAsStream("build.properties")) {
             if (input != null) load(input);
@@ -110,8 +113,8 @@ public class Main {
         // Make sure required resources are loaded
         ResourceLoader loader = new ResourceLoader();
         loader.saveResource(configFile, false);
-        loader.saveResource(commandsFile, false);
-        loadAllBundledTranslations(loader, true); // TODO make this false once language files are stable
+        loadAllBundledCommandFiles(loader);
+        loadAllBundledTranslations(loader, false);
 
         // Init config handlers
         config = new RobinConfiguration("config/" + configFile);
@@ -229,59 +232,118 @@ public class Main {
 
     public static void loadCommandDefs() {
         try {
-            commands = CommandFactory.loadConfig("config/" + commandsFile, Commands.class);
-            logger.warn(commands.getInfo().getName());
-            logger.warn(commands.getInfo().getHelp());
+            File localizedEnglishCommands = new File("config/commands/commands_en-US.yml");
+            File legacyCommands = new File("config/" + commandsFile);
+            File source = localizedEnglishCommands.isFile() ? localizedEnglishCommands : legacyCommands;
+            if (!source.isFile()) {
+                throw new FileNotFoundException("No default command file found");
+            }
+            commands = CommandFactory.loadConfig(source.getPath(), Commands.class);
+            commands.getCommandsByKey(); // Validate the complete command catalog during startup.
         } catch (IOException e) {
             logger.fatal("There was a fatal error while registering slash commands", e);
             throw new RuntimeException(e);
         }
     }
 
-    private static void loadAllBundledTranslations(ResourceLoader loader, boolean replace) {
-        String resourceDir = "translations";
-        Set<String> resourcePaths = new HashSet<>();
-        try {
-            ClassLoader cl = Main.class.getClassLoader();
-            Enumeration<URL> urls = cl.getResources(resourceDir);
-            while (urls.hasMoreElements()) {
-                URL url = urls.nextElement();
-                String protocol = url.getProtocol();
-                if ("file".equals(protocol)) {
-                    try {
-                        File dir = new File(url.toURI());
-                        File[] files = dir.listFiles((d, name) -> name.endsWith(".yml"));
-                        if (files != null) {
-                            for (File f : files) {
-                                resourcePaths.add(resourceDir + "/" + f.getName());
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.warn("Failed to enumerate file resources for translations: {}", e.getMessage());
-                    }
-                } else if ("jar".equals(protocol)) {
-                    try {
-                        JarURLConnection conn = (JarURLConnection) url.openConnection();
-                        try (JarFile jarFile = conn.getJarFile()) {
-                            Enumeration<JarEntry> entries = jarFile.entries();
-                            while (entries.hasMoreElements()) {
-                                JarEntry entry = entries.nextElement();
-                                String name = entry.getName();
-                                if (!entry.isDirectory() && name.startsWith(resourceDir + "/") && name.endsWith(".yml")) {
-                                    resourcePaths.add(name);
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.warn("Failed to enumerate JAR resources for translations: {}", e.getMessage());
-                    }
-                } else {
-                    logger.debug("Unsupported classpath URL protocol for translations: {}", protocol);
+    /**
+     * Returns command help content for a locale, falling back to the configured default and then en-US.
+     * Command names are always taken from the canonical command catalog so localization cannot change routing.
+     */
+    public static Commands getCommands(Locale locale) {
+        if (commands == null || locale == null || "en-US".equals(locale.toLanguageTag())) {
+            return commands;
+        }
+
+        String localeTag = locale.toLanguageTag();
+        return localizedCommands.computeIfAbsent(localeTag, Main::loadLocalizedCommandDefs);
+    }
+
+    private static Commands loadLocalizedCommandDefs(String localeTag) {
+        Set<String> candidatePaths = new java.util.LinkedHashSet<>();
+        candidatePaths.add("config/commands/commands_" + localeTag + ".yml");
+        if (fallbackLocale != null) {
+            String fallbackTag = fallbackLocale.toLanguageTag();
+            if (!fallbackTag.equals(localeTag)) {
+                candidatePaths.add("config/commands/commands_" + fallbackTag + ".yml");
+            }
+        }
+        candidatePaths.add("config/commands/commands_en-US.yml");
+        candidatePaths.add("config/" + commandsFile);
+
+        for (String path : candidatePaths) {
+            File file = new File(path);
+            if (!file.isFile()) {
+                continue;
+            }
+            try {
+                Commands localized = CommandFactory.loadConfig(path, Commands.class);
+                localized.getCommandsByKey(); // Validate before caching the localized catalog.
+                return localized;
+            } catch (Exception e) {
+                logger.error("Failed to load localized command file '{}'; trying the next fallback", path, e);
+            }
+        }
+
+        logger.warn("No localized command file found for {}; using the default command catalog", localeTag);
+        return commands;
+    }
+
+    /**
+     * Returns the locale tags for bundled localized command catalogs.
+     */
+    public static Set<Locale> getAvailableCommandLocales() {
+        File directory = new File("config/commands");
+        File[] files = directory.listFiles((dir, name) -> name.startsWith("commands_") && name.endsWith(".yml"));
+        Set<Locale> locales = new java.util.LinkedHashSet<>();
+        if (files == null) {
+            return locales;
+        }
+
+        for (File file : files) {
+            String localeTag = file.getName().substring("commands_".length(), file.getName().length() - ".yml".length());
+            Locale locale = Locale.forLanguageTag(localeTag);
+            if (!"und".equals(locale.toLanguageTag()) && !"TEMPLATE".equalsIgnoreCase(localeTag)) {
+                locales.add(locale);
+            }
+        }
+        return locales;
+    }
+
+    private static void loadAllBundledCommandFiles(ResourceLoader loader) {
+        Set<String> commandResources = findBundledYamlResources("commands");
+        File legacyCommands = new File("config/" + commandsFile);
+
+        if (commandResources.isEmpty()) {
+            logger.warn("No command resources discovered via classpath enumeration; attempting to copy the en-US default.");
+            if (!legacyCommands.isFile()) {
+                try {
+                    loader.saveResource("commands/commands_en-US.yml", false);
+                } catch (Exception e) {
+                    logger.error("Unable to copy the default localized command file", e);
                 }
             }
-        } catch (IOException e) {
-            logger.warn("Unable to list translation resources: {}", e.getMessage());
+            return;
         }
+
+        for (String path : commandResources) {
+            File localizedEnglish = new File("config/commands/commands_en-US.yml");
+            // Existing installations may have customized commands.yml. Let that remain their en-US catalog
+            // until they choose to create the new locale-specific file themselves.
+            if (path.endsWith("/commands_en-US.yml") && legacyCommands.isFile() && !localizedEnglish.isFile()) {
+                continue;
+            }
+            try {
+                loader.saveResource(path, false);
+            } catch (Exception e) {
+                logger.warn("Failed to save bundled command resource '{}': {}", path, e.getMessage());
+            }
+        }
+    }
+
+    private static void loadAllBundledTranslations(ResourceLoader loader, boolean replace) {
+        String resourceDir = "translations";
+        Set<String> resourcePaths = findBundledYamlResources(resourceDir);
 
         if (resourcePaths.isEmpty()) {
             // Fallback: attempt known default file to ensure at least the template exists on first run
@@ -305,6 +367,52 @@ public class Main {
                 logger.warn("Failed to save translation resource '{}': {}", path, e.getMessage());
             }
         }
+    }
+
+    private static Set<String> findBundledYamlResources(String resourceDir) {
+        Set<String> resourcePaths = new HashSet<>();
+        try {
+            ClassLoader cl = Main.class.getClassLoader();
+            Enumeration<URL> urls = cl.getResources(resourceDir);
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                String protocol = url.getProtocol();
+                if ("file".equals(protocol)) {
+                    try {
+                        File dir = new File(url.toURI());
+                        File[] files = dir.listFiles((d, name) -> name.endsWith(".yml"));
+                        if (files != null) {
+                            for (File f : files) {
+                                resourcePaths.add(resourceDir + "/" + f.getName());
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Failed to enumerate file resources under '{}': {}", resourceDir, e.getMessage());
+                    }
+                } else if ("jar".equals(protocol)) {
+                    try {
+                        JarURLConnection conn = (JarURLConnection) url.openConnection();
+                        try (JarFile jarFile = conn.getJarFile()) {
+                            Enumeration<JarEntry> entries = jarFile.entries();
+                            while (entries.hasMoreElements()) {
+                                JarEntry entry = entries.nextElement();
+                                String name = entry.getName();
+                                if (!entry.isDirectory() && name.startsWith(resourceDir + "/") && name.endsWith(".yml")) {
+                                    resourcePaths.add(name);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        logger.warn("Failed to enumerate JAR resources under '{}': {}", resourceDir, e.getMessage());
+                    }
+                } else {
+                    logger.debug("Unsupported classpath URL protocol for '{}': {}", resourceDir, protocol);
+                }
+            }
+        } catch (IOException e) {
+            logger.warn("Unable to list resources under '{}': {}", resourceDir, e.getMessage());
+        }
+        return resourcePaths;
     }
 
     // Handle the registry of slash commands and any errors associated.

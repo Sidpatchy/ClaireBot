@@ -3,7 +3,9 @@ package com.sidpatchy.clairebot;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sidpatchy.Robin.Discord.Command;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -36,6 +38,29 @@ public class Commands {
                 avatar, config, eightball, help, info, leaderboard,
                 level, poll, quote, request, santa, server, user
         );
+    }
+
+    /**
+     * Retrieves commands by their stable configuration key, independent of their display name.
+     *
+     * @return commands keyed by their YAML field names
+     */
+    public Map<String, Command> getCommandsByKey() {
+        Map<String, Command> result = new LinkedHashMap<>();
+        result.put("avatar", getAvatar());
+        result.put("config", getConfig());
+        result.put("eightball", getEightball());
+        result.put("help", getHelp());
+        result.put("info", getInfo());
+        result.put("leaderboard", getLeaderboard());
+        result.put("level", getLevel());
+        result.put("poll", getPoll());
+        result.put("quote", getQuote());
+        result.put("request", getRequest());
+        result.put("santa", getSanta());
+        result.put("server", getServer());
+        result.put("user", getUser());
+        return result;
     }
 
     public Command getAvatar() {
