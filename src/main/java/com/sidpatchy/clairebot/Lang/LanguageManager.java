@@ -181,7 +181,7 @@ public class LanguageManager {
                 }
             }
         } catch (IOException e) {
-            logger.error("ClaireData failed to return a response for Locale information. Are we cooked?");
+            logger.warn("ClaireData unavailable while resolving locale; using the fallback language", e);
             locale = fallbackLocale;
         }
         return locale;
@@ -247,7 +247,7 @@ public class LanguageManager {
                 }
             }
         } catch (IOException e) {
-            logger.error("ClaireData failed to return a response for Locale information. Are we cooked?");
+            logger.warn("ClaireData unavailable while resolving locale; using the fallback language", e);
             locale = fallbackLocale;
         }
 

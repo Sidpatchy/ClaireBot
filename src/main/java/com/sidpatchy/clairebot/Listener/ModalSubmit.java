@@ -2,14 +2,11 @@ package com.sidpatchy.clairebot.Listener;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.SantaEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.UserPreferencesEmbed;
-import com.sidpatchy.clairebot.Embed.Commands.Regular.VotingEmbed;
-import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import com.sidpatchy.clairebot.Util.ChannelUtils;
 import com.sidpatchy.clairebot.Util.SantaUtils;
-import org.javacord.api.entity.channel.ServerTextChannel;
+import com.sidpatchy.clairebot.Util.Voting.VotingFlow;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
@@ -44,21 +41,11 @@ public class ModalSubmit implements ModalSubmitListener {
         ContextManager context = new ContextManager(server, textchannel, user, user, null, new HashMap<>());
         languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
-        String voteType = "";       // Allows the Poll/Request feature to distinguish between the two
-
         // Santa related vars
         String santaMessageID = ""; // Allows the Secret Santa function to identify which message is being referenced.
         SantaUtils.ExtractionResult extractionResult = null;
         Message santaMessage = null;
-        if (modalID.equalsIgnoreCase("poll")) {
-            voteType = "POLL";
-            modalID = "request";
-        }
-        else if (modalID.equalsIgnoreCase("request")) {
-            voteType = "REQUEST";
-        }
-
-        else if (modalID.startsWith("santa")) {
+        if (modalID.startsWith("santa")) {
             if (modalID.startsWith("santa-rules")) {
                 santaMessageID = modalID.replace("santa-rules-", "");
                 modalID = "santa-rules";
@@ -97,37 +84,15 @@ public class ModalSubmit implements ModalSubmitListener {
                         .respond();
                 }
                 break;
-            case "request":
+            case "poll", "request":
                 String question = modalInteraction.getTextInputValueByCustomId("question-modal").orElse("");
                 String description = modalInteraction.getTextInputValueByCustomId("details-modal").orElse("");
-                User author = modalInteraction.getUser();
-
-                if (server == null) {
-                    return;
+                VotingFlow.start(modalInteraction, languageManager, modalID.toUpperCase(), question, description);
+                break;
+            default:
+                if (modalID.startsWith("vote-options:")) {
+                    VotingFlow.options(modalInteraction, languageManager);
                 }
-
-                if (voteType.equalsIgnoreCase("request")) {
-                    ServerTextChannel requestsChannel = ChannelUtils.getRequestsChannel(server);
-                    if (requestsChannel == null) {
-                        modalInteraction.createImmediateResponder()
-                                .addEmbed(ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("requestsChannelMissing"), "A requests channel is not configured for this server. An admin can set one in /config server > Requests Channel."))
-                                .setFlags(MessageFlag.EPHEMERAL)
-                                .respond();
-                    } else {
-                        modalInteraction.createImmediateResponder()
-                                .addEmbed(VotingEmbed.getUserResponse(languageManager, author, requestsChannel.getMentionTag()))
-                                .setFlags(MessageFlag.EPHEMERAL)
-                                .respond();
-
-                        requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, voteType, question, description, false, null, server, author, 0));
-                    }
-                }
-                else if (voteType.equalsIgnoreCase("poll")) {
-                    modalInteraction.createImmediateResponder()
-                            .addEmbed(VotingEmbed.getPoll(languageManager, voteType, question, description, false, null, server, author, 0))
-                            .respond();
-                }
-
                 break;
             case "santa-rules", "santa-theme":
                 // Silently defer the modal response (no visible message), then update the existing host message in place

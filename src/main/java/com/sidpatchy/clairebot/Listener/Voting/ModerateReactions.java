@@ -27,9 +27,14 @@ public class ModerateReactions implements ReactionAddListener {
             return;
         }
 
+        if (message.getEmbeds().isEmpty()) {
+            return;
+        }
         Embed embed = message.getEmbeds().get(0);
         EmbedFooter footer = embed.getFooter().orElse(null);
-        assert footer != null;
+        if (footer == null) {
+            return;
+        }
         String footerText = footer.getText().orElse(null);
 
         if (footerText != null) {

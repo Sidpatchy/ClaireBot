@@ -10,6 +10,7 @@ import com.sidpatchy.clairebot.MessageComponents.Regular.ServerPreferencesCompon
 import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponents;
 import com.sidpatchy.clairebot.MessageComponents.Regular.VotingComponents;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
+import com.sidpatchy.clairebot.Util.Voting.VotingFlow;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.TextChannel;
@@ -141,9 +142,15 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                     .respond();
         }
         else if (commandName.equalsIgnoreCase(commands.getPoll().getName())) {
+            if (server == null) {
+                slashCommandInteraction.createImmediateResponder()
+                        .addEmbed(ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("notaserver"),
+                                "You must run this command inside a server!"))
+                        .respond();
+                return;
+            }
             if (slashCommandInteraction.getArgumentStringValueByName("question").orElse(null) == null) {
                 try {
-                    // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
                     CompletableFuture<Void> pollModal = slashCommandInteraction.respondWithModal("poll", "Create Poll",
                             VotingComponents.getQuestionRow(languageManager),
                             VotingComponents.getDetailsRow(languageManager)
@@ -166,28 +173,17 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 // Populate choices
                 int numChoices = 0;
                 for (int i = 0; i < 10; i++) {
-                    choices.add(slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null));
-                    if (slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null) == null) {
-                        numChoices = i;
-                        break;
-                    }
+                    String choice = slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null);
+                    if (choice == null || choice.isBlank()) break;
+                    choices.add(choice);
+                    numChoices++;
                 }
 
                 int finalNumChoices = numChoices;
                 slashCommandInteraction.respondLater().thenAccept(interactionOriginalResponseUpdater -> {
                     interactionOriginalResponseUpdater.addEmbed(VotingEmbed.getPoll(languageManager, "POLL", question, allowMultipleChoices, choices, server, author, finalNumChoices))
                             .update().thenAccept(message -> {
-                                if (finalNumChoices > 0) {
-                                    String[] numberEmojis = new String[]{"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"};
-                                    int limit = Math.min(finalNumChoices, numberEmojis.length);
-                                    for (int i = 0; i < limit; i++) {
-                                        message.addReaction(numberEmojis[i]);
-                                    }
-                                } else {
-                                    message.addReaction("\uD83D\uDC4D"); // 👍 emoji
-                                    message.addReaction("\uD83D\uDC4E"); // 👎 emoji
-                                    message.addReaction(":vote:706373563564949566"); // Custom emoji
-                                }
+                                VotingFlow.addReactions(message, finalNumChoices);
                             });
                 });
             }
@@ -227,7 +223,6 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
             if (slashCommandInteraction.getArgumentStringValueByName("question").orElse(null) == null) {
                 try {
-                    // LOL how long has this been unimplemented? Not a bad idea tbh 2023-02-16
                     CompletableFuture<Void> pollModal = slashCommandInteraction.respondWithModal("request", "Create Request",
                             VotingComponents.getQuestionRow(languageManager),
                             VotingComponents.getDetailsRow(languageManager)
@@ -250,11 +245,10 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
                 // Populate choices
                 int numChoices = 0;
                 for (int i = 0; i < 10; i++) {
-                    choices.add(slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null));
-                    if (slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null) == null) {
-                        numChoices = i;
-                        break;
-                    }
+                    String choice = slashCommandInteraction.getArgumentStringValueByName("choice-" + (i + 1)).orElse(null);
+                    if (choice == null || choice.isBlank()) break;
+                    choices.add(choice);
+                    numChoices++;
                 }
 
                 // Resolve requests channel safely
@@ -272,16 +266,7 @@ public class SlashCommandCreate implements SlashCommandCreateListener {
 
                     final int finalNumChoicesReq = numChoices;
                     requestsChannel.sendMessage(VotingEmbed.getPoll(languageManager, "REQUEST", question, allowMultipleChoices, choices, server, author, finalNumChoicesReq)).thenAccept(message -> {
-                        if (finalNumChoicesReq > 0) {
-                            String[] numberEmojis = new String[]{"1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"};
-                            for (int i = 0; i < finalNumChoicesReq; i++) {
-                                message.addReaction(numberEmojis[i]);
-                            }
-                        } else {
-                            message.addReaction("\uD83D\uDC4D");
-                            message.addReaction("\uD83D\uDC4E");
-                            message.addReaction(":vote:706373563564949566");
-                        }
+                        VotingFlow.addReactions(message, finalNumChoicesReq);
                     });
                 }
             }

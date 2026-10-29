@@ -40,7 +40,7 @@ translationNotes: "Arr, this be the official pirate speak translation fer Claire
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 1
+version: 2
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -319,3 +319,15 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "Allows the respondent to select more than one option, flexible as a sail"
             AllowMultipleChoicesNoDescription: "Only allows the respondent to select one option, arr"
             OptionLabelTemplate: "Option #{cb.voting.optionnumber}"
+            ChoicesPrompt: "Add custom choices, matey? Choose No to post a 👍/👎 poll."
+            AllowMultipleChoices: "Let yer crew pick more than one choice, arr?"
+            ChoicesTitle: "Poll choices"
+            AddMoreChoices: "Add more choices"
+            Publish: "Set sail"
+            Cancel: "Abandon ship"
+            ReadyToPublish: "Ready to set sail? Add more choices or post it now, arr."
+            TooFewChoices: "Enter at least two choices, matey. Start again for another try."
+            DraftUnavailable: "This poll draft be gone or expired. Start again, arr."
+            Cancelled: "Poll creation abandoned, arr."
+            PublishFailed: "Couldn't post the poll. Try again, matey."
+            PollPublished: "Poll posted, arr!"

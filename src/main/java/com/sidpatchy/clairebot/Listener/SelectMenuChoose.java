@@ -8,6 +8,7 @@ import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.ServerPreferencesComponents;
 import com.sidpatchy.clairebot.MessageComponents.Regular.UserPreferencesComponents;
+import com.sidpatchy.clairebot.Util.Voting.VotingFlow;
 import org.apache.logging.log4j.Logger;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
@@ -39,6 +40,11 @@ public class SelectMenuChoose implements SelectMenuChooseListener {
         // Route exclusively by customId and stable option values to avoid localization issues
         String customId = selectMenuInteraction.getCustomId();
         String value = selectMenuInteraction.getChosenOptions().get(0).getValue();
+
+        if (customId.startsWith("vote-choices:") || customId.startsWith("vote-multi:")) {
+            VotingFlow.choose(selectMenuInteraction, languageManager);
+            return;
+        }
 
         // User preferences main menu (customId: "settings")
         if ("settings".equalsIgnoreCase(customId)) {

@@ -40,7 +40,7 @@ translationNotes: ""
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 1
+version: 2
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -316,3 +316,15 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "Permite al encuestado seleccionar más de una opción"
             AllowMultipleChoicesNoDescription: "Solo permite al encuestado seleccionar una opción"
             OptionLabelTemplate: "Opción #{cb.voting.optionnumber}"
+            ChoicesPrompt: "¿Quieres añadir opciones? Elige No para publicar una encuesta de 👍/👎."
+            AllowMultipleChoices: "¿Permitir que se elija más de una opción?"
+            ChoicesTitle: "Opciones de la encuesta"
+            AddMoreChoices: "Añadir más opciones"
+            Publish: "Publicar"
+            Cancel: "Cancelar"
+            ReadyToPublish: "¿Listo para publicar? Añade más opciones o publica ahora."
+            TooFewChoices: "Introduce al menos dos opciones. Vuelve a empezar para intentarlo de nuevo."
+            DraftUnavailable: "Esta encuesta ya no está disponible o ha caducado. Vuelve a empezar."
+            Cancelled: "Creación de la encuesta cancelada."
+            PublishFailed: "No he podido publicar la encuesta. Inténtalo de nuevo."
+            PollPublished: "¡Encuesta publicada!"

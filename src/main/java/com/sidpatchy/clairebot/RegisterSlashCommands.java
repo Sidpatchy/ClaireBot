@@ -77,7 +77,8 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-6", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-7", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-8", "Custom choice"))
-                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")), "poll"),
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-10", "Custom choice")), "poll"),
                 localizedDescription(new SlashCommandBuilder()
                         .setName(commands.getQuote().getName())
                         .setDescription(defaultLanguageCommands.getQuote().getOverview())
@@ -95,7 +96,8 @@ public class RegisterSlashCommands {
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-6", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-7", "Custom choice"))
                         .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-8", "Custom choice"))
-                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice")), "request"),
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-9", "Custom choice"))
+                        .addOption(SlashCommandOption.create(SlashCommandOptionType.STRING, "choice-10", "Custom choice")), "request"),
                 localizedDescription(new SlashCommandBuilder()
                         .setName(commands.getServer().getName())
                         .setDescription(defaultLanguageCommands.getServer().getOverview())

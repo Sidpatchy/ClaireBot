@@ -40,7 +40,7 @@ translationNotes: "ClaireBotが公式にサポートしている言語です。"
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 1
+version: 2
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -320,3 +320,15 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "回答者が複数の選択肢を選べるようにします"
             AllowMultipleChoicesNoDescription: "回答者が一つの選択肢しか選べないようにします"
             OptionLabelTemplate: "選択肢 #{cb.voting.optionnumber}"
+            ChoicesPrompt: "選択肢を追加しますか？「いいえ」を選ぶと👍/👎の投票を投稿します。"
+            AllowMultipleChoices: "複数の選択肢への投票を許可しますか？"
+            ChoicesTitle: "投票の選択肢"
+            AddMoreChoices: "選択肢を追加"
+            Publish: "投稿する"
+            Cancel: "キャンセル"
+            ReadyToPublish: "投稿しますか？選択肢を追加するか、このまま投稿できます。"
+            TooFewChoices: "選択肢を2つ以上入力してください。もう一度最初からやり直してください。"
+            DraftUnavailable: "この投票の下書きは利用できないか、期限切れです。最初からやり直してください。"
+            Cancelled: "投票の作成をキャンセルしました。"
+            PublishFailed: "投票を投稿できませんでした。もう一度お試しください。"
+            PollPublished: "投票を投稿しました！"

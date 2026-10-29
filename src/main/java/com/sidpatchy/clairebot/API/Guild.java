@@ -33,15 +33,17 @@ public class Guild {
             guild.loadFromURL(Main.getApiUser(), Main.getApiPassword(), UrlBuilder.buildUrl(Main.getApiPath(), "api/v1/guild", guildID));
         }
         catch (Exception e) {
-            if (createNewWithDefaults) {
-                createGuildWithDefaults();
-                createNewWithDefaults = false; // prevent recursion if ClaireData goes down.
-                try {
-                    getGuild();
-                }
-                catch (Exception e2) {
-                    throw new IOException("It is reasonably likely that the database has gone down.");
-                }
+            if (!createNewWithDefaults) {
+                throw new IOException("Unable to load guild " + guildID + " from ClaireData", e);
+            }
+            // An absent guild may need creating; if ClaireData is offline, creation or the retry
+            // must fail rather than leaving an empty configuration to be read as valid data.
+            createNewWithDefaults = false;
+            createGuildWithDefaults();
+            try {
+                getGuild();
+            } catch (IOException retryFailure) {
+                throw new IOException("Unable to load guild " + guildID + " after creating it", retryFailure);
             }
         }
     }
@@ -55,7 +57,9 @@ public class Guild {
     }
 
     public boolean isEnforceSeverLanguage() {
-        return (boolean) guild.getObj("enforceServerLanguage");
+        Object value = guild.getObj("enforceServerLanguage");
+        // Older guild records may lack this setting; the default is not to override user language.
+        return Boolean.TRUE.equals(value) || (value instanceof String text && Boolean.parseBoolean(text));
     }
 
     public String getLocale() {
@@ -75,19 +79,12 @@ public class Guild {
         ));
     }
 
-    public void createGuildWithDefaults() {
+    public void createGuildWithDefaults() throws IOException {
         Map<String, Object> defaults = Main.getGuildDefaults();
-        Main.getLogger().warn(Main.getUserDefaults());
-        try {
-            createGuild((String) defaults.get("requestsChannelID"),
-                    (String) defaults.get("moderatorMessagesChannelID"),
-                    (boolean) defaults.get("enforceServerLanguage"),
-                    (String) defaults.get("locale"));
-        }
-        // top 10 bad ideas #1
-        catch (Exception e) {
-            Main.getLogger().error("Unable to create user with defaults.", e);
-        }
+        createGuild((String) defaults.get("requestsChannelID"),
+                (String) defaults.get("moderatorMessagesChannelID"),
+                (boolean) defaults.get("enforceServerLanguage"),
+                (String) defaults.get("locale"));
     }
 
     public void updateGuild(String requestsChannelID,
