@@ -1,15 +1,17 @@
 package com.sidpatchy.clairebot.Listener;
 
 import com.sidpatchy.clairebot.API.APIUser;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.MessageType;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -18,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.random.RandomGenerator;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 public class MessageCreate implements MessageCreateListener {
@@ -28,7 +30,17 @@ public class MessageCreate implements MessageCreateListener {
         String messageContent = message.getContent();
         Server server = message.getServer().orElse(null);
         MessageAuthor messageAuthor = message.getAuthor();
+        User user = messageAuthor.asUser().orElse(null);
         APIUser apiUser = new APIUser(messageAuthor.getIdAsString());
+        TextChannel textChannel = message.getChannel();
+
+        // Some messages (e.g., webhooks/system) have no user; skip processing to avoid NPEs in localization
+        if (user == null) {
+            return;
+        }
+
+        ContextManager context = new ContextManager(server, textChannel, user, user, message, new HashMap<>());
+        LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         // it seems as though the Javacord functions for this don't actually work, or I'm using them wrong
         if (messageAuthor.isBotUser() || messageAuthor.isYourself() || messageAuthor.getIdAsString().equalsIgnoreCase("704244031772950528") || messageAuthor.getIdAsString().equalsIgnoreCase("848024760789237810")) {
@@ -37,8 +49,9 @@ public class MessageCreate implements MessageCreateListener {
         }
 
         // ClaireBot on top!!
-        List<String> onTopResponses = Main.getClaireBotOnTopResponses();
-        for (String trigger : Main.getOnTopTriggers()) {
+        List<String> onTopTriggers = languageManager.getLocalizedList("ClaireLang.Embed.Commands.Regular.EightBallEmbed.OnTopTriggers");
+        List<String> onTopResponses = languageManager.getLocalizedList("ClaireLang.Embed.Commands.Regular.EightBallEmbed.ClaireBotOnTopResponses");
+        for (String trigger : onTopTriggers) {
             String regex = "\\b" + Pattern.quote(trigger.toUpperCase()) + "\\b.*"; // match trigger followed by anything
             if (messageContent.toUpperCase().matches(regex)) {
                 Random random = new Random();
@@ -46,7 +59,7 @@ public class MessageCreate implements MessageCreateListener {
                 
                 // because apparently message.reply() doesn't allow disabling mentions.
                 new MessageBuilder()
-                        .setContent(Main.getClaireBotOnTopResponses().get(rand))
+                        .setContent(onTopResponses.get(rand))
                         .setAllowedMentions(new AllowedMentionsBuilder().build())
                         .replyTo(message)
                         .send(message.getChannel());
@@ -56,10 +69,11 @@ public class MessageCreate implements MessageCreateListener {
         }
 
         // pls ban
-        List<String> plsBanResponses = Main.getPlsBanResponses();
+        List<String> plsBanTriggers = languageManager.getLocalizedList("ClaireLang.PlsBan.PlsBanTriggers");
+        List<String> plsBanResponses = languageManager.getLocalizedList("ClaireLang.PlsBan.PlsBanResponses");
         String escapedBotId = Pattern.quote("<@" + Main.getApi().getClientId() + ">");
 
-        for (String trigger : Main.getPlsBanTriggers()) {
+        for (String trigger : plsBanTriggers) {
             String regex = "(?i)" + escapedBotId + "\\s*" + Pattern.quote(trigger) + ".*";
             if (messageContent.toUpperCase().matches(regex)) {
                 Random random = new Random();
@@ -67,7 +81,7 @@ public class MessageCreate implements MessageCreateListener {
 
                 // Message.reply() doesn't allow disabling mentions.
                 new MessageBuilder()
-                        .setContent(Main.getPlsBanResponses().get(rand))
+                        .setContent(plsBanResponses.get(rand))
                         .setAllowedMentions(new AllowedMentionsBuilder().build())
                         .replyTo(message)
                         .send(message.getChannel());
@@ -88,18 +102,17 @@ public class MessageCreate implements MessageCreateListener {
 
         // Grant between 0 and 8 points
         if (server != null) {
-            Integer currentPoints = LevelingTools.getUserPoints(messageAuthor.getIdAsString(), "global");
-            RandomGenerator randomGenerator = RandomGenerator.getDefault();
-            Integer pointsToGrant = randomGenerator.nextInt(8);
+            int pointsToGrant = ThreadLocalRandom.current().nextInt(9);
             try {
-                Map<String, Integer> guildPointsToUpdate = new HashMap<>();
-                guildPointsToUpdate.put(server.getIdAsString(), pointsToGrant);
-                guildPointsToUpdate.put("global", pointsToGrant);
+                Map<String, Integer> guildPointsToUpdate = Map.of(
+                        server.getIdAsString(), pointsToGrant,
+                        "global", pointsToGrant
+                );
                 apiUser.updateUserPointsGuildID(guildPointsToUpdate);
-
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                Main.getLogger().error("Failed to update points for user {}", messageAuthor.getIdAsString(), e);
             }
         }
+
     }
 }

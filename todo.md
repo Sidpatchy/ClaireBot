@@ -1,67 +1,57 @@
-# MOVED TO 
+# ClaireBot TODOs — Updated 2025-10-16 18:43
 
-# Known Issues
-1) Avatar command not sending 4096x4096 image - FIXED
-2) Help command fucking dies whenever a command is added / name changed. Caused by using a seperate commands list from
-the one used by everything else. Recommendation: Delete ClaireMusic - DELETED CLAIREMUSIC
-3) Race condition issue with the leveling system -  see https://github.com/Sidpatchy/ClaireBot/issues/3
+This file replaces an outdated TODO from several release cycles ago. It consolidates current, de-duplicated, prioritized action items discovered across the codebase and docs.
 
-# Commands
-1) 8ball - Done but needs optimizations
-2) Avatar - Done, see known issues #1
-3) Config
-   - Server preferences - DONE
-     - Messaging Channels - DONE
-     - Language - DONE
-   - User preferences
-     - Colour
-       - Common colours - DONE
-       - Hex entry - DONE
-     - Language - NYI (see #14)
-       - Need to create a system for multi-lang.
-       - For plans see Specs/ClaireLang, ClaireConfig, ClairePAPI
-4) Help - DONE, see known issues #2 DONE, see #16
-5) Info - NYI, literally just copy RomeBot's info command. -- DONE
-6) Leaderboard
-    - DB implementation complete. Finalize API implementation.
-    - API implementation complete. Need to create the command.
-    - Command framework is completed. Need to prevent querying, but more importantly, displaying users who are not in a guild.
-    - Race condition issue https://github.com/Sidpatchy/ClaireBot/issues/3
-7) Level - NYI
-    - API prepared for command creation.
-    - Command created
-    - Listeners partially implemented
-    - Race condition issue https://github.com/Sidpatchy/ClaireBot/issues/3
-8) Poll - DONE
-9) Request - DONE
-10) Server - DONE
-11) User - DONE
-12) ClaireBot on top! - DONE
-13) Zerfas
-14) ClaireBot Language System (ClaireLang)
-    - Language Manager
-    - Collect EVERY language string and add it to a YAML file.
-    - Rewrite EVERY command to make use of the language manager.
-        - 8ball
-        - avatar
-        - help
-        - info
-        - leaderboard
-        - level
-        - poll
-        - request
-        - server
-        - user
-        - config
-15) Probably gonna want to do something with the points system you added to the API... - Sorta kinda started
-    - Need to add system of gaining points.
-    - Mostly done, could probably make gaining points way more robust.
-    - Fix race condition issues: https://github.com/Sidpatchy/ClaireBot/issues/3
-16) Rewrite the help command to be actually informative. There's literally no additional value added with the current system. The command spec already supports a more advanced help string for each command. MAKE USE OF IT. The architecture of the command is great, it just needs to be more useful. The main screen could be a little more useful, point to starters like /config, and explain breifly what it does.
+## 1) High‑impact, low‑effort fixes (quick wins)
+- Main.java: Do not force-copy default language file each startup.
+  - Change saveResource("translations/lang_en-US.yml", true) to false and only copy when missing. Ensure non-en-US locales are handled on first run via lazy copy or locale detection. Priority: P1.
+- SlashCommandCreate.java: Remove hardcoded "en-US".
+  - Read Main.fallbackLocale or a config param and pass language context appropriately. Priority: P1.
+- Translations (lang_en-US.yml, lang_ja-JP.yml, lang_es-ES.yml, lang_TEMPLATE.yml): Replace “# todo insert wiki page”.
+  - Insert the correct documentation URL(s) to the wiki/help pages. Priority: P1.
+- config.yml: “TODO either automatically add new config file params or remove this.”
+  - Decide policy. Prefer auto-merge of new keys at startup; otherwise remove the comment and document manual update. Priority: P1.
+- ErrorEmbed.java: “remove these legacy methods.”
+  - Identify unused legacy methods, remove or deprecate with @Deprecated and migrate call sites. Priority: P1–P2.
 
+## 2) Internationalization and language flow
+- LanguageManager.java
+  - Allow server admins to specify a custom language via ClaireData. Extend Guild model + API endpoints to store server language; honor enforceServerLanguage and read from DB (not Discord preferredLocale). Priority: P2.
+  - Move locale resolution out of parseUserAndServerOptions into Guild creation or a dedicated locale service; LanguageManager should consume it. Priority: P2.
+  - Dependency: ClaireData update (Trello vkQTCTMG). Status: Blocked. Priority: P2 (blocked).
 
-# General Features
-## ClaireWeb
-A website needs to be designed. In addition, ClaireBot needs to have an API endpoint (in addition to ClaireData) for it to query from.
+## 3) Command system and registration
+- RegisterSlashCommands.java
+  - Register commands per-server so server admins may use different languages. Implement per-guild registration with Javacord, mapping guild ID to localized command variants, or use localization hooks if supported. Priority: P2.
+- QuoteEmbed.java
+  - "validate that this won’t nuke the bot" — add guardrails and error handling; bound rate/size; add a small test or dry-run. Priority: P2.
 
-## 
+## 4) Configuration handling
+- Main.java
+  - “stop using Robin for this. Switch to standard Java classes.” Replace RobinConfiguration for config.yml with Jackson YAML or SnakeYAML + POJO; keep migration path; add validation and defaults. Priority: P3.
+- build.gradle
+  - Kotlin stdlib re-add when JDK 25 support lands. Track Kotlin/JDK compatibility; once supported, re-enable or rely on transitive stdlib via Kotlin DSL if applicable. Priority: P3 (blocked by external support).
+
+## 5) Documentation
+- Writerside/topics/Contributing-guide.md
+  - Fill TODO sections: branching model, code style, commit messages, PR checks. Priority: P2.
+- Translations wiki links
+  - Insert live URLs across all locales (see section 1). Priority: P1.
+
+## 6) Backlog (still relevant)
+- Leaderboard
+  - Exclude users not in guild; finish final display logic. Monitor race condition issue (#3). Priority: P2.
+- Level command
+  - API prepared; complete command and listeners; verify race conditions (#3). Priority: P2.
+- Points system
+  - Make gaining points more robust; define events, caps, anti-abuse. Priority: P3.
+- Help command rewrite
+  - Use rich, informative help with extended per-command descriptions; point to starters like /config. Priority: P2.
+- ClaireLang rollout
+  - Collect all language strings into YAML; ensure every command uses LanguageManager; audit placeholders and add tests. Priority: P2.
+- ClaireWeb
+  - Design website and add ClaireBot API endpoints (in addition to ClaireData) for web queries. Priority: P3.
+
+## Notes and dependencies
+- Several i18n items are blocked by ClaireData schema/API changes (see Trello card). Start with unblocked quick wins and documentation.
+- Spanish translation file contains natural-language “todo” occurrences (meaning “all/every”); only comment lines at the top were actionable.

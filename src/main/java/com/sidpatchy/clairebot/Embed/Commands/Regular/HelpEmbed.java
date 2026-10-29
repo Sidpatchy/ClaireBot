@@ -1,63 +1,76 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
-import com.sidpatchy.Robin.Discord.ParseCommands;
+import com.sidpatchy.Robin.Discord.Command;
+import com.sidpatchy.clairebot.Commands;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class HelpEmbed {
 
-    private static final ParseCommands commands = new ParseCommands(Main.getCommandsFile());
-    public static EmbedBuilder getHelp(String commandName, String userID) throws FileNotFoundException {
-        List<String> regularCommandsList = Arrays.asList("8ball", "avatar", "help", "info", "leaderboard", "level", "poll", "quote", "request", "server", "user", "config", "santa");
+    private static final Commands commands = Main.getCommands();
+    private static String commandsLangString;
+    private static String usageLangString;
 
-        // Create HashMaps for help command
-        HashMap<String, HashMap<String, String>> allCommands = new HashMap<String, HashMap<String, String>>();
-        HashMap<String, HashMap<String, String>> regularCommands = new HashMap<String, HashMap<String, String>>();
+    public static EmbedBuilder getHelp(LanguageManager languageManager, String commandName, String userID) throws FileNotFoundException {
+        // Language Strings
+        commandsLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Commands");
+        usageLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Usage");
+        languageManager.addContext(ContextManager.ContextType.GENERIC, "commandname", commandName);
 
-        for (String s : regularCommandsList) {
-            regularCommands.put(s, commands.get(s));
+        HashMap<String, Command> allCommands = new HashMap<>();
+        HashMap<String, Command> regularCommands = new HashMap<>();
+
+        for (Command command : commands.getAllCommands()) {
+            allCommands.put(command.getName(), command);
+            regularCommands.put(command.getName(), command);
         }
 
-        allCommands.putAll(regularCommands);
-
-        // Commands list
         if (commandName.equalsIgnoreCase("help")) {
-            StringBuilder glob = new StringBuilder("```");
-            for (String s : regularCommandsList) {
-                if (glob.toString().equalsIgnoreCase("```")) {
-                    glob.append(commands.getCommandName(s));
-                } else {
-                    glob.append(", ")
-                            .append(commands.getCommandName(s));
-                }
-            }
-            glob.append("```");
-
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setColor(Main.getColor(userID))
-                    .addField("Commands", glob.toString(), false);
-
-            return embed;
+            return buildHelpEmbed(userID, regularCommands);
+        } else {
+            return buildCommandDetailEmbed(commandName, userID, allCommands, languageManager);
         }
-        // Command details
-        else {
-            if (allCommands.get(commandName) == null) {
-                String errorCode = Main.getErrorCode("help_command");
-                Main.getLogger().error("Unable to locate command \"" + commandName + "\" for help command. Error code: " + errorCode);
-                return ErrorEmbed.getError(errorCode);
-            } else {
-                return new EmbedBuilder()
-                        .setColor(Main.getColor(userID))
-                        .setAuthor(commandName.toUpperCase())
-                        .setDescription(allCommands.get(commandName).get("help"))
-                        .addField("Command", "Usage\n" + "```" + allCommands.get(commandName).get("usage") + "```");
+    }
+
+    private static EmbedBuilder buildHelpEmbed(String userID, HashMap<String, Command> regularCommands) {
+        StringBuilder commandsList = new StringBuilder("```");
+
+        for (String commandName : regularCommands.keySet()) {
+            if (commandsList.length() > 3) {
+                commandsList.append(", ");
             }
+            commandsList.append(commandName);
+        }
+
+        commandsList.append("```");
+
+        return new EmbedBuilder()
+                .setColor(Main.getColor(userID))
+                .addField(commandsLangString, commandsList.toString(), false);
+    }
+
+    private static EmbedBuilder buildCommandDetailEmbed(String commandName, String userID, HashMap<String, Command> allCommands, LanguageManager languageManager) {
+        Command command = allCommands.get(commandName);
+
+        if (command == null) {
+            String errorCode = Main.getErrorCode("help_command");
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "errorcode", errorCode);
+            String errorLangString = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.HelpEmbed.Error");
+            Main.getLogger().error(errorLangString);
+            return ErrorEmbed.getError(languageManager, errorCode);
+        } else {
+            return new EmbedBuilder()
+                    .setColor(Main.getColor(userID))
+                    .setAuthor(commandName.toUpperCase())
+                    .setDescription(command.getOverview().isEmpty() ? command.getHelp() : command.getOverview())
+                    .addField(commandsLangString, usageLangString + "\n```" + command.getUsage() + "```");
         }
     }
 }
+

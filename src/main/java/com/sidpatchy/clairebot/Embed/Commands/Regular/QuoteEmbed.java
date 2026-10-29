@@ -1,11 +1,10 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
+
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import com.sidpatchy.clairebot.Util.Cache.MessageCacheManager;
-import org.javacord.api.entity.Icon;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.message.embed.EmbedFooter;
 import org.javacord.api.entity.server.Server;
@@ -25,12 +24,16 @@ public class QuoteEmbed {
      * @param channel the text channel where the messages are located
      * @return a CompletableFuture that resolves to an EmbedBuilder containing the quote
      */
-    public static CompletableFuture<EmbedBuilder> getQuote(Server server, final User user, TextChannel channel) {
+    public static CompletableFuture<EmbedBuilder> getQuote(LanguageManager languageManager, Server server, final User user, TextChannel channel) {
 
-        return MessageCacheManager.queryMessageCache(channel, user).thenApply(userMessages -> {
+        return channel.getMessages(50000).thenApply(messages -> {
+            List<Message> userMessages = new java.util.ArrayList<>(messages.stream()
+                    .filter(message -> message.getAuthor().getId() == user.getId())
+                    .toList());
+
             if (userMessages.isEmpty()) {
                 // user not sent messages
-                return ErrorEmbed.getError(Main.getErrorCode("UserNotInSet"));
+                return ErrorEmbed.getError(languageManager, Main.getErrorCode("UserNotInSet"));
             }
 
             Random random = new Random();
@@ -70,7 +73,7 @@ public class QuoteEmbed {
 
             // Fallback for if all messages checked were invalid
             if (!messageSelected) {
-                embed = ErrorEmbed.getCustomError(Main.getErrorCode("invalidMessages"),
+                embed = ErrorEmbed.getCustomError(languageManager, Main.getErrorCode("invalidMessages"),
                         "Looks like the messages I selected were invalid. Please try again later.");
             }
 

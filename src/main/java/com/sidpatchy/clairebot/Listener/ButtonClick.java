@@ -2,13 +2,13 @@ package com.sidpatchy.clairebot.Listener;
 
 import com.sidpatchy.clairebot.Embed.Commands.Regular.QuoteEmbed;
 import com.sidpatchy.clairebot.Embed.Commands.Regular.SantaEmbed;
+import com.sidpatchy.clairebot.Lang.ContextManager;
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.SantaModal;
 import com.sidpatchy.clairebot.Util.SantaUtils;
-import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.message.embed.EmbedFooter;
@@ -19,22 +19,27 @@ import org.javacord.api.event.interaction.ButtonClickEvent;
 import org.javacord.api.interaction.ButtonInteraction;
 import org.javacord.api.listener.interaction.ButtonClickListener;
 
+import java.util.HashMap;
+
 public class ButtonClick implements ButtonClickListener {
     @Override
     public void onButtonClick(ButtonClickEvent event) {
         ButtonInteraction buttonInteraction = event.getButtonInteraction();
 
+        Server server = buttonInteraction.getServer().orElse(null);
         String buttonID = buttonInteraction.getCustomId().toLowerCase();
         User buttonAuthor = buttonInteraction.getUser();
         Message message = buttonInteraction.getMessage();
         TextChannel channel = message.getChannel();
+
+        ContextManager context = new ContextManager(server, channel, buttonAuthor, null, message, new HashMap<>());
+        LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
         Embed embed = buttonInteraction.getMessage().getEmbeds().get(0);
         EmbedFooter footer = embed.getFooter().orElse(null);
 
         // Extract data from embed fields
         SantaUtils.ExtractionResult extractionResult = null;
-        Server server = null;
         User author = null;
         if (!buttonID.equalsIgnoreCase("view_original")) {
             extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);
@@ -45,33 +50,35 @@ public class ButtonClick implements ButtonClickListener {
         switch (buttonID) {
             case "rules":
                 buttonInteraction.respondWithModal("santa-rules-" + message.getIdAsString(), "Update Rules",
-                        SantaModal.getRulesRow()
+                        SantaModal.getRulesRow(languageManager)
                 );
 
                 break;
             case "theme":
                 buttonInteraction.respondWithModal("santa-theme-" + message.getIdAsString(), "Update Theme",
-                        SantaModal.getThemeRow()
+                        SantaModal.getThemeRow(languageManager)
                 );
 
                 break;
             case "send":
                 buttonInteraction.acknowledge();
                 for (int i = 0; i < extractionResult.givers.size(); i++) {
-                    SantaEmbed.getSantaMessage(server, author, extractionResult.givers.get(i), extractionResult.receivers.get(i), extractionResult.rules, extractionResult.theme).send(extractionResult.givers.get(i));
+                    SantaEmbed.getSantaMessage(languageManager, server, author, extractionResult.givers.get(i), extractionResult.receivers.get(i), extractionResult.rules, extractionResult.theme).send(extractionResult.givers.get(i));
                 }
 
                 break;
             case "test":
                 buttonInteraction.acknowledge();
-                SantaEmbed.getSantaMessage(server, author, extractionResult.givers.get(0), extractionResult.receivers.get(0), extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+                SantaEmbed.getSantaMessage(languageManager, server, author, extractionResult.givers.get(0), extractionResult.receivers.get(0), extractionResult.rules, extractionResult.theme).send(buttonAuthor);
 
                 break;
             case "randomize":
                 buttonInteraction.acknowledge();
                 Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
-                buttonInteraction.getMessage().delete();
-                SantaEmbed.getHostMessage(role, buttonAuthor, extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+                // Edit the existing host message in place with a fresh randomized pairing
+                buttonInteraction.getMessage().edit(
+                        SantaEmbed.buildHostEmbedRandomized(languageManager, role, author, extractionResult.rules, extractionResult.theme)
+                );
 
                 break;
 

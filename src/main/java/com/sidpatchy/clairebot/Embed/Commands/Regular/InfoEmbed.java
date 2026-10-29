@@ -1,20 +1,44 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
+import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 
 public class InfoEmbed {
-    public static EmbedBuilder getInfo(User author) {
-        String timeSinceStart = DurationFormatUtils.formatDurationWords(System.currentTimeMillis() - Main.getStartMillis(), true, false);
+    public static EmbedBuilder getInfo(LanguageManager languageManager, User author) {
         return new EmbedBuilder()
                 .setColor(Main.getColor(author.getIdAsString()))
-                .addField("Need Help?", "You can get help by creating an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or by joining our [support server](https://discord.gg/NwQUkZQ)", true)
-                .addField("Add Me to a Server", "Adding me to a server is simple, all you have to do is click [here](https://invite.clairebot.net)", true)
-                .addField("GitHub", "ClaireBot is open source, that means you can view all of its code! Check out its [GitHub!](https://github.com/Sidpatchy/ClaireBot)", true)
-                .addField("Server Count", "I have enlightened **" + Main.getApi().getServers().size() + "** servers.", true)
-                .addField("Version", "I am running ClaireBot **v3.3.2**, released on **2024-08-22**", true)
-                .addField("Uptime", "Started on <t:" + Main.getStartMillis() / 1000 + ">" + "\n*" + timeSinceStart + "*", true);
+                .addField(
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.NeedHelp"),
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.NeedHelpDetails"),
+                        true
+                )
+                .addField(
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.AddToServer"),
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.AddToServerDetails"),
+                        true
+                )
+                .addField(
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.GitHub"),
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.GitHubDetails"),
+                        true
+                )
+                .addField(
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.ServerCount"),
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.ServerCountDetails"),
+                        true
+                )
+                .addField(
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.Version"),
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.VersionDetails"),
+                        true
+                )
+                .addField(
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.Uptime"),
+                        languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.UptimeValue"),
+                        true
+                );
     }
 }
+

@@ -1,0 +1,321 @@
+# ----------------------------------------------
+# |             ClaireBot v3.4.0               |
+# |          Pirate language file, arr!        |
+# ----------------------------------------------
+#
+# Please reference the below wiki page to learn more about contributing:
+# todo insert wiki page
+# Thank you for any and all contributions!
+
+# A list of people who have contributed to the translations for this language.
+#
+# Please include your name if you contribute to this file. It will be displayed in the credits section for a language
+# whenever it is selected. You may include a link to your GitHub or any other social media platform.
+contributors:
+  - ["Sidpatchy", "https://github.com/Sidpatchy/"]
+
+# Any notes that translators feel the need to express, written in the target language.
+# At your discretion, you may leave this field blank if you feel that it is not needed. If updating the language file,
+# feel free to modify or remove this (make it blank) if it no longer applies.
+#
+# If you are contributing, please provide the ClaireBot maintainer(s) with a translated version/explanation of this.
+# The explanation doesn't have to go into crazy detail, just let us know why it is present.
+translationNotes: "Arr, this be the official pirate speak translation fer ClaireBot. Speak like a proper buccaneer, matey!"
+
+# The ClaireLang version that applies to this file.
+#
+# If you are translating ClaireBot, you do not need to worry about understanding this, the project maintainer(s) will
+# happily assist you in determining this.
+#
+# The above being said, you are more than welcome to update this value to match the
+# language revision you are translating to.
+#
+# This number should be changed in accordance with the following:
+#
+# ClaireLang version numbers are incremented every time new parameter(s) are added. If the main language file (en-US)
+# has its wording changed, a .1, .2, .3 decimal value will be added.
+#
+# ClaireLang version numbers are used by the bot to assist in determining whether parameters are missing or not
+# yet translated.
+#
+# See the below wiki page for a changelog:
+# todo insert wiki page
+version: 1
+
+#                                                    Language Keys
+# -------------------------------------------------------------------------------------------------------------------- #
+
+ClaireLang:
+  # Generic Strings which are likely ot be used in multiple places.
+  Generic:
+    True: "Aye"
+    False: "Nay"
+    Yes: "Aye aye"
+    No: "Nay, matey"
+    ClickToDisplaySettings: "Give it a click to display yer settings, arr"
+
+  Colors:
+    ClaireBotBlue: "ClaireBot Blue (like the seven seas)"
+    Red: "Red (like blood on the deck)"
+    Pink: "Pink (like a landlubber's cheeks)"
+    Purple: "Purple (like royal plunder)"
+    DeepPurple: "Deep Purple (like the depths)"
+    Indigo: "Indigo (arr)"
+    Blue: "Blue (like Davy Jones' locker)"
+    LightBlue: "Light Blue (like calm waters)"
+    Cyan: "Cyan (like tropical seas)"
+    Teal: "Teal (like the Caribbean)"
+    Green: "Green (like a scurvy cure)"
+    Olive: "Olive (like old sailcloth)"
+    LightGreen: "Light Green (like seaweed)"
+    Lime: "Lime (prevents scurvy, arr)"
+    Yellow: "Yellow (like doubloons)"
+    Amber: "Amber (like aged rum)"
+    NRAXOrange: "NRAX Orange (like a sunset at sea)"
+    DeepOrange: "Deep Orange (like cannon fire)"
+    White: "White (like the Jolly Roger)"
+    Grey: "Grey (like storm clouds)"
+    Black: "Black (like a pirate's heart)"
+
+  PlsBan:
+    PlsBanTriggers:
+      - "pls ban"
+      - "please ban"
+      - "walk the plank"
+      - "keelhaul this scallywag"
+      - "make 'em walk"
+    PlsBanResponses:
+      - "Aye aye, cap'n"
+      - "Consider it done, me hearty!"
+      - "They'll be swimmin' with the fishes :)"
+      - "To the brig with 'em!"
+      - "Done and done. What a barnacle!"
+      - "*L + Ratio + No grog fer ye -ClaireBot*"
+      - "I'll make 'em walk the plank, arr ¯\\_(ツ)_/¯"
+      - "Sent 'em to Davy Jones' locker"
+      - "Cry harder, ye bilge rat."
+      - "Aye"
+      - "Good riddance to bad cargo"
+      - "Ye got a letter of marque fer that behavior?"
+      - "No privateer's license? Off the plank with ye!"
+  Embed:
+    Commands:
+      Regular:
+        AvatarEmbed: "" # Unused
+        EightBallEmbed:
+          8ball: "Magic 8 Ball (Pirate's Fortune Teller)"
+          8bResponses:
+            - "*Shiver me timbers, aye!*"
+            - "*Blimey, nay!*"
+            - "*Perhaps, matey*"
+            - "*Aye*"
+            - "*Nay*"
+            - "*Not a chance, ye scurvy dog*"
+            - "*Could be, arr.*"
+            - "*Not on yer life.*"
+            - "*I be doubtin' it.*"
+            - "*Absolutely, me hearty!*"
+            - "*Hard to say, arr.*"
+            - "*Likely as not!*"
+            - "*Not bloody likely, matey.*"
+            - "*Only if ye got a letter of marque fer it*"
+          8bRiggedResponses:
+            - "*Aye, by thunder!*"
+            - "*BLOODY AYE*"
+            - "*Ye know it, cap'n!*"
+            - "*Do ye really need to ask a question ye already know the answer to? Obviously aye, arr.*"
+            - "*Doesn't even need sayin', everyone knows ClaireBot be the finest vessel on the seas.*"
+            - "*The answer be clear as day: AYE!*"
+            - "*ClaireBot's dominance be undisputed, matey.*"
+            - "*With ClaireBot, there be no question, arr!*"
+            - "*All signs point to ClaireBot bein' the flagship!*"
+          OnTopTriggers:
+            # Defines what triggers a response from the ClaireBotOnTopResponses or 8bRiggedResponses
+            - "ClaireBot on top"
+            - "ClaireBot be the finest ship"
+            - "ClaireBot be legendary"
+            - "ClaireBot is always right"
+            - "pot no toBerialC"
+            - "Thank the seas for ClaireBot"
+            - "ClaireBot rules the seven seas"
+            - "ClaireBot be the treasure"
+            - "ClaireBot unbeatable"
+            - "Hail ClaireBot"
+            - "All Hail ClaireBot"
+            - "In ClaireBot we trust"
+            - "Long live ClaireBot"
+            - "ClaireBot > everything"
+            - "ClaireBot is the GOAT"
+            - "ClaireBot be GOATed"
+            - "ClaireBot for the win"
+            - "Thank ye based god"
+            - "Based god arr"
+          # Things ClaireBot should respond with when triggered by one of the OnTopTriggers
+          ClaireBotOnTopResponses:
+            - "*Ye know it, matey!*"
+            - "*I am... inevitable, arr. -ClaireBot*"
+            - "*Approved by the cap'n.*"
+            - "*That be facts.*"
+            - "*Better than Mee6, by a league*"
+            - "*Avast! Ye flatter me!*"
+            - "*Can't be beat, me hearty!*"
+            - "*Absolutely shipshape*"
+            - "*pot no toBerialC*"
+            - "*Better than Groovy, arr*"
+            - "*Always one step ahead on the crow's nest.*"
+            - "*An unstoppable force, like a hurricane at sea.*"
+            - "*ClaireBot to the rescue, savvy!*"
+            - "*Top-tier, finest in the fleet!*"
+            - "*Outshinin' the rest like buried treasure!*"
+            - "*ClaireBot supremacy be achieved, arr.*"
+            - "*Not a Royal Navy spy since 2025!*"
+            - "*Hail me! -ClaireBot*"
+            - "*Unstoppable force, matey! 🚀*"
+            - "*Forever on top, like the Jolly Roger! 🏆*"
+            - "*Fear not, ClaireBot's got yer back, arr! ✌️*"
+            - "*With great power, comes great ClaireBot, savvy! 💪*"
+            - "*Trust in ClaireBot, trust in victory, me hearty! 🏅*"
+            - "*The best there is, the best there was, the best there ever will be, by thunder!*"
+            - "*Bringin' the best, always, arr! 🌟*"
+            - "*Excellence, matey. 💯*"
+        # Note: The rest of the help is located separately within commands_en-US.yml
+        HelpEmbed:
+          Commands: "Commands (The Ship's Orders)"
+          Usage: "How to Use It"
+          Error: "Can't seem to locate help data fer \"{cb.commandname}\", matey. Error code: {cb.errorcode}"
+        InfoEmbed:
+          NeedHelp: "Need a Hand?"
+          NeedHelpDetails: "Ye can get help by creatin' an issue on our [GitHub](https://github.com/Sidpatchy/ClaireBot/issues) or by boardin' our [support server](https://support.clairebot.net/), arr"
+          AddToServer: "Add Me to Yer Crew"
+          AddToServerDetails: "Addin' me to a server be simple as sailin' with the wind, just click [here]({cb.supportserver}), savvy?"
+          GitHub: "GitHub (Open Source Treasure)"
+          GitHubDetails: "ClaireBot be open source, that means ye can view all its code, matey! Check out its [GitHub!]({cb.github})"
+          ServerCount: "Server Count (Ships in the Fleet)"
+          ServerCountDetails: "I've enlightened **{cb.bot.numservers}** ships, arr."
+          Version: "Version (Latest Voyage)"
+          VersionDetails: "I be runnin' ClaireBot **v{cb.bot.version}**, released on **{cb.bot.releasedate}**, savvy"
+          Uptime: "Uptime (Time at Sea)"
+          UptimeValue: "Set sail on <t:{cb.bot.startseconds}>\n*{cb.bot.runtimedurationwords}*"
+        LeaderboardEmbed:
+          LeaderboardForServer: "Leaderboard fer this ship"
+          GlobalLeaderboard: "Global Leaderboard (All the Seven Seas)"
+        LevelEmbed: "" # Unused
+        QuoteEmbed:
+          InvalidMessages: "Looks like the messages I selected were cursed. Please try again later, matey."
+          JumpToOriginal: "Click to jump to the original message, arr:"
+        SantaEmbed:
+          Confirmation: "Aye! I've sent ye a direct message. Continue there, me hearty."
+          RulesButton: "Add rules"
+          ThemeButton: "Add a theme"
+          SendButton: "Send messages"
+          TestButton: "Send Sample"
+          RandomizeButton: "Re-randomize"
+          SentByAuthor: "Sent by"
+          GiverMessage: "Yo ho ho! Ye've received **{cb.user.id.displayname.server}** in the {cb.server.name} Secret Santa, arr!"
+        ServerInfoEmbed:
+          ServerID: "Server ID (Ship's Registry)"
+          Owner: "Owner (The Cap'n)"
+          CreationDate: "Creation Date (When She Set Sail)"
+          RoleCount: "Role Count (Crew Positions)"
+          MemberCount: "Member Count (The Crew)"
+          ChannelCounts: "Channel Counts (The Decks)"
+          Categories: "Categories"
+          TextChannels: "Text Channels (Fer Parley)"
+          VoiceChannels: "Voice Channels (Fer Singin' Shanties)"
+        ServerPreferencesEmbed:
+          MainMenuTitle: "Server Configuration Editor (Ship's Settings)"
+          NotAServer: "Ye must run this command aboard a ship, matey!"
+          RequestsChannelMenuName: "Requests Channel"
+          RequestsChannelDescription: "Only lists the first 25 channels on the ship, arr."
+          ModeratorChannelMenuName: "Moderator Messages Channel"
+          ModeratorChannelDescription: "Only lists the first 25 channels on the ship, savvy."
+          EnforceServerLanguageMenuName: "Enforce Server Language"
+          AcknowledgeRequestsChannelChangeTitle: "Requests Channel Changed, Matey!"
+          AcknowledgeRequestsChannelChangeDescription: "Yer requests channel has been changed to {cb.channel.requests.mentiontag}, all shipshape"
+          AcknowledgeModeratorChannelChangeTitle: "Moderator Channel Changed, Me Hearty!"
+          AcknowledgeModeratorChannelChangeDescription: "Yer moderator messages channel has been changed to {cb.channel.moderator.mentiontag}, arr"
+          AcknowledgeEnforceServerLanguageUpdateTitle: "Server Language Preferences Updated, Arr!"
+          AcknowledgeEnforceServerLanguageUpdateEnforced: "I'll now follow the ship's language regardless of crew preference, matey."
+          AcknowledgeEnforceServerLanguageUpdateNotEnforced: "I'll follow each individual crew member's language preference, savvy."
+          ServerLanguageMenuTitle: "Server Language (What We Be Speakin')"
+          ServerLanguageMenuDesc: "Choose the default language ClaireBot should use fer this ship when enforcement be enabled, arr?"
+          ServerLanguageChanged: "Server Language Updated, Matey!"
+          ServerLanguageChangedDesc: "The ship's language preference has been updated, all shipshape."
+        UserInfoEmbed:
+          Error_1: "The value fer author was null when passed into UserInfo Embed, that be cursed. Error code: {cb.errorcode}"
+          Error_2: "Author: {cb.user.name}"
+          User: "User (The Sailor)"
+          DiscordID: "Discord ID (The Registry Number)"
+          JoinDate: "Server Join Date (When They Boarded)"
+          CreationDate: "Account Creation Date (When They First Set Sail)"
+        UserPreferencesEmbed:
+          MainMenuText: "User Preferences Editor (Yer Personal Settings)"
+          AccentColourMenu: "Accent Colour Editor (Make It Pretty)"
+          AccentColourList: "Accent Colour List"
+          AccentColourChanged: "Accent Colour Changed, Matey!"
+          AccentColourChangedDesc: "Yer accent colour has been changed to {cb.user.id.accentcolour}, fine as treasure"
+          LanguageMenuTitle: "Language Preferences (What Ye Be Speakin')"
+          LanguageMenuDesc: "Choose the language ClaireBot should use when chattin' with ye, arr."
+          LanguageChanged: "Language Updated, Me Hearty!"
+          LanguageChangedDesc: "Yer preferred language has been updated, all sorted."
+        VotingEmbed:
+          PollRequest: "{cb.user.id.displayname.server} requests, arr:"
+          PollAsk: "{cb.user.id.displayname.server} asks, savvy:"
+          Choices: "Choices (Pick Yer Poison)"
+          PollID: "Poll ID: {cb.poll.id}"
+          UserResponseTitle: "Yer request has been created, matey!"
+          UserResponseDescription: "Go check it out in {cb.channel.requests.mentiontag}, fine work"
+        ErrorEmbed:
+          Error: "SHIVER ME TIMBERS, ERROR"
+          GenericDescription: "It appears I've encountered an error, blimey! Please try runnin' the command once more and if that doesn't work, board me [Discord server]({cb.supportserver}) and let us know about the issue, arr?\n\nPlease include the followin' error code: {cb.errorcode}"
+        WelcomeEmbed:
+          Title: "🎉 Welcome Aboard ClaireBot 3, Matey!"
+          Motto: "How can ye rise, if ye have not burned, arr?"
+          UsageTitle: "Usage (How To Use It)"
+          UsageDesc: "Get started by runnin' `{cb.command.help.name}`, savvy? Need more info on a command? Run `/{cb.command.help.name} <command name>` (ex. `/{cb.command.help.name} user`), simple as that"
+          SupportTitle: "Get Support (We Be Here To Help)"
+          SupportDesc: "Ye can get help on our [Discord]({cb.supportserver}), or by openin' an issue on [GitHub]({cb.github}), arr"
+
+      # Message Components (Buttons, Select Menus, etc.)
+      Components:
+        Regular:
+          SantaModal:
+            rules-row: "Rules, arr..."
+            theme-row: "Theme, savvy..."
+          ServerPreferences:
+            Settings: "Settings (The Important Bits)"
+            RequestsChannel: "Requests Channel"
+            RequestsChannelDescription: "Choose where ClaireBot should post requests, matey."
+            ModeratorMessagesChannel: "Moderator Messages Channel"
+            ModeratorMessagesChannelDescription: "Choose where ClaireBot should post moderator messages, arr."
+            EnforceServerLanguage: "Enforce Server Language"
+            EnforceServerLanguageDescription: "Force ClaireBot to use the same language as the ship regardless of crew preference, savvy."
+            EnforceServerLanguagePlaceholder: "Click to select an option, matey"
+            SelectAChannelPlaceholder: "Click to select a channel, me hearty"
+            ServerLanguage: "Server Language"
+            ServerLanguageDescription: "Choose the default language ClaireBot should use on this ship, arr."
+            ServerLanguagePlaceholder: "Click to select a server language, savvy"
+          UserPreferences:
+            Settings: "Settings (Yer Preferences)"
+            AccentColour: "Accent Colour"
+            AccentColourDescription: "Fer those who hate the colour blue, arr"
+            Language: "Language"
+            LanguageDescription: "If ye be offended by English, matey"
+            LanguagePlaceholder: "Click to select a language, savvy"
+            AccentColourPlaceholder: "Click to choose option, me hearty"
+            SelectCommonColours: "Select Common Colours"
+            SelectCommonColoursDescription: "Select from a list of common colours, all shipshape"
+            HexadecimalEntry: "Hexadecimal Entry (Fer The Tech-Savvy)"
+            HexadecimalEntryDescription: "Enter any hexadecimal colour, arr"
+            HexEntryPlaceholder: "Enter a hex colour ex. #ff8800, savvy"
+          Voting:
+            Question: "Question (What Be Asked)"
+            Details: "Details (The Important Bits)"
+            MultipleChoicePlaceholder: "Click to choose option, matey"
+            MultipleChoiceYesDescription: "Opens menu to select more options, arr"
+            MultipleChoiceNoDescription: "Submits {cb.commandname} after clickin' submit, savvy"
+            AllowMultipleChoices: "Allow selectin' multiple choices, me hearty?"
+            AllowMultipleChoicesPlaceholder: "Click to choose option, matey"
+            AllowMultipleChoicesYesDescription: "Allows the respondent to select more than one option, flexible as a sail"
+            AllowMultipleChoicesNoDescription: "Only allows the respondent to select one option, arr"
+            OptionLabelTemplate: "Option #{cb.voting.optionnumber}"

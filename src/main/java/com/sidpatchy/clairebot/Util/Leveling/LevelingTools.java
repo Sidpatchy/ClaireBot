@@ -1,10 +1,12 @@
 package com.sidpatchy.clairebot.Util.Leveling;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sidpatchy.clairebot.API.APIUser;
-import org.yaml.snakeyaml.Yaml;
+import com.sidpatchy.clairebot.Main;
+import org.apache.logging.log4j.Logger;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,13 +15,17 @@ import java.util.List;
 import java.util.Map;
 
 public class LevelingTools {
+    private static final Logger logger = Main.getLogger();
 
     public static HashMap<String, Integer> rankUsers(String guildID) throws IOException {
         APIUser apiUser = new APIUser("");
 
         // Load the YAML data from an InputStream into a Java object
-        Yaml yaml = new Yaml();
-        List<Map<String, Object>> users = yaml.load(apiUser.getALLUsers());
+        YAMLMapper yamlMapper = new YAMLMapper();
+        List<Map<String, Object>> users = yamlMapper.readValue(
+                apiUser.getALLUsers(),
+                new TypeReference<List<Map<String, Object>>>() {}
+        );
 
         // Iterate over each user and calculate their total points
         HashMap<String, Integer> userPoints = new HashMap<>();
@@ -63,7 +69,13 @@ public class LevelingTools {
 
     public static List<String> updateUserPoints(String userID, String guildID, int newPoints) {
         // Fetch the user's current points
-        Map<String, Integer> currentPointsMap = parseJsonArray2(new APIUser(userID).getPointsGuildID());
+        APIUser user = new APIUser(userID);
+        try {
+            user.getUser();  // ← Load data first
+        } catch (IOException e) {
+            logger.error("Error while loading user data.", e);
+        }
+        Map<String, Integer> currentPointsMap = parseJsonArray2(user.getPointsGuildID());
 
         // Update the points
         int updatedPoints = currentPointsMap.getOrDefault(guildID, 0) + newPoints;
@@ -89,7 +101,13 @@ public class LevelingTools {
      */
     public static List<String> updateUserPoints(String userID, Map<String, Integer> guildPointsToUpdate) {
         // Fetch the user's current points
-        Map<String, Integer> currentPointsMap = parseJsonArray2(new APIUser(userID).getPointsGuildID());
+        APIUser user = new APIUser(userID);
+        try {
+            user.getUser();  // ← Load data first
+        } catch (IOException e) {
+            logger.error("Error while loading user data.", e);
+        }
+        Map<String, Integer> currentPointsMap = parseJsonArray2(user.getPointsGuildID());
 
         // Iterate over each guild ID and update the points
         for (Map.Entry<String, Integer> guildEntry : guildPointsToUpdate.entrySet()) {
@@ -123,15 +141,10 @@ public class LevelingTools {
                 result.put("global", 0);
             } else {
                 // Otherwise, parse the JSON string and add it to the result list
-                try {
-                    // Parse the JSON string into a Map<String, Integer>
-                    Map<String, Integer> map = mapper.readValue(json, new TypeReference<Map<String, Integer>>() {});
-                    // Add all entries from the map to the result
-                    result.putAll(map);
-                } catch (IOException e) {
-                    // Handle the exception
-                    e.printStackTrace();
-                }
+                // Parse the JSON string into a Map<String, Integer>
+                Map<String, Integer> map = mapper.readValue(json, new TypeReference<Map<String, Integer>>() {});
+                // Add all entries from the map to the result
+                result.putAll(map);
             }
         }
         return result;

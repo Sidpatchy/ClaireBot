@@ -32,25 +32,27 @@ public class ModerateReactions implements ReactionAddListener {
         assert footer != null;
         String footerText = footer.getText().orElse(null);
 
-        if (footerText != null && footerText.contains("Poll ID")) {
-            HashMap<String, String> pollID = VotingUtils.parsePollID(footerText.replace("Poll ID: ", ""));
-            boolean allowMultipleChoices = pollID.get("allowMultipleChoices").equalsIgnoreCase("1");
+        if (footerText != null) {
+            String encoded = VotingUtils.extractPollIdFromFooter(footerText);
+            if (!encoded.isEmpty()) {
+                HashMap<String, String> pollID = VotingUtils.parsePollID(encoded);
+                boolean allowMultipleChoices = pollID.get("allowMultipleChoices").equalsIgnoreCase("1");
 
-            if (!allowMultipleChoices) {
-                String emote = event.getEmoji().asUnicodeEmoji().orElse(null);
-                User author = event.getUser().orElse(null);
+                if (!allowMultipleChoices) {
+                    String emote = event.getEmoji().asUnicodeEmoji().orElse(null);
+                    User author = event.getUser().orElse(null);
 
-                assert author != null;
-                if (author.isYourself()) {
-                    return;
-                }
+                    assert author != null;
+                    if (author.isYourself()) {
+                        return;
+                    }
 
-                List<Reaction> reacts = message.getReactions();
+                    List<Reaction> reacts = message.getReactions();
 
-                for (Reaction reaction : reacts) {
-
-                    if (emote != null && !emote.equalsIgnoreCase(reaction.getEmoji().asUnicodeEmoji().orElse(null))) {
-                        reaction.removeUser(author);
+                    for (Reaction reaction : reacts) {
+                        if (emote != null && !emote.equalsIgnoreCase(reaction.getEmoji().asUnicodeEmoji().orElse(null))) {
+                            reaction.removeUser(author);
+                        }
                     }
                 }
             }
