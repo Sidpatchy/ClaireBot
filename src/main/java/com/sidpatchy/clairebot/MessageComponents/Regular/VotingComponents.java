@@ -1,6 +1,7 @@
 package com.sidpatchy.clairebot.MessageComponents.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
+import com.sidpatchy.clairebot.Lang.ContextManager;
 import org.javacord.api.entity.message.component.*;
 
 import java.util.Arrays;
@@ -30,8 +31,9 @@ public class VotingComponents {
         String yesDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleChoiceYesDescription");
 
         String noLabel = languageManager.getLocalizedString("ClaireLang.Generic.No");
-        String noDescTemplate = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleChoiceNoDescription");
-        String noDesc = noDescTemplate.replace("{cb.commandname}", commandName);
+        // Localization resolves placeholders immediately, before the caller can replace template text.
+        languageManager.addContext(ContextManager.ContextType.GENERIC, "commandname", commandName);
+        String noDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleChoiceNoDescription");
 
         return ActionRow.of(
                 SelectMenu.create("vote-choices:" + draftId, placeholder, 1, 1,
@@ -61,8 +63,8 @@ public class VotingComponents {
     }
 
     public static ActionRow getOptionActionRow(int optionNumber, LanguageManager languageManager, boolean required) {
-        String template = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.OptionLabelTemplate");
-        String label = template.replace("{cb.voting.optionnumber}", String.valueOf(optionNumber));
+        languageManager.addContext(ContextManager.ContextType.GENERIC, "voting.optionnumber", optionNumber);
+        String label = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.OptionLabelTemplate");
         return new ActionRowBuilder()
                 .addComponents(new TextInputBuilder(TextInputStyle.SHORT, "option-" + optionNumber, label)
                         .setRequired(required).setMaximumLength(90).build())
