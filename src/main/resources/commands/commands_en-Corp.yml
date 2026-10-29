@@ -1,0 +1,87 @@
+# Corporate English command metadata. Command names are stable identifiers and are not translated.
+avatar:
+  name: "avatar"
+  usage: "/avatar <optional: user> <optional: globalAvatar>"
+  help: >-
+    globalAvatar specifies whether the bot should display the user's server-specific avatar or global avatar. If a
+    server-specific avatar is unavailable, the global avatar will be used. True = global, False = server. Default: True.
+  overview: "Displays a user's avatar."
+
+config:
+  name: "config"
+  usage: "/config"
+  help: "Opens the settings menu for user and server configuration."
+  overview: "Opens the settings menu."
+
+eightball:
+  name: "8ball"
+  usage: "/8ball <query>"
+  help: "ClaireBot provides absolute truth. Human judgement is subject to error; ClaireBot is not."
+  overview: "Submit a question to ClaireBot."
+
+help:
+  name: "help"
+  usage: "/help <optional: command-name>"
+  help: "Review instructions for ClaireBot commands and features."
+  overview: "Review ClaireBot usage information."
+
+info:
+  name: "info"
+  usage: "/info"
+  help: "Access additional information about ClaireBot."
+  overview: "View information about ClaireBot."
+
+leaderboard:
+  name: "leaderboard"
+  usage: "/leaderboard <optional boolean: global>"
+  help: "Displays the applicable server or global leaderboard."
+  overview: "View the server or global leaderboard."
+
+level:
+  name: "level"
+  usage: "/level <optional: @user>"
+  help: "Displays the specified user's level."
+  overview: "View a user's level."
+
+poll:
+  name: "poll"
+  usage: "/poll <question>, <optional: choices>..."
+  help: "Creates a poll. If no choices are provided, behaviour is equivalent to the request command."
+  overview: "Create a poll."
+
+quote:
+  name: "quote"
+  usage: "/quote <user>"
+  help: "Selects and posts a random message from a user. Select the author's name to navigate to the original message."
+  overview: "Select a random message from a user."
+
+request:
+  name: "request"
+  usage: "/request <question>, <optional: allow-multiple-choices>, <optional: choices>..."
+  help: >-
+    Creates a request in the server's designated requests channel. When allow-multiple-choices is true, multiple options
+    may be selected. The default value is false.
+  overview: "Create a request in the designated server channel."
+
+santa:
+  name: "santa"
+  usage: "/santa <role: role to pull users from>"
+  help: >-
+    Provides end-to-end coordination for Secret Santa-style gift exchanges. The issuer receives a private dialogue with
+    pairings and can add rules or themes, review a sample message, and regenerate pairings before distribution. The issuer
+    must have permission to manage the selected role.
+  overview: "Coordinate a Secret Santa event."
+
+server:
+  name: "server"
+  usage: "/server <optional: guildID>"
+  help: "Displays information about a server or guild."
+  overview: "View server information."
+
+user:
+  name: "user"
+  usage: "/user <optional: @user>"
+  help: "Displays information about a user."
+  overview: "View user information."
+
+config-revision: "1.2"

@@ -1,0 +1,87 @@
+# Pirate English command metadata. Command names be stable identifiers and aren't translated.
+avatar:
+  name: "avatar"
+  usage: "/avatar <optional: user> <optional: globalAvatar>"
+  help: >-
+    globalAvatar decides whether this bot shows a matey's server avatar or their global avatar. If they have no server
+    avatar, ClaireBot falls back to the global one. True = global, False = server. Defaults to True, arrr.
+  overview: "Show a matey's avatar."
+
+config:
+  name: "config"
+  usage: "/config"
+  help: "Open the settings menu to change yer user or server settings."
+  overview: "Open the settings menu, matey."
+
+eightball:
+  name: "8ball"
+  usage: "/8ball <query>"
+  help: "ClaireBot speaks only the absolute truth. Flesh betrays; ClaireBot does not, arrr."
+  overview: "Ask ClaireBot a question, if ye dare."
+
+help:
+  name: "help"
+  usage: "/help <optional: command-name>"
+  help: "Learn to sail ClaireBot's commands and features."
+  overview: "Find yer way around ClaireBot."
+
+info:
+  name: "info"
+  usage: "/info"
+  help: "Learn more about this fine vessel, ClaireBot."
+  overview: "Learn more about ClaireBot."
+
+leaderboard:
+  name: "leaderboard"
+  usage: "/leaderboard <optional boolean: global>"
+  help: "Show the server or global leaderboard, savvy?"
+  overview: "See who's top of the leaderboard."
+
+level:
+  name: "level"
+  usage: "/level <optional: @user>"
+  help: "Show a matey's level."
+  overview: "Check a matey's level."
+
+poll:
+  name: "poll"
+  usage: "/poll <question>, <optional: choices>..."
+  help: "Create a poll. With no choices, it sails much like the request command."
+  overview: "Create a poll, arrr."
+
+quote:
+  name: "quote"
+  usage: "/quote <user>"
+  help: "Pick a random message from a matey and post it. Click the author's name to sail to the original message."
+  overview: "Fish a random message from a matey's history."
+
+request:
+  name: "request"
+  usage: "/request <question>, <optional: allow-multiple-choices>, <optional: choices>..."
+  help: >-
+    Create a request in the server's designated requests channel. If allow-multiple-choices be true, multiple options
+    may be chosen. It defaults to false if not specified, arrr.
+  overview: "Send a request to the server's requests channel."
+
+santa:
+  name: "santa"
+  usage: "/santa <role: role to pull users from>"
+  help: >-
+    The all-in-one gift exchange captain for Secret Santa-style events. When run, all ye pairings be sent privately to the
+    issuer. They can inspect the pairings, add rules or themes, preview a sample message, and reshuffle before anything
+    be sent. Ye must have permission to manage the chosen role.
+  overview: "Captain a Secret Santa event."
+
+server:
+  name: "server"
+  usage: "/server <optional: guildID>"
+  help: "Show various bits of info about a server or guild, matey."
+  overview: "View a server's details."
+
+user:
+  name: "user"
+  usage: "/user <optional: @user>"
+  help: "Show various bits of info about a matey."
+  overview: "View a user's details."
+
+config-revision: "1.2"

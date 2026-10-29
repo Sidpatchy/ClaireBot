@@ -1,0 +1,87 @@
+# British English command metadata. Command names are stable identifiers and are not translated.
+avatar:
+  name: "avatar"
+  usage: "/avatar <optional: user> <optional: globalAvatar>"
+  help: >-
+    globalAvatar determines whether the bot displays the user's server-specific avatar or their global avatar. If the
+    user has no server avatar, ClaireBot falls back to their global avatar. True = global, False = server. Defaults to True.
+  overview: "Displays a user's avatar."
+
+config:
+  name: "config"
+  usage: "/config"
+  help: "Opens the settings menu for modifying user or server settings."
+  overview: "Opens the settings menu."
+
+eightball:
+  name: "8ball"
+  usage: "/8ball <query>"
+  help: "ClaireBot only speaks in absolute truth. Flesh betrays; ClaireBot will not."
+  overview: "Ask ClaireBot a question."
+
+help:
+  name: "help"
+  usage: "/help <optional: command-name>"
+  help: "Learn how to use ClaireBot's commands and features."
+  overview: "Learn how to use ClaireBot."
+
+info:
+  name: "info"
+  usage: "/info"
+  help: "Learn more about ClaireBot."
+  overview: "Learn more about ClaireBot."
+
+leaderboard:
+  name: "leaderboard"
+  usage: "/leaderboard <optional boolean: global>"
+  help: "Displays the server or global leaderboard."
+  overview: "View the server or global leaderboard."
+
+level:
+  name: "level"
+  usage: "/level <optional: @user>"
+  help: "Displays a user's level."
+  overview: "View a user's level."
+
+poll:
+  name: "poll"
+  usage: "/poll <question>, <optional: choices>..."
+  help: "Creates a poll. If no choices are added, it behaves similarly to the request command."
+  overview: "Create a poll."
+
+quote:
+  name: "quote"
+  usage: "/quote <user>"
+  help: "Picks a random message from a user and posts it. On a PC, click the author's name to jump to the quoted message."
+  overview: "Pick a random message from a user."
+
+request:
+  name: "request"
+  usage: "/request <question>, <optional: allow-multiple-choices>, <optional: choices>..."
+  help: >-
+    Creates a request in the server's designated requests channel. If allow-multiple-choices is true, ClaireBot allows
+    multiple options to be selected. This defaults to false if it is not specified.
+  overview: "Create a request in the server's requests channel."
+
+santa:
+  name: "santa"
+  usage: "/santa <role: role to pull users from>"
+  help: >-
+    The all-in-one gift exchange coordinator for Secret Santa-style events. When run, a dialogue showing all pairings is
+    privately messaged to the issuer. They can view the pairings, add rules or themes, view a sample message, and
+    regenerate the pairings before anything is sent. You must have permission to manage the selected role.
+  overview: "Coordinate a Secret Santa event."
+
+server:
+  name: "server"
+  usage: "/server <optional: guildID>"
+  help: "Displays information about a server or guild."
+  overview: "View information about a server."
+
+user:
+  name: "user"
+  usage: "/user <optional: @user>"
+  help: "Displays information about a user."
+  overview: "View information about a user."
+
+config-revision: "1.2"

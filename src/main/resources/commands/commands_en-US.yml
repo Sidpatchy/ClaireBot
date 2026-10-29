@@ -1,0 +1,96 @@
+# ----------------------------------------------
+# |             ClaireBot v3.4.0               |
+# |           Commands Config file             |
+# ----------------------------------------------
+# Allows for changing how the help command displays commands.
+# Additionally allows for changing command names during runtime.
+# The bot's host or delegated administrators may reload the
+# list of commands (and config) using /reload. (NYI)
+
+# ------------------ COMMANDS ------------------
+avatar:
+  name: "avatar"
+  usage: "/avatar <optional: user> <optional: globalAvatar>"
+  help: "globalAvatar determines whether the bot will select the user's server specific avatar, or get their global 
+  avatar. If the user has no server avatar, ClaireBot will fallback to their global avatar. True = global, 
+  False = server. Defaults to True."
+  overview: "Gets a user's avatar."
+
+config:
+  name: "config"
+  usage: "/config"
+  help: "Opens up settings menu for modifying user or server settings." # Probably worth writing a brief wiki page for this command
+  overview: ""
+
+eightball:
+  name: "8ball"
+  usage: "/8ball <query>"
+  help: "ClaireBot only speaks in absolute truth. Flesh betrays, ClaireBot will not."
+  overview: ""
+
+help:
+  name: "help"
+  usage: "/help <optional: command-name>"
+  help: "Learn how to use ClaireBot's commands and various features."
+  overview: ""
+
+# Integrate "servers"
+info:
+  name: "info"
+  usage: "/info"
+  help: "Learn more about ClaireBot."
+  overview: ""
+
+leaderboard:
+  name: "leaderboard"
+  usage: "/leaderboard <optional boolean: global>"
+  help: "Reports the server or global leaderboard."
+  overview: ""
+
+level:
+  name: "level"
+  usage: "/level <optional: @user>"
+  help: "Reports a user's level."
+  overview: ""
+
+poll:
+  name: "poll"
+  usage: "/poll <question>, <optional: queries>..."
+  help: "Creates a poll. If no queries are added, it will behave similar to the request function."
+  overview: "Creates a poll."
+
+quote:
+  name: "quote"
+  usage: "/quote <user>"
+  help: "Picks a random message (out of the last 50,000) from a user and posts it. On PC, you can click the author's name to jump to the quoted message."
+  overview: "Picks a random message from a user and posts it."
+
+request:
+  name: "request"
+  usage: "/request <question>, <optional: allow-multiple-choices>, <optional: queries>..."
+  help: "Creates a request in the server's designated requests channel.\nIf allow-multiple-choices is set to true, ClaireBot will allow multiple options to be selected. This defaults to false if it isn't specified."
+  overview: "Creates a request."
+
+santa:
+  name: "santa"
+  usage: "/santa <role: role to pull users from>"
+  help: "The all-in-one gift exchange coordinator for secret santa-like events.\n\nWhen run, a dialogue displaying all 
+  pair-ups will be privately messaged to the issuer. The issuer will then be able to view the pair-ups, add 
+  rules/themes, view a sample message, and regenerate the pair-ups before anything is sent to a santa.\n\nYou must have 
+  permission to manage the role you are attempting to use."
+  overview: "Command to send secret santa message to mentioned role's users."
+
+server:
+  name: "server"
+  usage: "/server <optional: guildID>"
+  help: "Reports various bits of info about a server/guild."
+  overview: ""
+
+user:
+  name: "user"
+  usage: "/user <optional: @user>"
+  help: "Reports various bits of info on a user."
+  overview: ""
+
+# Do not change this, this is automatically changed if needed
+config-revision: 1.2

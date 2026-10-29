@@ -1,0 +1,80 @@
+# Translator template. Keep command names unchanged; translate help, overview, and usage.
+avatar:
+  name: "avatar"
+  usage: "/avatar <optional: user> <optional: globalAvatar>"
+  help: ""
+  overview: ""
+
+config:
+  name: "config"
+  usage: "/config"
+  help: ""
+  overview: ""
+
+eightball:
+  name: "8ball"
+  usage: "/8ball <query>"
+  help: ""
+  overview: ""
+
+help:
+  name: "help"
+  usage: "/help <optional: command-name>"
+  help: ""
+  overview: ""
+
+info:
+  name: "info"
+  usage: "/info"
+  help: ""
+  overview: ""
+
+leaderboard:
+  name: "leaderboard"
+  usage: "/leaderboard <optional boolean: global>"
+  help: ""
+  overview: ""
+
+level:
+  name: "level"
+  usage: "/level <optional: @user>"
+  help: ""
+  overview: ""
+
+poll:
+  name: "poll"
+  usage: "/poll <question>, <optional: choices>..."
+  help: ""
+  overview: ""
+
+quote:
+  name: "quote"
+  usage: "/quote <user>"
+  help: ""
+  overview: ""
+
+request:
+  name: "request"
+  usage: "/request <question>, <optional: allow-multiple-choices>, <optional: choices>..."
+  help: ""
+  overview: ""
+
+santa:
+  name: "santa"
+  usage: "/santa <role: role to pull users from>"
+  help: ""
+  overview: ""
+
+server:
+  name: "server"
+  usage: "/server <optional: guildID>"
+  help: ""
+  overview: ""
+
+user:
+  name: "user"
+  usage: "/user <optional: @user>"
+  help: ""
+  overview: ""
+
+config-revision: "1.2"
