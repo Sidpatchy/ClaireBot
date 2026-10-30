@@ -114,7 +114,7 @@ public class Main {
         ResourceLoader loader = new ResourceLoader();
         loader.saveResource(configFile, false);
         loadAllBundledCommandFiles(loader);
-        loadAllBundledTranslations(loader, false);
+        loadAllBundledTranslations(loader, true);
 
         // Init config handlers
         config = new RobinConfiguration("config/" + configFile);

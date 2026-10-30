@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VotingTranslationsTest {
     private static final List<String> FILES = List.of("en-US", "en-GB", "en-PIRATE", "en-Corp", "es-ES", "ja-JP");
-    private static final List<String> KEYS = List.of("ChoicesPrompt", "AllowMultipleChoices", "ChoicesTitle",
+    private static final List<String> KEYS = List.of("ChoicesPrompt", "AllowMultipleChoicesPrompt", "ChoicesTitle",
+            "CustomChoicesButton", "ThumbsPollButton", "MultipleSelectionButton", "SingleSelectionButton",
             "AddMoreChoices", "Publish", "Cancel", "ReadyToPublish", "TooFewChoices",
             "DraftUnavailable", "Cancelled", "PublishFailed", "PollPublished");
 
@@ -39,6 +40,9 @@ class VotingTranslationsTest {
                 }
                 for (String key : List.of("ChoicesTitle", "AddMoreChoices", "Publish", "Cancel")) {
                     assertTrue(((String) voting.get(key)).length() <= 45, locale + ": " + key);
+                }
+                for (String key : List.of("CustomChoicesButton", "ThumbsPollButton", "MultipleSelectionButton", "SingleSelectionButton")) {
+                    assertTrue(((String) voting.get(key)).length() <= 80, locale + ": " + key);
                 }
                 String optionLabel = ((String) voting.get("OptionLabelTemplate"))
                         .replace("{cb.voting.optionnumber}", "10");

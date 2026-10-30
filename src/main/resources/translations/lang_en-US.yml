@@ -40,7 +40,7 @@ translationNotes: "The officially supported language for ClaireBot."
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 2
+version: 3
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -314,8 +314,12 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "Allows the respondent to select more than one option"
             AllowMultipleChoicesNoDescription: "Only allows the respondent to select one option"
             OptionLabelTemplate: "Option #{cb.voting.optionnumber}"
-            ChoicesPrompt: "Add custom choices? Choose No to publish a 👍/👎 poll."
-            AllowMultipleChoices: "Allow voters to select more than one choice?"
+            ChoicesPrompt: "Choose a poll type: custom choices or a 👍/👎 poll."
+            AllowMultipleChoicesPrompt: "Allow voters to select more than one choice?"
+            CustomChoicesButton: "Custom choices"
+            ThumbsPollButton: "👍/👎 poll"
+            MultipleSelectionButton: "Select multiple"
+            SingleSelectionButton: "One choice only"
             ChoicesTitle: "Poll choices"
             AddMoreChoices: "Add more choices"
             Publish: "Publish"

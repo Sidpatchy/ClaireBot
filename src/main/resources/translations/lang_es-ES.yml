@@ -40,7 +40,7 @@ translationNotes: ""
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 2
+version: 3
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -316,8 +316,12 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "Permite al encuestado seleccionar más de una opción"
             AllowMultipleChoicesNoDescription: "Solo permite al encuestado seleccionar una opción"
             OptionLabelTemplate: "Opción #{cb.voting.optionnumber}"
-            ChoicesPrompt: "¿Quieres añadir opciones? Elige No para publicar una encuesta de 👍/👎."
-            AllowMultipleChoices: "¿Permitir que se elija más de una opción?"
+            ChoicesPrompt: "Elige el tipo de encuesta: opciones personalizadas o 👍/👎."
+            AllowMultipleChoicesPrompt: "¿Permitir que se elija más de una opción?"
+            CustomChoicesButton: "Opciones personalizadas"
+            ThumbsPollButton: "Encuesta 👍/👎"
+            MultipleSelectionButton: "Elegir varias"
+            SingleSelectionButton: "Elegir solo una"
             ChoicesTitle: "Opciones de la encuesta"
             AddMoreChoices: "Añadir más opciones"
             Publish: "Publicar"

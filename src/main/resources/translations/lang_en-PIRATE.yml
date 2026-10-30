@@ -40,7 +40,7 @@ translationNotes: "Arr, this be the official pirate speak translation fer Claire
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 2
+version: 3
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -319,8 +319,12 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "Allows the respondent to select more than one option, flexible as a sail"
             AllowMultipleChoicesNoDescription: "Only allows the respondent to select one option, arr"
             OptionLabelTemplate: "Option #{cb.voting.optionnumber}"
-            ChoicesPrompt: "Add custom choices, matey? Choose No to post a 👍/👎 poll."
-            AllowMultipleChoices: "Let yer crew pick more than one choice, arr?"
+            ChoicesPrompt: "Choose yer poll type: custom choices or 👍/👎, arr."
+            AllowMultipleChoicesPrompt: "Let yer crew pick more than one choice, arr?"
+            CustomChoicesButton: "Yer own choices"
+            ThumbsPollButton: "👍/👎 poll"
+            MultipleSelectionButton: "Pick several"
+            SingleSelectionButton: "Pick just one"
             ChoicesTitle: "Poll choices"
             AddMoreChoices: "Add more choices"
             Publish: "Set sail"

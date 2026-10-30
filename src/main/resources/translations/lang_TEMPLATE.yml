@@ -40,7 +40,7 @@ translationNotes: ""
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 2
+version: 3
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -240,7 +240,11 @@ ClaireLang:
             AllowMultipleChoicesNoDescription: ""
             OptionLabelTemplate: ""
             ChoicesPrompt: ""
-            AllowMultipleChoices: ""
+            AllowMultipleChoicesPrompt: ""
+            CustomChoicesButton: ""
+            ThumbsPollButton: ""
+            MultipleSelectionButton: ""
+            SingleSelectionButton: ""
             ChoicesTitle: ""
             AddMoreChoices: ""
             Publish: ""

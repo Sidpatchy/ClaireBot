@@ -40,7 +40,7 @@ translationNotes: "The only propah language for ClaireBot, innit."
 #
 # See the below wiki page for a changelog:
 # todo insert wiki page
-version: 2
+version: 3
 
 #                                                    Language Keys
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -319,8 +319,12 @@ ClaireLang:
             AllowMultipleChoicesYesDescription: "Allows the respondent to select more than one option, proper flexible"
             AllowMultipleChoicesNoDescription: "Only allows the respondent to select one option, innit"
             OptionLabelTemplate: "Option #{cb.voting.optionnumber}"
-            ChoicesPrompt: "Add custom choices, mate? Choose No to post a 👍/👎 poll."
-            AllowMultipleChoices: "Let voters pick more than one choice, yeah?"
+            ChoicesPrompt: "Choose a poll type, mate: custom choices or 👍/👎."
+            AllowMultipleChoicesPrompt: "Let voters pick more than one choice, yeah?"
+            CustomChoicesButton: "Custom choices"
+            ThumbsPollButton: "👍/👎 poll"
+            MultipleSelectionButton: "Pick several"
+            SingleSelectionButton: "Pick just one"
             ChoicesTitle: "Poll choices"
             AddMoreChoices: "Add more choices"
             Publish: "Post it"
