@@ -2,8 +2,9 @@ package com.sidpatchy.clairebot.Lang;
 
 import com.sidpatchy.clairebot.Main;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.javacord.api.entity.channel.Channel;
-import org.javacord.api.entity.channel.ServerChannel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 
 import java.awt.*;
 import java.util.List;
@@ -45,7 +46,7 @@ public class PlaceholderHandler {
                 entry("cb.supportserver", Main::getSupportServer),
 
                 // Bot placeholders
-                entry("cb.bot.numservers", () -> Main.getApi().getServers().size()),
+                entry("cb.bot.numservers", () -> Main.getApi().getGuilds().size()),
                 entry("cb.bot.version", Main::getBuildVersion),
                 entry("cb.bot.releasedate", Main::getBuildDate),
                 entry("cb.bot.startseconds", () -> Main.getStartMillis() / 1000),
@@ -56,29 +57,29 @@ public class PlaceholderHandler {
                 entry("cb.server.name", () ->
                         context.server() != null ? context.server().getName() : ""),
                 entry("cb.server.id", () ->
-                        context.server() != null ? context.server().getIdAsString() : ""),
+                        context.server() != null ? context.server().getId() : ""),
 
                 // User placeholders
                 entry("cb.user.name", () ->
                         context.user() != null ? context.user().getName() : ""),
                 entry("cb.user.id", () ->
-                        context.user() != null ? context.user().getIdAsString() : ""),
+                        context.user() != null ? context.user().getId() : ""),
                 entry("cb.user.id.mentiontag", () ->
-                        context.user() != null ? "<@" + context.user().getIdAsString() + ">" : ""),
+                        context.user() != null ? "<@" + context.user().getId() + ">" : ""),
                 entry("cb.user.id.accentcolour", () -> {
-                    Color color = Main.getColor(Objects.requireNonNull(context.user()).getIdAsString());
+                    Color color = Main.getColor(Objects.requireNonNull(context.user()).getId());
                     return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
                 }),
                 entry("cb.user.id.displayname.server", () -> {
-                    org.javacord.api.entity.server.Server server = context.server();
-                    org.javacord.api.entity.user.User author = context.author();
+                    Guild server = context.server();
+                    User author = context.author();
                     if (author != null) {
-                        return (server != null) ? author.getDisplayName(server) : author.getName();
+                        return (server != null && server.getMember(author) != null) ? server.getMember(author).getEffectiveName() : author.getName();
                     }
 
-                    org.javacord.api.entity.user.User user = context.user();
+                    User user = context.user();
                     if (user != null) {
-                        return (server != null) ? user.getDisplayName(server) : user.getName();
+                        return (server != null && server.getMember(user) != null) ? server.getMember(user).getEffectiveName() : user.getName();
                     }
 
                     return "";
@@ -88,18 +89,15 @@ public class PlaceholderHandler {
                 entry("cb.author.name", () ->
                         context.author() != null ? context.author().getName() : ""),
                 entry("cb.author.id", () ->
-                        context.author() != null ? context.author().getIdAsString() : ""),
+                        context.author() != null ? context.author().getId() : ""),
 
                 // Channel placeholders
                 entry("cb.channel.name", () ->
-                        Optional.ofNullable(context.channel())
-                                .flatMap(Channel::asServerChannel)
-                                .map(ServerChannel::getName)
-                                .orElse("NOT FOUND")),
+                        context.channel() instanceof GuildChannel ? ((GuildChannel) context.channel()).getName() : "NOT FOUND"),
                 entry("cb.channel.id", () ->
-                        context.channel() != null ? context.channel().getIdAsString() : ""),
+                        context.channel() != null ? context.channel().getId() : ""),
                 entry("cb.channel.id.mentiontag", () ->
-                        context.channel() != null ? "<#" + context.channel().getIdAsString() + ">" : ""),
+                        context.channel() != null ? "<#" + context.channel().getId() + ">" : ""),
                 // Specific placeholders used by acknowledgements when the selected channel differs from invoking channel
                 entry("cb.channel.requests.mentiontag", () -> {
                     Object v = context.getData(ContextManager.ContextType.GENERIC, "cb.channel.requests.mentiontag");
@@ -115,7 +113,7 @@ public class PlaceholderHandler {
                         String.valueOf(Objects.requireNonNull((Object) context.getData(ContextManager.ContextType.GENERIC, "commandname")))),
                 entry("cb.user.id.username", () ->
                         Optional.ofNullable(context.author())
-                                .map(org.javacord.api.entity.user.User::getDiscriminatedName)
+                                .map(User::getAsTag)
                                 .orElseGet(() -> {
                                     Object v = context.getData(ContextManager.ContextType.GENERIC, "user.id.username");
                                     return v != null ? v.toString() : "";
