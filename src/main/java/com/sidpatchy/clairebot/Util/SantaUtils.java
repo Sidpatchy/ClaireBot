@@ -9,8 +9,12 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SantaUtils {
+    private static final Pattern userMention = Pattern.compile("<@!?(\\d+)>");
+
     public static class ExtractionResult {
         public String rules;
         public String theme;
@@ -41,13 +45,8 @@ public class SantaUtils {
             } else if (name.equalsIgnoreCase("theme")) {
                 theme = value;
             } else {
-                value = value.replace("<@!", "");
-                value = value.replace(">", "");
-                value = value.replace(" → ", "");
-                value = value.replace(name, "");
-
                 givers.add(Main.getApi().retrieveUserById(name).complete());
-                receivers.add(Main.getApi().retrieveUserById(value).complete());
+                receivers.add(Main.getApi().retrieveUserById(getReceiverID(value)).complete());
             }
         }
 
@@ -55,6 +54,23 @@ public class SantaUtils {
         HashMap<String, String> santaID = parseSantaID(footer.getText());
 
         return new ExtractionResult(rules, theme, givers, receivers, santaID);
+    }
+
+    static String getReceiverID(String pair) {
+        String[] mentions = pair.split(" → ", 2);
+        if (mentions.length != 2) {
+            throw new IllegalArgumentException("Invalid Santa pair: " + pair);
+        }
+
+        String receiverID = mentions[1].trim();
+        Matcher matcher = userMention.matcher(receiverID);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        if (receiverID.matches("\\d+")) {
+            return receiverID;
+        }
+        throw new IllegalArgumentException("Invalid Santa receiver: " + receiverID);
     }
 
     public static String getSantaID(String serverID, String authorID, String roleID) {
