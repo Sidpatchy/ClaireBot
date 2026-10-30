@@ -36,7 +36,8 @@ public class ButtonClick implements ButtonClickListener {
         ContextManager context = new ContextManager(server, channel, buttonAuthor, buttonAuthor, message, new HashMap<>());
         LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
-        if (buttonID.startsWith("vote-more:") || buttonID.startsWith("vote-publish:")
+        if (buttonID.startsWith("vote-choices-") || buttonID.startsWith("vote-multi-")
+                || buttonID.startsWith("vote-more:") || buttonID.startsWith("vote-publish:")
                 || buttonID.startsWith("vote-cancel:")) {
             VotingFlow.button(buttonInteraction, languageManager);
             return;

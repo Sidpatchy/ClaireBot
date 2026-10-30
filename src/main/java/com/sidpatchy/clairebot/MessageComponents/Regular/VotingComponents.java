@@ -4,8 +4,6 @@ import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import org.javacord.api.entity.message.component.*;
 
-import java.util.Arrays;
-
 public class VotingComponents {
 
     // Question row
@@ -22,44 +20,22 @@ public class VotingComponents {
                 .setRequired(false).setMaximumLength(1000).build());
     }
 
-    // Second Menu
-    // Multiple choices row
-    public static ActionRow getMultipleChoicesRow(LanguageManager languageManager, String commandName, String draftId) {
-        String placeholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleChoicePlaceholder");
-
-        String yesLabel = languageManager.getLocalizedString("ClaireLang.Generic.Yes");
-        String yesDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleChoiceYesDescription");
-
-        String noLabel = languageManager.getLocalizedString("ClaireLang.Generic.No");
-        // Localization resolves placeholders immediately, before the caller can replace template text.
-        languageManager.addContext(ContextManager.ContextType.GENERIC, "commandname", commandName);
-        String noDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleChoiceNoDescription");
-
-        return ActionRow.of(
-                SelectMenu.create("vote-choices:" + draftId, placeholder, 1, 1,
-                        Arrays.asList(
-                                // Keep values stable for interaction handlers
-                                SelectMenuOption.create(yesLabel, "Yes", yesDesc),
-                                SelectMenuOption.create(noLabel, "No", noDesc)
-                        ))
-        );
+    public static ActionRow getChoicesButtons(LanguageManager languageManager, String draftId) {
+        String customLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.CustomChoicesButton");
+        String thumbsLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.ThumbsPollButton");
+        return ActionRow.of(Button.primary("vote-choices-yes:" + draftId, customLabel),
+                Button.secondary("vote-choices-no:" + draftId, thumbsLabel),
+                Button.danger("vote-cancel:" + draftId, languageManager.getLocalizedString(
+                        "ClaireLang.Embed.Commands.Components.Regular.Voting.Cancel")));
     }
 
-    // Select menus belong on messages; text inputs belong in modals (up to five per modal).
-    public static ActionRow getAllowMultipleChoicesRow(LanguageManager languageManager, String draftId) {
-        String allowPlaceholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.AllowMultipleChoicesPlaceholder");
-
-        String yesLabel = languageManager.getLocalizedString("ClaireLang.Generic.Yes");
-        String yesDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.AllowMultipleChoicesYesDescription");
-
-        String noLabel = languageManager.getLocalizedString("ClaireLang.Generic.No");
-        String noDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.AllowMultipleChoicesNoDescription");
-
-        return ActionRow.of(SelectMenu.create("vote-multi:" + draftId, allowPlaceholder, 1, 1,
-                Arrays.asList(
-                        SelectMenuOption.create(yesLabel, "Yes", yesDesc),
-                        SelectMenuOption.create(noLabel, "No", noDesc)
-                )));
+    public static ActionRow getAllowMultipleChoicesButtons(LanguageManager languageManager, String draftId) {
+        String multiLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.MultipleSelectionButton");
+        String singleLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.SingleSelectionButton");
+        return ActionRow.of(Button.primary("vote-multi-yes:" + draftId, multiLabel),
+                Button.secondary("vote-multi-no:" + draftId, singleLabel),
+                Button.danger("vote-cancel:" + draftId, languageManager.getLocalizedString(
+                        "ClaireLang.Embed.Commands.Components.Regular.Voting.Cancel")));
     }
 
     public static ActionRow getOptionActionRow(int optionNumber, LanguageManager languageManager, boolean required) {

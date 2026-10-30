@@ -17,7 +17,6 @@ import org.javacord.api.interaction.ButtonInteraction;
 import org.javacord.api.interaction.InteractionBase;
 import org.javacord.api.interaction.MessageComponentInteractionBase;
 import org.javacord.api.interaction.ModalInteraction;
-import org.javacord.api.interaction.SelectMenuInteraction;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public final class VotingFlow {
         drafts.put(id, new Draft(interaction, type, question.trim(), description.trim()));
         interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL)
                 .setContent(text(languageManager, "ChoicesPrompt"))
-                .addComponents(VotingComponents.getMultipleChoicesRow(languageManager, type.toLowerCase(), id))
+                .addComponents(VotingComponents.getChoicesButtons(languageManager, id))
                 .respond();
     }
 
@@ -97,37 +96,6 @@ public final class VotingFlow {
     private static void invalid(InteractionBase interaction, LanguageManager languageManager) {
         interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL)
                 .setContent(text(languageManager, "DraftUnavailable")).respond();
-    }
-
-    public static void choose(SelectMenuInteraction interaction, LanguageManager languageManager) {
-        String customId = interaction.getCustomId();
-        String id = customId.substring(customId.indexOf(':') + 1);
-        Draft draft = getDraft(interaction, id, languageManager);
-        if (draft == null) return;
-
-        synchronized (draft) {
-            if (customId.startsWith("vote-choices:") && draft.step == Step.CHOICES) {
-                if ("No".equals(interaction.getChosenOptions().getFirst().getValue())) {
-                    publish(interaction, languageManager, id, draft);
-                } else {
-                    draft.step = Step.MULTIPLE;
-                    interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL)
-                            .setContent(text(languageManager, "AllowMultipleChoices"))
-                            .addComponents(VotingComponents.getAllowMultipleChoicesRow(languageManager, id))
-                            .respond();
-                }
-            } else if (customId.startsWith("vote-multi:") && draft.step == Step.MULTIPLE) {
-                draft.allowMultiple = "Yes".equals(interaction.getChosenOptions().getFirst().getValue());
-                draft.step = Step.FIRST_OPTIONS;
-                ActionRow[] rows = new ActionRow[5];
-                for (int i = 0; i < rows.length; i++) {
-                    rows[i] = VotingComponents.getOptionActionRow(i + 1, languageManager, i < 2);
-                }
-                interaction.respondWithModal("vote-options:" + id, text(languageManager, "ChoicesTitle"), rows);
-            } else {
-                invalid(interaction, languageManager);
-            }
-        }
     }
 
     public static void options(ModalInteraction interaction, LanguageManager languageManager) {
@@ -172,12 +140,38 @@ public final class VotingFlow {
         if (draft == null) return;
 
         synchronized (draft) {
-            if (draft.step != Step.READY) {
-                invalid(interaction, languageManager);
-            } else if (customId.startsWith("vote-cancel:")) {
+            if (customId.startsWith("vote-cancel:") && (draft.step == Step.CHOICES
+                    || draft.step == Step.MULTIPLE || draft.step == Step.READY)) {
                 drafts.remove(id, draft);
-                interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL)
-                        .setContent(text(languageManager, "Cancelled")).respond();
+                interaction.createOriginalMessageUpdater().setContent(text(languageManager, "Cancelled"))
+                        .removeAllComponents().update();
+            } else if (draft.step == Step.CHOICES && customId.startsWith("vote-choices-")) {
+                if (customId.startsWith("vote-choices-no:")) {
+                    publish(interaction, languageManager, id, draft);
+                } else if (customId.startsWith("vote-choices-yes:")) {
+                    draft.step = Step.MULTIPLE;
+                    interaction.createOriginalMessageUpdater()
+                            .setContent(text(languageManager, "AllowMultipleChoicesPrompt"))
+                            .removeAllComponents()
+                            .addComponents(VotingComponents.getAllowMultipleChoicesButtons(languageManager, id))
+                            .update();
+                } else {
+                    invalid(interaction, languageManager);
+                }
+            } else if (draft.step == Step.MULTIPLE && customId.startsWith("vote-multi-")) {
+                if (!customId.startsWith("vote-multi-yes:") && !customId.startsWith("vote-multi-no:")) {
+                    invalid(interaction, languageManager);
+                    return;
+                }
+                draft.allowMultiple = customId.startsWith("vote-multi-yes:");
+                draft.step = Step.FIRST_OPTIONS;
+                ActionRow[] rows = new ActionRow[5];
+                for (int i = 0; i < rows.length; i++) {
+                    rows[i] = VotingComponents.getOptionActionRow(i + 1, languageManager, i < 2);
+                }
+                interaction.respondWithModal("vote-options:" + id, text(languageManager, "ChoicesTitle"), rows);
+            } else if (draft.step != Step.READY) {
+                invalid(interaction, languageManager);
             } else if (customId.startsWith("vote-more:") && draft.choices.size() < 10) {
                 draft.step = Step.MORE_OPTIONS;
                 draft.nextOption = draft.choices.size() + 1;
@@ -214,25 +208,26 @@ public final class VotingFlow {
         }
 
         TextChannel destination = target;
-        interaction.acknowledge().thenRun(() -> destination.sendMessage(VotingEmbed.getPoll(languageManager,
-                draft.type, draft.question, draft.description, draft.allowMultiple, draft.choices,
-                server, interaction.getUser(), draft.choices.size())).whenComplete((message, error) -> {
-            if (error != null) {
-                Main.getLogger().error("Could not publish poll/request", error);
-                interaction.createFollowupMessageBuilder().setFlags(MessageFlag.EPHEMERAL)
-                        .setContent(text(languageManager, "PublishFailed")).send();
-            } else {
-                addReactions(message, draft.choices.size());
-                if (draft.type.equals("REQUEST")) {
-                    interaction.createFollowupMessageBuilder().setFlags(MessageFlag.EPHEMERAL)
-                            .addEmbed(VotingEmbed.getUserResponse(languageManager, interaction.getUser(),
-                                    destination.asServerTextChannel().orElseThrow().getMentionTag())).send();
-                } else {
-                    interaction.createFollowupMessageBuilder().setFlags(MessageFlag.EPHEMERAL)
-                            .setContent(text(languageManager, "PollPublished")).send();
-                }
-            }
-        }));
+        interaction.createOriginalMessageUpdater().removeAllComponents().update()
+                .thenRun(() -> destination.sendMessage(VotingEmbed.getPoll(languageManager,
+                        draft.type, draft.question, draft.description, draft.allowMultiple, draft.choices,
+                        server, interaction.getUser(), draft.choices.size())).whenComplete((message, error) -> {
+                    if (error != null) {
+                        Main.getLogger().error("Could not publish poll/request", error);
+                        interaction.createFollowupMessageBuilder().setFlags(MessageFlag.EPHEMERAL)
+                                .setContent(text(languageManager, "PublishFailed")).send();
+                    } else {
+                        addReactions(message, draft.choices.size());
+                        if (draft.type.equals("REQUEST")) {
+                            interaction.createFollowupMessageBuilder().setFlags(MessageFlag.EPHEMERAL)
+                                    .addEmbed(VotingEmbed.getUserResponse(languageManager, interaction.getUser(),
+                                            destination.asServerTextChannel().orElseThrow().getMentionTag())).send();
+                        } else {
+                            interaction.createFollowupMessageBuilder().setFlags(MessageFlag.EPHEMERAL)
+                                    .setContent(text(languageManager, "PollPublished")).send();
+                        }
+                    }
+                }));
     }
 
     public static void addReactions(Message message, int choiceCount) {
