@@ -4,9 +4,9 @@ import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 
 public class LeaderboardEmbed {
 
-    public static EmbedBuilder getLeaderboard(LanguageManager languageManager, Server server, User author) {
+    public static EmbedBuilder getLeaderboard(LanguageManager languageManager, Guild server, User author) {
         // Language Strings
         String leaderboardFor = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.LeaderboardEmbed.LeaderboardForServer");
 
-        String serverID = server.getIdAsString();
+        String serverID = server.getId();
 
         HashMap<String, Integer> unsortedLevelMap = null;
         try {
@@ -35,7 +35,7 @@ public class LeaderboardEmbed {
         Map<String, Integer> sortedLevelMap = sortMap(namedMap);
         EmbedBuilder embed = initializeLeaderboardEmbed(sortedLevelMap, author);
 
-        embed.setAuthor(leaderboardFor + " " + server.getName(), "", server.getIcon().orElse(null));
+        embed.setAuthor(leaderboardFor + " " + server.getName(), null, server.getIconUrl());
 
         return embed;
     }
@@ -64,8 +64,8 @@ public class LeaderboardEmbed {
         Map<String, Integer> namedMap = new HashMap<>();
 
         for (Map.Entry<String, Integer> entry : unsortedMap.entrySet()) {
-            Main.getApi().getUserById(entry.getKey()).thenAccept(user -> {
-                namedMap.put(user.getDiscriminatedName(), entry.getValue());
+            Main.getApi().retrieveUserById(entry.getKey()).queue(user -> {
+                namedMap.put(user.getAsTag(), entry.getValue());
             });
             if (namedMap.size() >= 10) {
                 break;
@@ -85,15 +85,15 @@ public class LeaderboardEmbed {
 
     private static EmbedBuilder initializeLeaderboardEmbed(Map<String, Integer> namedMap, User author) {
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
-                .setTimestampToNow()
+                .setColor(Main.getColor(author.getId()))
+                .setTimestamp(java.time.Instant.now())
                 .setFooter(String.valueOf(author.getId()));
 
         for (Map.Entry<String, Integer> entry : namedMap.entrySet()) {
             Integer userLevel = entry.getValue() / 500;
             String levelString = userLevel + " | " + LevelingTools.getProgressBar((entry.getValue().floatValue() / 500), 0);
 
-            embed.addField(entry.getKey(), levelString);
+            embed.addField(entry.getKey(), levelString, false);
         }
 
         return embed;

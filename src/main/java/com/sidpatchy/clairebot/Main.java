@@ -10,8 +10,12 @@ import com.sidpatchy.clairebot.Listener.*;
 import com.sidpatchy.clairebot.Listener.Voting.ModerateReactions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
@@ -55,7 +59,7 @@ import java.util.jar.JarFile;
 public class Main {
 
     // Discord API
-    private static DiscordApi api;
+    private static JDA api;
 
     private static final long startMillis = System.currentTimeMillis();
 
@@ -144,28 +148,28 @@ public class Main {
         Clockwork.initClockwork();
 
         // Set the bot's activity
-        api.updateActivity("ClaireBot " + buildVersion, video_url);
+        api.getPresence().setActivity(Activity.streaming("ClaireBot " + buildVersion, video_url));
 
         // Register slash commands
         registerSlashCommands();
 
         // Register Command-related listeners
-        api.addSlashCommandCreateListener(new SlashCommandCreate());
-        api.addSelectMenuChooseListener(new SelectMenuChoose());
-        api.addModalSubmitListener(new ModalSubmit());
+        api.addEventListener(new SlashCommandCreate());
+        api.addEventListener(new SelectMenuChoose());
+        api.addEventListener(new ModalSubmit());
 
         // Related to Voting Functions
-        api.addReactionAddListener(new ModerateReactions());
+        api.addEventListener(new ModerateReactions());
 
         // Misc. Events
-        api.addServerJoinListener(new ServerJoin());
-        api.addMessageCreateListener(new AntiPhish());
-        api.addMessageCreateListener(new MessageCreate());
-        api.addButtonClickListener(new ButtonClick());
+        api.addEventListener(new ServerJoin());
+        api.addEventListener(new AntiPhish());
+        api.addEventListener(new MessageCreate());
+        api.addEventListener(new ButtonClick());
     }
 
     // Connect to Discord and create an API object
-    private static DiscordApi DiscordLogin(String token, Integer current_shard, Integer total_shards) {
+    private static JDA DiscordLogin(String token, Integer current_shard, Integer total_shards) {
         if (token == null || token.isEmpty()) {
             logger.fatal("Token can't be null or empty. Check your config file!");
             System.exit(1);
@@ -178,12 +182,11 @@ public class Main {
         try {
             // Connect to Discord
             logger.info("Attempting discord login");
-            return new DiscordApiBuilder()
-                    .setToken(token)
-                    .setAllIntents()
-                    .setCurrentShard(current_shard)
-                    .setTotalShards(total_shards)
-                    .login().join();
+            return JDABuilder.createDefault(token, GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+                    .useSharding(current_shard, total_shards)
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
+                    .setChunkingFilter(ChunkingFilter.ALL)
+                    .build().awaitReady();
         }
         catch (Exception e) {
             logger.fatal("Unable to log in to Discord. Aborting startup!", e);
@@ -528,10 +531,10 @@ public class Main {
     public static Logger getLogger() { return logger; }
 
     public static String getErrorCode(String descriptor) {
-        return descriptor + ":" + api.getCurrentShard() + ":" + api.getTotalShards() + ":" + api.getClientId() + ":" + System.currentTimeMillis() / 1000L;
+        return descriptor + ":" + api.getShardInfo().getShardId() + ":" + api.getShardInfo().getShardTotal() + ":" + api.getSelfUser().getId() + ":" + System.currentTimeMillis() / 1000L;
     }
 
-    public static DiscordApi getApi() { return api; }
+    public static JDA getApi() { return api; }
 
     public static long getStartMillis() { return startMillis; }
 

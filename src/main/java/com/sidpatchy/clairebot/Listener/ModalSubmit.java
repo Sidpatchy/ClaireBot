@@ -7,68 +7,43 @@ import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.SantaUtils;
 import com.sidpatchy.clairebot.Util.Voting.VotingFlow;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageFlag;
-import org.javacord.api.entity.message.embed.Embed;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.permission.Role;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
-import org.javacord.api.event.interaction.ModalSubmitEvent;
-import org.javacord.api.interaction.ModalInteraction;
-import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
-import org.javacord.api.listener.interaction.ModalSubmitListener;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 
-public class ModalSubmit implements ModalSubmitListener {
-
-    private LanguageManager languageManager;
+public class ModalSubmit extends ListenerAdapter {
 
     @Override
-    public void onModalSubmit(ModalSubmitEvent event) {
-        ModalInteraction modalInteraction = event.getModalInteraction();
+    public void onModalInteraction(ModalInteractionEvent event) {
+        ModalInteractionEvent modalInteraction = event;
 
-        Server server = modalInteraction.getServer().orElse(null);
-        TextChannel textchannel = modalInteraction.getChannel().orElse(null);
+        Guild server = modalInteraction.getGuild();
+        MessageChannel textchannel = modalInteraction.getChannel();
         User user = modalInteraction.getUser();
-        String modalID = modalInteraction.getCustomId();
+        String modalID = modalInteraction.getModalId();
 
         Main.getLogger().debug(modalID);
 
         ContextManager context = new ContextManager(server, textchannel, user, user, null, new HashMap<>());
-        languageManager = new LanguageManager(Main.getFallbackLocale(), context);
+        LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
 
-        // Santa related vars
-        String santaMessageID = ""; // Allows the Secret Santa function to identify which message is being referenced.
-        SantaUtils.ExtractionResult extractionResult = null;
-        Message santaMessage = null;
-        if (modalID.startsWith("santa")) {
-            if (modalID.startsWith("santa-rules")) {
-                santaMessageID = modalID.replace("santa-rules-", "");
-                modalID = "santa-rules";
-            }
-            else if (modalID.startsWith("santa-theme")) {
-                santaMessageID = modalID.replace("santa-theme-", "");
-                modalID = "santa-theme";
-            }
-
-            santaMessage = Main.getApi().getCachedMessageById(santaMessageID).orElse(null);
-            assert santaMessage != null;
-
-            Embed embed = santaMessage.getEmbeds().getFirst();
-            EmbedFooter footer = embed.getFooter().orElse(null);
-
-            extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);
+        if (modalID.startsWith("santa-rules-") || modalID.startsWith("santa-theme-")) {
+            String santaMessageID = modalID.substring(modalID.lastIndexOf('-') + 1);
+            updateSantaHostMessage(modalInteraction, languageManager, textchannel, santaMessageID);
+            return;
         }
 
-
-        
         switch (modalID) {
             case "hex-entry-modal":
-                String hexColour = modalInteraction.getTextInputValueByCustomId("hex-entry-field").orElse("");
+                String hexColour = modalInteraction.getValue("hex-entry-field") == null ? "" : modalInteraction.getValue("hex-entry-field").getAsString();
 
                 if (!hexColour.isEmpty()) {
                     // Add "#" if not present
@@ -78,15 +53,13 @@ public class ModalSubmit implements ModalSubmitListener {
 
                     Main.getLogger().debug(hexColour);
 
-                    modalInteraction.createImmediateResponder()
-                        .addEmbed(UserPreferencesEmbed.getAcknowledgeAccentColourChange(languageManager, user, hexColour))
-                        .setFlags(MessageFlag.EPHEMERAL)
-                        .respond();
+                    modalInteraction.replyEmbeds(UserPreferencesEmbed.getAcknowledgeAccentColourChange(languageManager, user, hexColour).build())
+                            .setEphemeral(true).queue();
                 }
                 break;
             case "poll", "request":
-                String question = modalInteraction.getTextInputValueByCustomId("question-modal").orElse("");
-                String description = modalInteraction.getTextInputValueByCustomId("details-modal").orElse("");
+                String question = modalInteraction.getValue("question-modal") == null ? "" : modalInteraction.getValue("question-modal").getAsString();
+                String description = modalInteraction.getValue("details-modal") == null ? "" : modalInteraction.getValue("details-modal").getAsString();
                 VotingFlow.start(modalInteraction, languageManager, modalID.toUpperCase(), question, description);
                 break;
             default:
@@ -94,28 +67,45 @@ public class ModalSubmit implements ModalSubmitListener {
                     VotingFlow.options(modalInteraction, languageManager);
                 }
                 break;
-            case "santa-rules", "santa-theme":
-                // Silently defer the modal response (no visible message), then update the existing host message in place
-                CompletableFuture<InteractionOriginalResponseUpdater> deferred = modalInteraction.respondLater();
+        }
+    }
 
-                assert extractionResult != null;
-                extractionResult.rules = modalInteraction.getTextInputValueByCustomId("rules-row").orElse(extractionResult.rules);
-                extractionResult.theme = modalInteraction.getTextInputValueByCustomId("theme-row").orElse(extractionResult.theme);
+    private static void updateSantaHostMessage(ModalInteractionEvent interaction, LanguageManager languageManager,
+                                               MessageChannel channel, String santaMessageID) {
+        interaction.deferEdit().queue(hook -> {
+            try {
+                Message santaMessage = interaction.getMessage();
+                if (santaMessage == null) {
+                    santaMessage = channel.retrieveMessageById(santaMessageID).complete();
+                }
 
-                Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
-                assert role != null;
+                MessageEmbed embed = santaMessage.getEmbeds().getFirst();
+                SantaUtils.ExtractionResult result = SantaUtils.extractDataFromEmbed(embed, embed.getFooter());
+                Role role = getSantaRole(interaction.getJDA(), result.santaID);
+                if (role == null) {
+                    hook.sendMessage("Could not update Secret Santa: the server or role is no longer available.")
+                            .setEphemeral(true).queue();
+                    return;
+                }
+
+                result.rules = interaction.getValue("rules-row") == null ? result.rules : interaction.getValue("rules-row").getAsString();
+                result.theme = interaction.getValue("theme-row") == null ? result.theme : interaction.getValue("theme-row").getAsString();
 
                 // Rebuild the host embed with the existing giver/receiver pairs and edit the original message
-                santaMessage.edit(SantaEmbed.buildHostEmbedFromPairs(languageManager, role, user, extractionResult.rules, extractionResult.theme, extractionResult.givers, extractionResult.receivers));
-                // Finalize and immediately delete the deferred response to avoid leaving a "Bot is thinking…" stub
-                deferred.thenAccept(interactionOriginalResponseUpdater -> {
-                    try {
-                        interactionOriginalResponseUpdater.setContent("\u200B").update().thenAccept(msg -> {
-                            try { msg.delete(); } catch (Exception ignored2) {}
-                        });
-                    } catch (Exception ignored) {}
+                santaMessage.editMessageEmbeds(SantaEmbed.buildHostEmbedFromPairs(languageManager, role, interaction.getUser(),
+                        result.rules, result.theme, result.givers, result.receivers).build()).queue(null, error -> {
+                    Main.getLogger().error("Could not update Secret Santa host message", error);
+                    hook.sendMessage("Could not update Secret Santa. Please try again.").setEphemeral(true).queue();
                 });
-                break;
-        }
+            } catch (RuntimeException error) {
+                Main.getLogger().error("Could not update Secret Santa host message", error);
+                hook.sendMessage("Could not update Secret Santa. Please try again.").setEphemeral(true).queue();
+            }
+        });
+    }
+
+    static Role getSantaRole(JDA api, HashMap<String, String> santaID) {
+        Guild server = api.getGuildById(santaID.get("serverID"));
+        return server == null ? null : server.getRoleById(santaID.get("roleID"));
     }
 }

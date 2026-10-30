@@ -2,7 +2,12 @@ package com.sidpatchy.clairebot.MessageComponents.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.component.*;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.label.Label;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
+import net.dv8tion.jda.api.components.selections.SelectOption;
+import net.dv8tion.jda.api.components.textinput.TextInput;
+import net.dv8tion.jda.api.components.textinput.TextInputStyle;
 
 import java.io.File;
 import java.util.*;
@@ -18,15 +23,12 @@ public class UserPreferencesComponents {
         String languageLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.Language");
         String languageDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.LanguageDescription");
 
-        return new ActionRowBuilder()
-                .addComponents(
-                        SelectMenu.create("settings", placeholder, 1, 1,
-                                Arrays.asList(
-                                        // Keep values stable for interaction handlers
-                                        SelectMenuOption.create(accentLabel, "Accent Colour Editor", accentDesc),
-                                        SelectMenuOption.create(languageLabel, "Language Editor", languageDesc)
-                                ))
-                ).build();
+        return ActionRow.of(StringSelectMenu.create("settings").setPlaceholder(placeholder)
+                .addOptions(
+                        // Keep values stable for interaction handlers
+                        SelectOption.of(accentLabel, "Accent Colour Editor").withDescription(accentDesc),
+                        SelectOption.of(languageLabel, "Language Editor").withDescription(languageDesc)
+                ).build());
     }
 
     public static ActionRow getAccentColourMenu(LanguageManager languageManager) {
@@ -38,15 +40,12 @@ public class UserPreferencesComponents {
         String hexLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.HexadecimalEntry");
         String hexDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.HexadecimalEntryDescription");
 
-        return new ActionRowBuilder()
-                .addComponents(
-                        SelectMenu.create("accent-color", placeholder, 1, 1,
-                                Arrays.asList(
-                                        // Keep values stable for interaction handlers
-                                        SelectMenuOption.create(commonLabel, "Select Common Colours", commonDesc),
-                                        SelectMenuOption.create(hexLabel, "Hexadecimal Entry", hexDesc)
-                                ))
-                ).build();
+        return ActionRow.of(StringSelectMenu.create("accent-color").setPlaceholder(placeholder)
+                .addOptions(
+                        // Keep values stable for interaction handlers
+                        SelectOption.of(commonLabel, "Select Common Colours").withDescription(commonDesc),
+                        SelectOption.of(hexLabel, "Hexadecimal Entry").withDescription(hexDesc)
+                ).build());
     }
 
     public static ActionRow getAccentColourList(LanguageManager languageManager) {
@@ -100,7 +99,7 @@ public class UserPreferencesComponents {
             put("Black", "ClaireLang.Colors.Black");
         }};
 
-        List<SelectMenuOption> selectMenuOptionList = new ArrayList<>();
+        List<SelectOption> selectMenuOptionList = new ArrayList<>();
 
         for (Map.Entry<String, String> color : colours.entrySet()) {
             String englishName = color.getKey();
@@ -113,22 +112,18 @@ public class UserPreferencesComponents {
                     : englishName;
 
             // Keep the value stable as the English canonical name
-            selectMenuOptionList.add(SelectMenuOption.create(localizedLabel, englishName, "#" + hex));
+            selectMenuOptionList.add(SelectOption.of(localizedLabel, englishName).withDescription("#" + hex));
         }
 
         String placeholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.AccentColourPlaceholder");
 
-        return new ActionRowBuilder()
-                .addComponents(
-                        SelectMenu.create("accent-color", placeholder, 1, 1, selectMenuOptionList)
-                ).build();
+        return ActionRow.of(StringSelectMenu.create("accent-color").setPlaceholder(placeholder)
+                .addOptions(selectMenuOptionList).build());
     }
 
-    public static ActionRow getAccentColourHexEntry(LanguageManager languageManager) {
+    public static Label getAccentColourHexEntry(LanguageManager languageManager) {
         String label = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.UserPreferences.HexEntryPlaceholder");
-        return new ActionRowBuilder()
-                .addComponents(TextInput.create(TextInputStyle.SHORT, "hex-entry-field", label))
-                .build();
+        return Label.of(label, TextInput.create("hex-entry-field", TextInputStyle.SHORT).build());
     }
 
     public static ActionRow getLanguageMenu(LanguageManager languageManager) {
@@ -136,7 +131,7 @@ public class UserPreferencesComponents {
 
         // Discover available language files under config/translations
         File dir = new File(Main.getTranslationsPath());
-        List<SelectMenuOption> options = new ArrayList<>();
+        List<SelectOption> options = new ArrayList<>();
         if (dir.exists() && dir.isDirectory()) {
             File[] files = dir.listFiles((d, name) -> name.startsWith("lang_") && name.endsWith(".yml"));
             if (files != null) {
@@ -149,7 +144,7 @@ public class UserPreferencesComponents {
                     // Try to read friendly display name from file header or use tag as fallback
                     String label = tag; // Minimal; can be localized in future via file metadata
                     // Value must be stable and languageManager-independent; use tag
-                    options.add(SelectMenuOption.create(label, tag));
+                    options.add(SelectOption.of(label, tag));
                 }
             }
         }
@@ -157,11 +152,10 @@ public class UserPreferencesComponents {
         if (options.isEmpty()) {
             // Fallback to at least allow selecting fallback locale
             String tag = Main.getFallbackLocale().toLanguageTag();
-            options.add(SelectMenuOption.create(tag, tag));
+            options.add(SelectOption.of(tag, tag));
         }
 
-        return new ActionRowBuilder()
-                .addComponents(SelectMenu.create("user-language", placeholder, 1, 1, options))
-                .build();
+        return ActionRow.of(StringSelectMenu.create("user-language").setPlaceholder(placeholder)
+                .addOptions(options).build());
     }
 }

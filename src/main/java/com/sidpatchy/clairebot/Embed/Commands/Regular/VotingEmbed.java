@@ -4,9 +4,9 @@ import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Voting.VotingUtils;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ public class VotingEmbed {
                                        String description,
                                        Boolean allowMultipleChoices,
                                        List<String> choices,
-                                       Server server,
+                                       Guild server,
                                        User author,
                                        Integer numChoices) {
         // Temp/localized variables block
@@ -42,14 +42,14 @@ public class VotingEmbed {
         String pollAskText;
         {
             // Provide display name placeholder for author line
-            languageManager.addContext(ContextManager.ContextType.GENERIC, "user.id.displayname.server", author.getDisplayName(server));
+            languageManager.addContext(ContextManager.ContextType.GENERIC, "user.id.displayname.server", server.getMember(author) != null ? server.getMember(author).getEffectiveName() : author.getName());
             pollRequestText = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.VotingEmbed.PollRequest");
             pollAskText = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.VotingEmbed.PollAsk");
         }
-        String authorUrl = "https://discord.com/users/" + author.getIdAsString();
+        String authorUrl = "https://discord.com/users/" + author.getId();
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()));
+                .setColor(Main.getColor(author.getId()));
 
         // Build choices block (up to 10)
         StringBuilder choiceBuilder = new StringBuilder();
@@ -67,27 +67,27 @@ public class VotingEmbed {
         if (choiceBuilder.isEmpty()) {
             allowMultipleChoices = false;
         } else {
-            embed.addField(choicesLabel, choiceBuilder.toString());
+            embed.addField(choicesLabel, choiceBuilder.toString(), false);
         }
 
         // Compute poll ID after choices logic, then localize footer with placeholder
-        String pollId = VotingUtils.getPollID(allowMultipleChoices, author.getIdAsString(), numChoices.toString());
+        String pollId = VotingUtils.getPollID(allowMultipleChoices, author.getId(), numChoices.toString());
         languageManager.addContext(ContextManager.ContextType.GENERIC, "poll.id", pollId);
         String footer = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.VotingEmbed.PollID");
         embed.setFooter(footer);
 
         // Localized author line
         if (commandName.equalsIgnoreCase("REQUEST")) {
-            embed.setAuthor(pollRequestText, authorUrl, author.getAvatar());
+            embed.setAuthor(pollRequestText, authorUrl, author.getEffectiveAvatarUrl());
         } else if (commandName.equalsIgnoreCase("POLL")) {
-            embed.setAuthor(pollAskText, authorUrl, author.getAvatar());
+            embed.setAuthor(pollAskText, authorUrl, author.getEffectiveAvatarUrl());
         }
 
         // Question / description
         if (description == null || description.isEmpty()) {
             embed.setDescription(question);
         } else {
-            embed.addField(question, description);
+            embed.addField(question, description, false);
         }
 
         return embed;
@@ -101,7 +101,7 @@ public class VotingEmbed {
                                        String question,
                                        Boolean allowMultipleChoices,
                                        List<String> choices,
-                                       Server server,
+                                       Guild server,
                                        User author,
                                        Integer numChoices) {
         return getPoll(languageManager, commandName, question, "", allowMultipleChoices, choices, server, author, numChoices);
@@ -119,7 +119,7 @@ public class VotingEmbed {
         String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.VotingEmbed.UserResponseDescription");
 
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(title)
                 .setDescription(desc);
     }

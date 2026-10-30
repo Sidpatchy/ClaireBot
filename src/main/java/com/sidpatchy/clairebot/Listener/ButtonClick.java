@@ -8,30 +8,28 @@ import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.MessageComponents.Regular.SantaModal;
 import com.sidpatchy.clairebot.Util.SantaUtils;
 import com.sidpatchy.clairebot.Util.Voting.VotingFlow;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.MessageFlag;
-import org.javacord.api.entity.message.embed.Embed;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.permission.Role;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
-import org.javacord.api.event.interaction.ButtonClickEvent;
-import org.javacord.api.interaction.ButtonInteraction;
-import org.javacord.api.listener.interaction.ButtonClickListener;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.modals.Modal;
 
 import java.util.HashMap;
 
-public class ButtonClick implements ButtonClickListener {
+public class ButtonClick extends ListenerAdapter {
     @Override
-    public void onButtonClick(ButtonClickEvent event) {
-        ButtonInteraction buttonInteraction = event.getButtonInteraction();
+    public void onButtonInteraction(ButtonInteractionEvent event) {
+        ButtonInteractionEvent buttonInteraction = event;
 
-        Server server = buttonInteraction.getServer().orElse(null);
-        String buttonID = buttonInteraction.getCustomId().toLowerCase();
+        Guild server = buttonInteraction.getGuild();
+        String buttonID = buttonInteraction.getComponentId().toLowerCase();
         User buttonAuthor = buttonInteraction.getUser();
         Message message = buttonInteraction.getMessage();
-        TextChannel channel = message.getChannel();
+        MessageChannel channel = message.getChannel();
 
         ContextManager context = new ContextManager(server, channel, buttonAuthor, buttonAuthor, message, new HashMap<>());
         LanguageManager languageManager = new LanguageManager(Main.getFallbackLocale(), context);
@@ -43,60 +41,61 @@ public class ButtonClick implements ButtonClickListener {
             return;
         }
 
-        Embed embed = buttonInteraction.getMessage().getEmbeds().get(0);
-        EmbedFooter footer = embed.getFooter().orElse(null);
+        MessageEmbed embed = buttonInteraction.getMessage().getEmbeds().get(0);
+        MessageEmbed.Footer footer = embed.getFooter();
 
         // Extract data from embed fields
         SantaUtils.ExtractionResult extractionResult = null;
         User author = null;
         if (!buttonID.equalsIgnoreCase("view_original")) {
             extractionResult = SantaUtils.extractDataFromEmbed(embed, footer);
-            server = Main.getApi().getServerById(extractionResult.santaID.get("serverID")).orElse(null);
-            author = Main.getApi().getUserById(extractionResult.santaID.get("authorID")).join();
+            server = Main.getApi().getGuildById(extractionResult.santaID.get("serverID"));
+            author = Main.getApi().retrieveUserById(extractionResult.santaID.get("authorID")).complete();
         }
+        final Guild santaServer = server;
+        final User santaAuthor = author;
+        final SantaUtils.ExtractionResult santa = extractionResult;
 
         switch (buttonID) {
             case "rules":
-                buttonInteraction.respondWithModal("santa-rules-" + message.getIdAsString(), "Update Rules",
-                        SantaModal.getRulesRow(languageManager)
-                );
+                buttonInteraction.replyModal(Modal.create("santa-rules-" + message.getId(), "Update Rules")
+                        .addComponents(SantaModal.getRulesRow(languageManager)).build()).queue();
 
                 break;
             case "theme":
-                buttonInteraction.respondWithModal("santa-theme-" + message.getIdAsString(), "Update Theme",
-                        SantaModal.getThemeRow(languageManager)
-                );
+                buttonInteraction.replyModal(Modal.create("santa-theme-" + message.getId(), "Update Theme")
+                        .addComponents(SantaModal.getThemeRow(languageManager)).build()).queue();
 
                 break;
             case "send":
-                buttonInteraction.acknowledge();
+                buttonInteraction.deferEdit().queue();
                 for (int i = 0; i < extractionResult.givers.size(); i++) {
-                    SantaEmbed.getSantaMessage(languageManager, server, author, extractionResult.givers.get(i), extractionResult.receivers.get(i), extractionResult.rules, extractionResult.theme).send(extractionResult.givers.get(i));
+                    User giver = extractionResult.givers.get(i);
+                    User receiver = extractionResult.receivers.get(i);
+                    giver.openPrivateChannel().flatMap(dm -> dm.sendMessage(SantaEmbed.getSantaMessage(languageManager, santaServer, santaAuthor, giver, receiver, santa.rules, santa.theme).build())).queue();
                 }
 
                 break;
             case "test":
-                buttonInteraction.acknowledge();
-                SantaEmbed.getSantaMessage(languageManager, server, author, extractionResult.givers.get(0), extractionResult.receivers.get(0), extractionResult.rules, extractionResult.theme).send(buttonAuthor);
+                buttonInteraction.deferEdit().queue();
+                buttonAuthor.openPrivateChannel().flatMap(dm -> dm.sendMessage(SantaEmbed.getSantaMessage(languageManager, santaServer, santaAuthor, santa.givers.get(0), santa.receivers.get(0), santa.rules, santa.theme).build())).queue();
 
                 break;
             case "randomize":
-                buttonInteraction.acknowledge();
-                Role role = Main.getApi().getRoleById(extractionResult.santaID.get("roleID")).orElse(null);
+                buttonInteraction.deferEdit().queue();
+                Role role = server.getRoleById(extractionResult.santaID.get("roleID"));
                 // Edit the existing host message in place with a fresh randomized pairing
-                buttonInteraction.getMessage().edit(
-                        SantaEmbed.buildHostEmbedRandomized(languageManager, role, author, extractionResult.rules, extractionResult.theme)
-                );
+                buttonInteraction.getMessage().editMessageEmbeds(
+                        SantaEmbed.buildHostEmbedRandomized(languageManager, role, author, extractionResult.rules, extractionResult.theme).build()
+                ).queue();
 
                 break;
 
             // Quote command
             case "view_original":
                 //buttonInteraction.acknowledge();
-                buttonInteraction.createImmediateResponder()
-                        .addEmbed(QuoteEmbed.viewOriginalMessageBuilder(channel, message))
-                        .setFlags(MessageFlag.EPHEMERAL)
-                        .respond();
+                buttonInteraction.replyEmbeds(QuoteEmbed.viewOriginalMessageBuilder(channel, message).build())
+                        .setEphemeral(true).queue();
 
                 break;
         }

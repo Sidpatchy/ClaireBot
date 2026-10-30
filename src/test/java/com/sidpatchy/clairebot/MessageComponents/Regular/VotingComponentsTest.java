@@ -3,9 +3,8 @@ package com.sidpatchy.clairebot.MessageComponents.Regular;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Lang.PlaceholderHandler;
-import org.javacord.api.entity.message.component.ActionRow;
-import org.javacord.api.entity.message.component.Button;
-import org.javacord.api.entity.message.component.TextInput;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -24,26 +23,23 @@ class VotingComponentsTest {
         ActionRow choices = VotingComponents.getChoicesButtons(languageManager, "draft");
         ActionRow multiple = VotingComponents.getAllowMultipleChoicesButtons(languageManager, "draft");
 
-        assertEquals("vote-choices-yes:draft", ((Button) choices.getComponents().get(0)).getCustomId().orElseThrow());
-        assertEquals("Custom choices", ((Button) choices.getComponents().get(0)).getLabel().orElseThrow());
-        assertEquals("vote-choices-no:draft", ((Button) choices.getComponents().get(1)).getCustomId().orElseThrow());
-        assertEquals("👍/👎 poll", ((Button) choices.getComponents().get(1)).getLabel().orElseThrow());
-        assertEquals("vote-cancel:draft", ((Button) choices.getComponents().get(2)).getCustomId().orElseThrow());
-        assertEquals("vote-multi-yes:draft", ((Button) multiple.getComponents().get(0)).getCustomId().orElseThrow());
-        assertEquals("vote-multi-no:draft", ((Button) multiple.getComponents().get(1)).getCustomId().orElseThrow());
-        assertEquals("Select multiple", ((Button) multiple.getComponents().get(0)).getLabel().orElseThrow());
-        assertEquals("One choice only", ((Button) multiple.getComponents().get(1)).getLabel().orElseThrow());
-        assertEquals("vote-cancel:draft", ((Button) multiple.getComponents().get(2)).getCustomId().orElseThrow());
+        assertEquals("vote-choices-yes:draft", ((Button) choices.getComponents().get(0)).getCustomId());
+        assertEquals("Custom choices", ((Button) choices.getComponents().get(0)).getLabel());
+        assertEquals("vote-choices-no:draft", ((Button) choices.getComponents().get(1)).getCustomId());
+        assertEquals("👍/👎 poll", ((Button) choices.getComponents().get(1)).getLabel());
+        assertEquals("vote-cancel:draft", ((Button) choices.getComponents().get(2)).getCustomId());
+        assertEquals("vote-multi-yes:draft", ((Button) multiple.getComponents().get(0)).getCustomId());
+        assertEquals("vote-multi-no:draft", ((Button) multiple.getComponents().get(1)).getCustomId());
+        assertEquals("Select multiple", ((Button) multiple.getComponents().get(0)).getLabel());
+        assertEquals("One choice only", ((Button) multiple.getComponents().get(1)).getLabel());
+        assertEquals("vote-cancel:draft", ((Button) multiple.getComponents().get(2)).getCustomId());
     }
 
     @Test
     void optionModalResolvesNumberBeforeReadingTranslation() {
         LanguageManager languageManager = languageManager();
 
-        TextInput input = (TextInput) VotingComponents.getOptionActionRow(10, languageManager, false)
-                .getComponents().getFirst();
-
-        assertEquals("Option #10", input.getLabel().orElseThrow());
+        assertEquals("Option #10", VotingComponents.getOptionActionRow(10, languageManager, false).getLabel());
     }
 
     private static LanguageManager languageManager() {

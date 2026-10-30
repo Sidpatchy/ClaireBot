@@ -2,8 +2,8 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.List;
 import java.util.Random;
@@ -32,9 +32,9 @@ public class EightBallEmbed {
             }
         }
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(ateBallLanguageString)
-                .addField(query, response)
-                .setFooter(author.getDiscriminatedName(), author.getAvatar());
+                .addField(query, response, false)
+                .setFooter(author.getAsTag(), author.getEffectiveAvatarUrl());
     }
 }

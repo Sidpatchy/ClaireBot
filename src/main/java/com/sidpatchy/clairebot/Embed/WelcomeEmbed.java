@@ -1,12 +1,11 @@
 package com.sidpatchy.clairebot.Embed;
 
-import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.apache.logging.log4j.Logger;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.IOException;
 
@@ -14,10 +13,10 @@ public class WelcomeEmbed {
     private static final Logger logger = Main.getLogger();
 
 
-    public static EmbedBuilder getWelcome(LanguageManager languageManager, Server server) {
+    public static EmbedBuilder getWelcome(LanguageManager languageManager, Guild server) {
 
         // Initialize the Guild in the database
-        Guild guild = new Guild(server.getIdAsString());
+        com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
         try {
             guild.getGuild();
         } catch (IOException e) {
@@ -39,9 +38,9 @@ public class WelcomeEmbed {
                 .setColor(Main.getColor(null))
                 .addField(title, motto, true)
                 .addField(usageTitle, usageDesc, false)
-                .addField(supportTitle, supportDesc);
+                .addField(supportTitle, supportDesc, false);
 
-        server.getIcon().ifPresent(embed::setThumbnail);
+        if (server.getIconUrl() != null) embed.setThumbnail(server.getIconUrl());
 
         return embed;
     }

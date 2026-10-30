@@ -4,8 +4,8 @@ import com.sidpatchy.clairebot.API.APIUser;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
 
@@ -16,7 +16,7 @@ public class UserPreferencesEmbed {
         String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.MainMenuText");
 
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(title);
     }
 
@@ -25,7 +25,7 @@ public class UserPreferencesEmbed {
         String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.AccentColourMenu");
 
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(title);
     }
 
@@ -34,7 +34,7 @@ public class UserPreferencesEmbed {
         String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.AccentColourList");
 
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(title);
     }
 
@@ -50,7 +50,7 @@ public class UserPreferencesEmbed {
         Color color = Color.decode(colourCode);
 
         try {
-            APIUser apiUser = new APIUser(author.getIdAsString());
+            APIUser apiUser = new APIUser(author.getId());
             apiUser.getUser();
             apiUser.updateUserColour(colourCode);
 
@@ -72,7 +72,7 @@ public class UserPreferencesEmbed {
         String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.LanguageMenuDesc");
 
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(title)
                 .setDescription(desc);
     }
@@ -86,7 +86,7 @@ public class UserPreferencesEmbed {
      */
     public static EmbedBuilder getAcknowledgeLanguageChange(LanguageManager languageManager, User author, String languageTag) {
         try {
-            APIUser apiUser = new APIUser(author.getIdAsString());
+            APIUser apiUser = new APIUser(author.getId());
             apiUser.getUser();
             apiUser.updateUserLanguage(languageTag);
 
@@ -94,7 +94,7 @@ public class UserPreferencesEmbed {
             String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.UserPreferencesEmbed.LanguageChangedDesc");
 
             return new EmbedBuilder()
-                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setColor(Main.getColor(author.getId()))
                     .setAuthor(title)
                     .setDescription(desc);
         } catch (Exception e) {

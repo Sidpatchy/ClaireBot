@@ -1,18 +1,20 @@
 package com.sidpatchy.clairebot.Util;
 
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.Embed;
-import org.javacord.api.entity.message.embed.EmbedField;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SantaUtils {
+    private static final Pattern userMention = Pattern.compile("<@!?(\\d+)>");
+
     public static class ExtractionResult {
         public String rules;
         public String theme;
@@ -29,12 +31,12 @@ public class SantaUtils {
         }
     }
 
-    public static ExtractionResult extractDataFromEmbed(Embed embed, EmbedFooter footer) {
+    public static ExtractionResult extractDataFromEmbed(MessageEmbed embed, MessageEmbed.Footer footer) {
         String rules = "";
         String theme = "";
         List<User> givers = new ArrayList<>();
         List<User> receivers = new ArrayList<>();
-        for (EmbedField field : embed.getFields()) {
+        for (MessageEmbed.Field field : embed.getFields()) {
             String name = field.getName();
             String value = field.getValue();
 
@@ -43,20 +45,32 @@ public class SantaUtils {
             } else if (name.equalsIgnoreCase("theme")) {
                 theme = value;
             } else {
-                value = value.replace("<@!", "");
-                value = value.replace(">", "");
-                value = value.replace(" → ", "");
-                value = value.replace(name, "");
-
-                givers.add(Main.getApi().getUserById(name).join());
-                receivers.add(Main.getApi().getUserById(value).join());
+                givers.add(Main.getApi().retrieveUserById(name).complete());
+                receivers.add(Main.getApi().retrieveUserById(getReceiverID(value)).complete());
             }
         }
 
         assert footer != null;
-        HashMap<String, String> santaID = parseSantaID(footer.getText().orElse(null));
+        HashMap<String, String> santaID = parseSantaID(footer.getText());
 
         return new ExtractionResult(rules, theme, givers, receivers, santaID);
+    }
+
+    static String getReceiverID(String pair) {
+        String[] mentions = pair.split(" → ", 2);
+        if (mentions.length != 2) {
+            throw new IllegalArgumentException("Invalid Santa pair: " + pair);
+        }
+
+        String receiverID = mentions[1].trim();
+        Matcher matcher = userMention.matcher(receiverID);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        if (receiverID.matches("\\d+")) {
+            return receiverID;
+        }
+        throw new IllegalArgumentException("Invalid Santa receiver: " + receiverID);
     }
 
     public static String getSantaID(String serverID, String authorID, String roleID) {

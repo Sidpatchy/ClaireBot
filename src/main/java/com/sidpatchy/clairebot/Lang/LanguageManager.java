@@ -3,11 +3,10 @@ package com.sidpatchy.clairebot.Lang;
 import com.sidpatchy.Robin.Exception.InvalidConfigurationException;
 import com.sidpatchy.Robin.File.RobinConfiguration;
 import com.sidpatchy.clairebot.API.APIUser;
-import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Main;
 import org.apache.logging.log4j.Logger;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class LanguageManager {
 
     private final String pathToLanguageFiles;
     private final Locale fallbackLocale;
-    private final Server server;
+    private final Guild server;
     private final User user;
     private final ContextManager context;
     private final PlaceholderHandler placeholderHandler;
@@ -139,24 +138,24 @@ public class LanguageManager {
         return getLocalizedList(basePath + "." + key);
     }
 
-    private Locale resolveEffectiveLocale(Server server, User user) {
+    private Locale resolveEffectiveLocale(Guild server, User user) {
         Locale locale;
         try {
             if (user == null) {
                 locale = fallbackLocale;
             } else {
-                APIUser apiUser = new APIUser(user.getIdAsString());
+                APIUser apiUser = new APIUser(user.getId());
                 apiUser.getUser();
                 locale = normalizeLocale(apiUser.getLanguage(), fallbackLocale);
             }
 
             if (server != null) {
-                Guild guild = new Guild(server.getIdAsString());
+                com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
                 guild.getGuild();
 
                 if (guild.isEnforceSeverLanguage()) {
-                    Locale preferred = server.getPreferredLocale() != null
-                            ? server.getPreferredLocale() : fallbackLocale;
+                    Locale preferred = server.getLocale() != null
+                            ? server.getLocale().toLocale() : fallbackLocale;
                     locale = normalizeLocale(guild.getLocale(), preferred);
                 }
             }
@@ -187,7 +186,7 @@ public class LanguageManager {
         return "und".equals(parsed.toLanguageTag()) ? fallback : parsed;
     }
 
-    private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
+    private RobinConfiguration parseUserAndServerOptions(Guild server, User user) {
         Locale locale;
         try {
             // If user is null (e.g., triggered by a system action or missing context),
@@ -195,7 +194,7 @@ public class LanguageManager {
             if (user == null) {
                 locale = fallbackLocale;
             } else {
-                APIUser apiUser = new APIUser(user.getIdAsString());
+                APIUser apiUser = new APIUser(user.getId());
                 apiUser.getUser();
                 locale = normalizeLocale(apiUser.getLanguage(), fallbackLocale);
             }
@@ -203,13 +202,13 @@ public class LanguageManager {
             // todo, pending ClaireData update: allow server admins to specify a custom language string.
             // todo ref https://trello.com/c/vkQTCTMG
             if (server != null) {
-                Guild guild = new Guild(server.getIdAsString());
+                com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
                 guild.getGuild();
 
                 if (guild.isEnforceSeverLanguage()) {
                     // Respect stored guild locale when enforcement is enabled.
-                    Locale preferred = server.getPreferredLocale() != null
-                            ? server.getPreferredLocale() : fallbackLocale;
+                    Locale preferred = server.getLocale() != null
+                            ? server.getLocale().toLocale() : fallbackLocale;
                     locale = normalizeLocale(guild.getLocale(), preferred);
                 }
             }

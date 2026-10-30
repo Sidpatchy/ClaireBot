@@ -5,18 +5,18 @@ import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 
 public class UserInfoEmbed {
 
-    public static EmbedBuilder getUser(LanguageManager languageManager, User user, User author, Server server) {
+    public static EmbedBuilder getUser(LanguageManager languageManager, User user, User author, Guild server) {
         // Temp / localized variables block
         long nowMs = System.currentTimeMillis();
-        long creationMs = user.getCreationTimestamp().toEpochMilli();
+        long creationMs = user.getTimeCreated().toInstant().toEpochMilli();
         String creationDateTag = "<t:" + (creationMs / 1000) + ">";
         String timeSinceCreation = DurationFormatUtils.formatDurationWords(nowMs - creationMs, true, false);
 
@@ -38,26 +38,26 @@ public class UserInfoEmbed {
             return ErrorEmbed.getError(languageManager, errorCode);
         }
 
-        String footerText = author.getDiscriminatedName() + " (" + author.getIdAsString() + ")";
+        String footerText = author.getAsTag() + " (" + author.getId() + ")";
 
         // Build embed
         EmbedBuilder embed = new EmbedBuilder()
-                .setColor(Main.getColor(user.getIdAsString()))
-                .setThumbnail(user.getAvatar())
-                .setAuthor(userLabel + "\n" + user.getDiscriminatedName())
-                .addField(discordIdLabel, user.getIdAsString(), false);
+                .setColor(Main.getColor(user.getId()))
+                .setThumbnail(user.getEffectiveAvatarUrl())
+                .setAuthor(userLabel + "\n" + user.getAsTag())
+                .addField(discordIdLabel, user.getId(), false);
 
         if (server != null) {
-            Instant joinedAt = user.getJoinedAtTimestamp(server).orElse(Instant.now());
+            Instant joinedAt = server.getMember(user) != null ? server.getMember(user).getTimeJoined().toInstant() : Instant.now();
             long joinMs = joinedAt.toEpochMilli();
             String joinDateTag = "<t:" + (joinMs / 1000) + ">";
-            long sinceBase = user.getJoinedAtTimestamp(server).orElse(Instant.ofEpochMilli(0)).toEpochMilli();
+            long sinceBase = server.getMember(user) != null ? server.getMember(user).getTimeJoined().toInstant().toEpochMilli() : 0;
             String timeSinceJoin = DurationFormatUtils.formatDurationWords(nowMs - sinceBase, true, false);
             embed.addField(joinDateLabel, joinDateTag + "\n*" + timeSinceJoin + "*", false);
         }
 
         embed.addField(creationDateLabel, creationDateTag + "\n*" + timeSinceCreation + "*", false)
-                .setFooter(footerText, author.getAvatar());
+                .setFooter(footerText, author.getEffectiveAvatarUrl());
 
         return embed;
     }

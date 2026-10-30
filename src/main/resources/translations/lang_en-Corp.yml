@@ -268,7 +268,7 @@ ClaireLang:
           GenericDescription: "We are SO incredibly sorry, but we've encountered an unexpected error. Please try running the command again, and if the issue persists, we STRONGLY encourage you to join our [Discord server]({cb.supportserver}) where our dedicated support team will be MORE than happy to assist you personally!\n\nFor our records, please reference error code: {cb.errorcode}\n\nThank you SO much for your patience and understanding! We truly appreciate you and are committed to resolving this as quickly as possible! Is there anything else we can help you with in the meantime?"
         WelcomeEmbed:
           Title: "🎉 Welcome to ClaireBot 3! We're SO Thrilled to Have You Here! Thank You for Joining Us!"
-          Motto: "How can you rise, if you have not burned? (Thank you for being here!)"
+          Motto: "ClaireBot 4: We do what we must because Discord keeps introducing unexpected disruptions! (Thank you for your patience!)"
           UsageTitle: "Getting Started is SO Easy! (We're Here to Help!)"
           UsageDesc: "Begin your journey by running `{cb.command.help.name}`! Need more detailed information about a specific command? Simply run `/{cb.command.help.name} <command name>` (for example: `/{cb.command.help.name} user`). We're here to help every step of the way, and we're SO excited to serve you! Thank you!"
           SupportTitle: "24/7 Support Available (We're Always Here for You!)"

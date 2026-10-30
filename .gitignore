@@ -19,3 +19,5 @@ target
 
 # Gradle Files #
 .gradle/
+
+*.log

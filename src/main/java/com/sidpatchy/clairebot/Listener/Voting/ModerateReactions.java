@@ -3,22 +3,21 @@ package com.sidpatchy.clairebot.Listener.Voting;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.MessageUtils;
 import com.sidpatchy.clairebot.Util.Voting.VotingUtils;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.Reaction;
-import org.javacord.api.entity.message.embed.Embed;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.user.User;
-import org.javacord.api.event.message.reaction.ReactionAddEvent;
-import org.javacord.api.listener.message.reaction.ReactionAddListener;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class ModerateReactions implements ReactionAddListener {
+public class ModerateReactions extends ListenerAdapter {
 
     @Override
-    public void onReactionAdd(ReactionAddEvent event) {
-        Message message = event.requestMessage().join();
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        Message message = event.retrieveMessage().complete();
         assert message != null;
 
         // Avoid executing past here when the author isn't the bot.
@@ -30,12 +29,12 @@ public class ModerateReactions implements ReactionAddListener {
         if (message.getEmbeds().isEmpty()) {
             return;
         }
-        Embed embed = message.getEmbeds().get(0);
-        EmbedFooter footer = embed.getFooter().orElse(null);
+        MessageEmbed embed = message.getEmbeds().get(0);
+        MessageEmbed.Footer footer = embed.getFooter();
         if (footer == null) {
             return;
         }
-        String footerText = footer.getText().orElse(null);
+        String footerText = footer.getText();
 
         if (footerText != null) {
             String encoded = VotingUtils.extractPollIdFromFooter(footerText);
@@ -44,19 +43,19 @@ public class ModerateReactions implements ReactionAddListener {
                 boolean allowMultipleChoices = pollID.get("allowMultipleChoices").equalsIgnoreCase("1");
 
                 if (!allowMultipleChoices) {
-                    String emote = event.getEmoji().asUnicodeEmoji().orElse(null);
-                    User author = event.getUser().orElse(null);
+                    String emote = event.getEmoji().getType() == net.dv8tion.jda.api.entities.emoji.Emoji.Type.UNICODE ? event.getEmoji().getName() : null;
+                    User author = event.getUser();
 
                     assert author != null;
-                    if (author.isYourself()) {
+                    if (author.getIdLong() == event.getJDA().getSelfUser().getIdLong()) {
                         return;
                     }
 
-                    List<Reaction> reacts = message.getReactions();
+                    List<MessageReaction> reacts = message.getReactions();
 
-                    for (Reaction reaction : reacts) {
-                        if (emote != null && !emote.equalsIgnoreCase(reaction.getEmoji().asUnicodeEmoji().orElse(null))) {
-                            reaction.removeUser(author);
+                    for (MessageReaction reaction : reacts) {
+                        if (emote != null && !emote.equalsIgnoreCase(reaction.getEmoji().getName())) {
+                            message.removeReaction(reaction.getEmoji(), author).queue();
                         }
                     }
                 }

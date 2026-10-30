@@ -265,7 +265,7 @@ ClaireLang:
           GenericDescription: "It appears that I've encountered an error, oops! Please try running the command once more and if that doesn't work, join my [Discord server]({cb.supportserver) and let us know about the issue.\n\nPlease include the following error code: {cb.errorcode}"
         WelcomeEmbed:
           Title: "🎉 Welcome to ClaireBot 3!"
-          Motto: "How can you rise, if you have not burned?"
+          Motto: "ClaireBot 4: We do what we must, because Discord keeps breaking shit."
           UsageTitle: "Usage"
           UsageDesc: "Get started by running `{cb.command.help.name}`. Need more info on a command? Run `/{cb.command.help.name} <command name>` (ex. `/{cb.command.help.name} user`)"
           SupportTitle: "Get Support"

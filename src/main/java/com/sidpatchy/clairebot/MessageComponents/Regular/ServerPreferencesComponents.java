@@ -1,12 +1,11 @@
 package com.sidpatchy.clairebot.MessageComponents.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
-import org.javacord.api.entity.channel.ServerTextChannel;
-import org.javacord.api.entity.message.component.ActionRow;
-import org.javacord.api.entity.message.component.ActionRowBuilder;
-import org.javacord.api.entity.message.component.SelectMenu;
-import org.javacord.api.entity.message.component.SelectMenuOption;
-import org.javacord.api.entity.server.Server;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
+import net.dv8tion.jda.api.components.selections.SelectOption;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,24 +28,21 @@ public class ServerPreferencesComponents {
         String serverLangLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.ServerLanguage");
         String serverLangDesc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.ServerLanguageDescription");
 
-        return new ActionRowBuilder()
-                .addComponents(
-                        SelectMenu.create("server-settings", placeholder, 1, 1,
-                                Arrays.asList(
-                                        // Keep values stable for interaction handlers
-                                        SelectMenuOption.create(requestsLabel, "Requests Channel", requestsDesc),
-                                        SelectMenuOption.create(modLabel, "Moderator Messages Channel", modDesc),
-                                        SelectMenuOption.create(enforceLabel, "Enforce Server Language", enforceDesc),
-                                        SelectMenuOption.create(serverLangLabel, "Server Language", serverLangDesc)
-                                ))
-                ).build();
+        return ActionRow.of(StringSelectMenu.create("server-settings").setPlaceholder(placeholder)
+                .addOptions(
+                        // Keep values stable for interaction handlers
+                        SelectOption.of(requestsLabel, "Requests Channel").withDescription(requestsDesc),
+                        SelectOption.of(modLabel, "Moderator Messages Channel").withDescription(modDesc),
+                        SelectOption.of(enforceLabel, "Enforce Server Language").withDescription(enforceDesc),
+                        SelectOption.of(serverLangLabel, "Server Language").withDescription(serverLangDesc)
+                ).build());
     }
 
-    public static ActionRow getRequestsChannelMenu(LanguageManager languageManager, Server server) {
+    public static ActionRow getRequestsChannelMenu(LanguageManager languageManager, Guild server) {
         return getChannelListActionRow(languageManager, server, "requestsChannel");
     }
 
-    public static ActionRow getModeratorChannelMenu(LanguageManager languageManager, Server server) {
+    public static ActionRow getModeratorChannelMenu(LanguageManager languageManager, Guild server) {
         return getChannelListActionRow(languageManager, server, "moderatorChannel");
     }
 
@@ -55,15 +51,12 @@ public class ServerPreferencesComponents {
         String trueText = languageManager.getLocalizedString("ClaireLang.Generic.True");
         String falseText = languageManager.getLocalizedString("ClaireLang.Generic.False");
 
-        return new ActionRowBuilder()
-                .addComponents(
-                        SelectMenu.create("enforceServerLanguage", placeholder, 1, 1,
-                                Arrays.asList(
-                                        // Localized labels with stable boolean values
-                                        SelectMenuOption.create(trueText, "true"),
-                                        SelectMenuOption.create(falseText, "false")
-                                ))
-                ).build();
+        return ActionRow.of(StringSelectMenu.create("enforceServerLanguage").setPlaceholder(placeholder)
+                .addOptions(
+                        // Localized labels with stable boolean values
+                        SelectOption.of(trueText, "true"),
+                        SelectOption.of(falseText, "false")
+                ).build());
     }
 
     public static ActionRow getServerLanguageMenu(LanguageManager languageManager) {
@@ -71,7 +64,7 @@ public class ServerPreferencesComponents {
         String placeholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.ServerLanguagePlaceholder");
 
         java.io.File dir = new java.io.File(com.sidpatchy.clairebot.Main.getTranslationsPath());
-        List<SelectMenuOption> options = new ArrayList<>();
+        List<SelectOption> options = new ArrayList<>();
         if (dir.exists() && dir.isDirectory()) {
             java.io.File[] files = dir.listFiles((d, name) -> name.startsWith("lang_") && name.endsWith(".yml"));
             if (files != null) {
@@ -80,17 +73,16 @@ public class ServerPreferencesComponents {
                     String name = f.getName();
                     String tag = name.substring("lang_".length(), name.length() - ".yml".length());
                     String label = tag;
-                    options.add(SelectMenuOption.create(label, tag));
+                    options.add(SelectOption.of(label, tag));
                 }
             }
         }
         if (options.isEmpty()) {
             String tag = com.sidpatchy.clairebot.Main.getFallbackLocale().toLanguageTag();
-            options.add(SelectMenuOption.create(tag, tag));
+            options.add(SelectOption.of(tag, tag));
         }
-        return new ActionRowBuilder()
-                .addComponents(SelectMenu.create("server-language", placeholder, 1, 1, options))
-                .build();
+        return ActionRow.of(StringSelectMenu.create("server-language").setPlaceholder(placeholder)
+                .addOptions(options).build());
     }
 
     /**
@@ -101,27 +93,25 @@ public class ServerPreferencesComponents {
      * @param languageManager Localization provider
      * @return ActionRow with SelectMenu
      */
-    private static ActionRow getChannelListActionRow(LanguageManager languageManager, Server server, String customId) {
-        List<ServerTextChannel> channels = server.getTextChannels();
-        List<SelectMenuOption> options = new ArrayList<>();
+    private static ActionRow getChannelListActionRow(LanguageManager languageManager, Guild server, String customId) {
+        List<TextChannel> channels = server.getTextChannels();
+        List<SelectOption> options = new ArrayList<>();
         int count = 0;
-        for (ServerTextChannel channel : channels) {
+        for (TextChannel channel : channels) {
             String channelName = channel.getName().replaceAll("[^\\p{ASCII}]", ""); // Remove non-ASCII characters
             if (channelName.length() > 25) {
                 channelName = channelName.substring(0, 25); // Truncate channel name to 25 characters
             }
             if (count < 25) {
-                options.add(SelectMenuOption.create(channelName, channel.getIdAsString()));
+                options.add(SelectOption.of(channelName, channel.getId()));
                 count++;
             }
         }
 
         String placeholder = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.ServerPreferences.SelectAChannelPlaceholder");
 
-        return new ActionRowBuilder()
-                .addComponents(
-                        SelectMenu.create(customId, placeholder, 1, 1, options)
-                ).build();
+        return ActionRow.of(StringSelectMenu.create(customId).setPlaceholder(placeholder)
+                .addOptions(options).build());
     }
 
 }
