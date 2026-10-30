@@ -1,16 +1,16 @@
 package com.sidpatchy.clairebot.Lang;
 
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public record ContextManager(
-        Server server,
-        TextChannel channel,
+        Guild server,
+        MessageChannel channel,
         User author,
         User user,
         Message message,
@@ -31,7 +31,7 @@ public record ContextManager(
     }
 
     // Alternative constructor without dynamicData parameter
-    public ContextManager(Server server, TextChannel channel, User author,
+    public ContextManager(Guild server, MessageChannel channel, User author,
                           User user, Message message) {
         this(server, channel, author, user, message, new HashMap<>());
     }

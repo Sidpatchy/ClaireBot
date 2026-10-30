@@ -1,14 +1,13 @@
 package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
-import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.channel.ServerTextChannel;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 public class ServerPreferencesEmbed {
 
@@ -57,26 +56,26 @@ public class ServerPreferencesEmbed {
         return createGenericMenuEmbed(author, title).setDescription(desc);
     }
 
-    public static EmbedBuilder getAcknowledgeRequestsChannelChange(LanguageManager languageManager, Server server, User author, String requestsChannelID) {
+    public static EmbedBuilder getAcknowledgeRequestsChannelChange(LanguageManager languageManager, Guild server, User author, String requestsChannelID) {
         // Resolve channel
-        ServerTextChannel channel = Main.getApi().getServerTextChannelById(requestsChannelID).orElse(null);
+        TextChannel channel = Main.getApi().getTextChannelById(requestsChannelID);
         if (channel == null) {
             return ErrorEmbed.getError(languageManager, Main.getErrorCode("channelNotExists"));
         }
 
         try {
-            Guild guild = new Guild(server.getIdAsString());
+            com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
             guild.getGuild();
             guild.updateRequestsChannelID(requestsChannelID);
 
             // Temp/localized variables
             String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeRequestsChannelChangeTitle");
-            String mention = "<#" + channel.getIdAsString() + ">";
+            String mention = "<#" + channel.getId() + ">";
             languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.requests.mentiontag", mention);
             String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeRequestsChannelChangeDescription");
 
             return new EmbedBuilder()
-                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setColor(Main.getColor(author.getId()))
                     .setAuthor(title)
                     .setDescription(desc);
         } catch (Exception e) {
@@ -85,26 +84,26 @@ public class ServerPreferencesEmbed {
         }
     }
 
-    public static EmbedBuilder getAcknowledgeModeratorChannelChange(LanguageManager languageManager, Server server, User author, String moderatorChannelID) {
+    public static EmbedBuilder getAcknowledgeModeratorChannelChange(LanguageManager languageManager, Guild server, User author, String moderatorChannelID) {
         // Resolve channel
-        ServerTextChannel channel = Main.getApi().getServerTextChannelById(moderatorChannelID).orElse(null);
+        TextChannel channel = Main.getApi().getTextChannelById(moderatorChannelID);
         if (channel == null) {
             return ErrorEmbed.getError(languageManager, Main.getErrorCode("channelNotExists"));
         }
 
         try {
-            Guild guild = new Guild(server.getIdAsString());
+            com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
             guild.getGuild();
             guild.updateModeratorMessagesChannelID(moderatorChannelID);
 
             // Temp/localized variables
             String title = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeModeratorChannelChangeTitle");
-            String mention = "<#" + channel.getIdAsString() + ">";
+            String mention = "<#" + channel.getId() + ">";
             languageManager.addContext(ContextManager.ContextType.GENERIC, "cb.channel.moderator.mentiontag", mention);
             String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeModeratorChannelChangeDescription");
 
             return new EmbedBuilder()
-                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setColor(Main.getColor(author.getId()))
                     .setAuthor(title)
                     .setDescription(desc);
         } catch (Exception e) {
@@ -113,12 +112,12 @@ public class ServerPreferencesEmbed {
         }
     }
 
-    public static EmbedBuilder getAcknowledgeEnforceServerLanguageUpdate(LanguageManager languageManager, Server server, User author, String newValue) {
+    public static EmbedBuilder getAcknowledgeEnforceServerLanguageUpdate(LanguageManager languageManager, Guild server, User author, String newValue) {
         // Temp/localized variables
         boolean value = Boolean.parseBoolean(newValue);
 
         try {
-            Guild guild = new Guild(server.getIdAsString());
+            com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
             guild.getGuild();
             guild.updateEnforceServerLanguage(value);
 
@@ -128,7 +127,7 @@ public class ServerPreferencesEmbed {
                     : languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.AcknowledgeEnforceServerLanguageUpdateNotEnforced");
 
             return new EmbedBuilder()
-                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setColor(Main.getColor(author.getId()))
                     .setAuthor(title)
                     .setDescription(desc);
 
@@ -138,9 +137,9 @@ public class ServerPreferencesEmbed {
         }
     }
 
-    public static EmbedBuilder getAcknowledgeServerLanguageChange(LanguageManager languageManager, Server server, User author, String languageTag) {
+    public static EmbedBuilder getAcknowledgeServerLanguageChange(LanguageManager languageManager, Guild server, User author, String languageTag) {
         try {
-            Guild guild = new Guild(server.getIdAsString());
+            com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
             guild.getGuild();
             guild.updateLocale(languageTag);
 
@@ -148,7 +147,7 @@ public class ServerPreferencesEmbed {
             String desc = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerPreferencesEmbed.ServerLanguageChangedDesc");
 
             return new EmbedBuilder()
-                    .setColor(Main.getColor(author.getIdAsString()))
+                    .setColor(Main.getColor(author.getId()))
                     .setAuthor(title)
                     .setDescription(desc);
         } catch (Exception e) {
@@ -166,7 +165,7 @@ public class ServerPreferencesEmbed {
      */
     private static EmbedBuilder createGenericMenuEmbed(User author, String menuName) {
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .setAuthor(menuName);
     }
 }

@@ -2,18 +2,18 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.awt.*;
 
 public class ServerInfoEmbed {
 
-    public static EmbedBuilder getServerInfo(LanguageManager languageManager, Server server, String userID) {
+    public static EmbedBuilder getServerInfo(LanguageManager languageManager, Guild server, String userID) {
         Color color = Main.getColor(userID);
         String authorName = server.getName();
         String footerLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.ServerID");
-        String footerText = footerLabel + ": " + server.getIdAsString();
+        String footerText = footerLabel + ": " + server.getId();
         String ownerLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.Owner");
         String creationDateLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.CreationDate");
         String roleCountLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.RoleCount");
@@ -24,7 +24,7 @@ public class ServerInfoEmbed {
         String voiceChannelsLabel = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.ServerInfoEmbed.VoiceChannels");
 
         String channelCountsValue =
-                "⦁ " + categoriesLabel + ": " + server.getChannelCategories().size() +
+                "⦁ " + categoriesLabel + ": " + server.getCategories().size() +
                         "\n⦁ " + textChannelsLabel + ": " + server.getTextChannels().size() +
                         "\n⦁ " + voiceChannelsLabel + ": " + server.getVoiceChannels().size();
 
@@ -34,13 +34,11 @@ public class ServerInfoEmbed {
                 .setAuthor(authorName)
                 .setFooter(footerText);
 
-        server.getIcon().ifPresent(embed::setThumbnail);
+        if (server.getIconUrl() != null) embed.setThumbnail(server.getIconUrl());
 
-        server.getOwner().ifPresent(owner -> {
-            embed.addField(ownerLabel, owner.getDiscriminatedName(), false);
-        });
+        if (server.getOwner() != null) embed.addField(ownerLabel, server.getOwner().getUser().getAsTag(), false);
 
-        embed.addField(creationDateLabel, "<t:" + server.getCreationTimestamp().getEpochSecond() + ">");
+        embed.addField(creationDateLabel, "<t:" + server.getTimeCreated().toEpochSecond() + ">", false);
 
         embed.addField(roleCountLabel, String.valueOf(server.getRoles().size()), false);
         embed.addField(memberCountLabel, String.valueOf(server.getMemberCount()), false);

@@ -6,7 +6,7 @@ import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Map;
 
@@ -59,7 +59,7 @@ public class HelpEmbed {
                 .setColor(Main.getColor(userID))
                 .setAuthor(canonicalCommand.getName().toUpperCase())
                 .setDescription(localizedCommand.getHelp())
-                .addField(commandsLangString, usageLangString + "\n```" + localizedCommand.getUsage() + "```");
+                .addField(commandsLangString, usageLangString + "\n```" + localizedCommand.getUsage() + "```", false);
     }
 
     private static EmbedBuilder buildUnknownCommandEmbed(LanguageManager languageManager) {

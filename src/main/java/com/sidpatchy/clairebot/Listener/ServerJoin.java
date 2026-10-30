@@ -4,12 +4,12 @@ import com.sidpatchy.clairebot.Embed.WelcomeEmbed;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.ChannelUtils;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.event.server.ServerJoinEvent;
-import org.javacord.api.listener.server.ServerJoinListener;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class ServerJoin implements ServerJoinListener {
+public class ServerJoin extends ListenerAdapter {
 
     private LanguageManager languageManager;
 
@@ -20,12 +20,12 @@ public class ServerJoin implements ServerJoinListener {
      * @param event
      */
     @Override
-    public void onServerJoin(ServerJoinEvent event) {
-        Server server = event.getServer();
+    public void onGuildJoin(GuildJoinEvent event) {
+        Guild server = event.getGuild();
 
         languageManager = new LanguageManager(Main.getFallbackLocale(), null); // this null should probably be fine
 
         TextChannel channel = ChannelUtils.getModeratorsOnlyChannel(server);
-        channel.sendMessage(WelcomeEmbed.getWelcome(languageManager, server));
+        channel.sendMessageEmbeds(WelcomeEmbed.getWelcome(languageManager, server).build()).queue();
     }
 }

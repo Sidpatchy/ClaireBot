@@ -1,13 +1,13 @@
 package com.sidpatchy.clairebot.Util;
 
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.message.Message;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
 
 public class MessageUtils {
-    static DiscordApi api = Main.getApi();
+    static JDA api = Main.getApi();
 
     public static boolean isBotUser(Message message) {
-        return message.getAuthor().getId() == api.getClientId();
+        return message.getAuthor().getIdLong() == api.getSelfUser().getIdLong();
     }
 }

@@ -2,13 +2,13 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Main;
 import com.sidpatchy.clairebot.Util.Leveling.LevelingTools;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 public class LevelEmbed {
 
     public static EmbedBuilder getLevel(String serverID, User user) {
-        Integer userPoints = LevelingTools.getUserPoints(user.getIdAsString(), serverID);
+        Integer userPoints = LevelingTools.getUserPoints(user.getId(), serverID);
 
         if (userPoints == null) {
             userPoints = 0;
@@ -20,9 +20,9 @@ public class LevelEmbed {
 
 
         return new EmbedBuilder()
-                .setColor(Main.getColor(user.getIdAsString()))
-                .setTimestampToNow()
-                .setAuthor(user.getDiscriminatedName(), "", user.getAvatar())
+                .setColor(Main.getColor(user.getId()))
+                .setTimestamp(java.time.Instant.now())
+                .setAuthor(user.getAsTag(), null, user.getEffectiveAvatarUrl())
                 .setDescription(levelString)
                 .setFooter(String.valueOf(user.getId()));
     }

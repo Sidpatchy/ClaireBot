@@ -2,13 +2,13 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 public class InfoEmbed {
     public static EmbedBuilder getInfo(LanguageManager languageManager, User author) {
         return new EmbedBuilder()
-                .setColor(Main.getColor(author.getIdAsString()))
+                .setColor(Main.getColor(author.getId()))
                 .addField(
                         languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.NeedHelp"),
                         languageManager.getLocalizedString("ClaireLang.Embed.Commands.Regular.InfoEmbed.NeedHelpDetails"),
@@ -41,4 +41,3 @@ public class InfoEmbed {
                 );
     }
 }
-

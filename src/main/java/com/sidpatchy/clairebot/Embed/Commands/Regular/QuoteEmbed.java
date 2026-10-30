@@ -3,12 +3,12 @@ package com.sidpatchy.clairebot.Embed.Commands.Regular;
 import com.sidpatchy.clairebot.Embed.ErrorEmbed;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 
 import java.util.List;
 import java.util.Random;
@@ -24,11 +24,11 @@ public class QuoteEmbed {
      * @param channel the text channel where the messages are located
      * @return a CompletableFuture that resolves to an EmbedBuilder containing the quote
      */
-    public static CompletableFuture<EmbedBuilder> getQuote(LanguageManager languageManager, Server server, final User user, TextChannel channel) {
+    public static CompletableFuture<EmbedBuilder> getQuote(LanguageManager languageManager, Guild server, final User user, MessageChannel channel) {
 
-        return channel.getMessages(50000).thenApply(messages -> {
+        return channel.getIterableHistory().takeAsync(50000).thenApply(messages -> {
             List<Message> userMessages = new java.util.ArrayList<>(messages.stream()
-                    .filter(message -> message.getAuthor().getId() == user.getId())
+                    .filter(message -> message.getAuthor().getIdLong() == user.getIdLong())
                     .toList());
 
             if (userMessages.isEmpty()) {
@@ -39,7 +39,7 @@ public class QuoteEmbed {
             Random random = new Random();
 
             EmbedBuilder embed = new EmbedBuilder()
-                    .setColor(Main.getColor(user.getIdAsString()));
+                    .setColor(Main.getColor(user.getId()));
 
             boolean messageSelected = false;
             int numberOfAttempts = 0;
@@ -51,20 +51,20 @@ public class QuoteEmbed {
                 int rand = random.nextInt(userMessages.size());
                 Message randomMessage = userMessages.get(rand);
 
-                if (!randomMessage.getContent().isEmpty()) {
-                    embed.setDescription(randomMessage.getContent());
+                if (!randomMessage.getContentRaw().isEmpty()) {
+                    embed.setDescription(randomMessage.getContentRaw());
                     messageSelected = true;
                 }
                 if (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().get(0).isImage()) {
-                    embed.setThumbnail(randomMessage.getAttachments().get(0).asImage().join());
+                    embed.setThumbnail(randomMessage.getAttachments().get(0).getUrl());
                     messageSelected = true;
                 }
 
                 // Set embed details if one of the above statements are valid
-                if (!randomMessage.getContent().isEmpty() || (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().get(0).isImage())) {
-                    embed.setAuthor(user.getDisplayName(server), randomMessage.getLink().toString(), user.getAvatar())
-                            .setTimestamp(randomMessage.getCreationTimestamp())
-                            .setFooter(randomMessage.getIdAsString());
+                if (!randomMessage.getContentRaw().isEmpty() || (!randomMessage.getAttachments().isEmpty() && randomMessage.getAttachments().get(0).isImage())) {
+                    embed.setAuthor(server != null && server.getMember(user) != null ? server.getMember(user).getEffectiveName() : user.getName(), randomMessage.getJumpUrl(), user.getEffectiveAvatarUrl())
+                            .setTimestamp(randomMessage.getTimeCreated())
+                            .setFooter(randomMessage.getId());
                 }
 
                 userMessages.remove(rand);
@@ -81,11 +81,11 @@ public class QuoteEmbed {
         });
     }
 
-    public static EmbedBuilder viewOriginalMessageBuilder(TextChannel channel, Message message) {
-        EmbedFooter footer = message.getEmbeds().get(0).getFooter().orElse(null);
-        Message quotedMessage = message.getApi().getMessageById(footer.getText().orElse(""), channel).join();
+    public static EmbedBuilder viewOriginalMessageBuilder(MessageChannel channel, Message message) {
+        MessageEmbed.Footer footer = message.getEmbeds().get(0).getFooter();
+        Message quotedMessage = channel.retrieveMessageById(footer.getText()).complete();
 
         return new EmbedBuilder()
-                .addField("Click to jump to the original message:", quotedMessage.getLink().toString());
+                .addField("Click to jump to the original message:", quotedMessage.getJumpUrl(), false);
     }
 }

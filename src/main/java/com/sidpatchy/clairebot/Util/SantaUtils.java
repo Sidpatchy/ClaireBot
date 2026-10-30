@@ -1,10 +1,8 @@
 package com.sidpatchy.clairebot.Util;
 
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.Embed;
-import org.javacord.api.entity.message.embed.EmbedField;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.user.User;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -29,12 +27,12 @@ public class SantaUtils {
         }
     }
 
-    public static ExtractionResult extractDataFromEmbed(Embed embed, EmbedFooter footer) {
+    public static ExtractionResult extractDataFromEmbed(MessageEmbed embed, MessageEmbed.Footer footer) {
         String rules = "";
         String theme = "";
         List<User> givers = new ArrayList<>();
         List<User> receivers = new ArrayList<>();
-        for (EmbedField field : embed.getFields()) {
+        for (MessageEmbed.Field field : embed.getFields()) {
             String name = field.getName();
             String value = field.getValue();
 
@@ -48,13 +46,13 @@ public class SantaUtils {
                 value = value.replace(" → ", "");
                 value = value.replace(name, "");
 
-                givers.add(Main.getApi().getUserById(name).join());
-                receivers.add(Main.getApi().getUserById(value).join());
+                givers.add(Main.getApi().retrieveUserById(name).complete());
+                receivers.add(Main.getApi().retrieveUserById(value).complete());
             }
         }
 
         assert footer != null;
-        HashMap<String, String> santaID = parseSantaID(footer.getText().orElse(null));
+        HashMap<String, String> santaID = parseSantaID(footer.getText());
 
         return new ExtractionResult(rules, theme, givers, receivers, santaID);
     }

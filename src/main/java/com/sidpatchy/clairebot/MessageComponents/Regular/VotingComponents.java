@@ -2,22 +2,26 @@ package com.sidpatchy.clairebot.MessageComponents.Regular;
 
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Lang.ContextManager;
-import org.javacord.api.entity.message.component.*;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
+import net.dv8tion.jda.api.components.label.Label;
+import net.dv8tion.jda.api.components.textinput.TextInput;
+import net.dv8tion.jda.api.components.textinput.TextInputStyle;
 
 public class VotingComponents {
 
     // Question row
-    public static ActionRow getQuestionRow(LanguageManager languageManager) {
+    public static Label getQuestionRow(LanguageManager languageManager) {
         String label = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.Question");
-        return ActionRow.of(new TextInputBuilder(TextInputStyle.SHORT, "question-modal", label)
-                .setRequired(true).setMaximumLength(250).build());
+        return Label.of(label, TextInput.create("question-modal", TextInputStyle.SHORT)
+                .setRequired(true).setMaxLength(250).build());
     }
 
     // Details row
-    public static ActionRow getDetailsRow(LanguageManager languageManager) {
+    public static Label getDetailsRow(LanguageManager languageManager) {
         String label = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.Details");
-        return ActionRow.of(new TextInputBuilder(TextInputStyle.PARAGRAPH, "details-modal", label)
-                .setRequired(false).setMaximumLength(1000).build());
+        return Label.of(label, TextInput.create("details-modal", TextInputStyle.PARAGRAPH)
+                .setRequired(false).setMaxLength(1000).build());
     }
 
     public static ActionRow getChoicesButtons(LanguageManager languageManager, String draftId) {
@@ -38,12 +42,10 @@ public class VotingComponents {
                         "ClaireLang.Embed.Commands.Components.Regular.Voting.Cancel")));
     }
 
-    public static ActionRow getOptionActionRow(int optionNumber, LanguageManager languageManager, boolean required) {
+    public static Label getOptionActionRow(int optionNumber, LanguageManager languageManager, boolean required) {
         languageManager.addContext(ContextManager.ContextType.GENERIC, "voting.optionnumber", optionNumber);
         String label = languageManager.getLocalizedString("ClaireLang.Embed.Commands.Components.Regular.Voting.OptionLabelTemplate");
-        return new ActionRowBuilder()
-                .addComponents(new TextInputBuilder(TextInputStyle.SHORT, "option-" + optionNumber, label)
-                        .setRequired(required).setMaximumLength(90).build())
-                .build();
+        return Label.of(label, TextInput.create("option-" + optionNumber, TextInputStyle.SHORT)
+                .setRequired(required).setMaxLength(90).build());
     }
 }

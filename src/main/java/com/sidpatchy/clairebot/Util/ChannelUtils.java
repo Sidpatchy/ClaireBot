@@ -1,10 +1,9 @@
 package com.sidpatchy.clairebot.Util;
 
-import com.sidpatchy.clairebot.API.Guild;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.channel.ServerTextChannel;
-import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.server.Server;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.Permission;
 
 import java.io.IOException;
 
@@ -19,14 +18,17 @@ public class ChannelUtils {
      * @param server server to check for
      * @return requests channel
      */
-    public static TextChannel getModeratorsOnlyChannel(Server server) {
+    public static TextChannel getModeratorsOnlyChannel(Guild server) {
         TextChannel channel = null;
         boolean apiFailed;
 
         try {
-            Guild guild = new Guild(server.getIdAsString());
+            com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
             guild.getGuild();
-            channel = Main.getApi().getTextChannelById(guild.getModeratorMessagesChannelID()).orElse(null);
+            String channelID = guild.getModeratorMessagesChannelID();
+            if (channelID != null && channelID.matches("\\d+")) {
+                channel = Main.getApi().getTextChannelById(channelID);
+            }
             apiFailed = false;
         }
         catch (IOException ignored) {
@@ -34,9 +36,11 @@ public class ChannelUtils {
         }
 
         if (apiFailed || channel == null) {
-            channel = server.getModeratorsOnlyChannel()
-                    .orElse(server.getSystemChannel()
-                            .orElse(server.getTextChannels().get(0)));
+            channel = server.getTextChannels().stream()
+                    .filter(text -> text.getPermissionOverride(server.getPublicRole()) != null
+                            && text.getPermissionOverride(server.getPublicRole()).getDenied().contains(Permission.VIEW_CHANNEL))
+                    .findFirst().orElse(server.getSystemChannel() != null ? server.getSystemChannel()
+                            : server.getTextChannels().get(0));
         }
 
         return channel;
@@ -51,21 +55,24 @@ public class ChannelUtils {
      * @param server server to check for
      * @return requests channel
      */
-    public static ServerTextChannel getRequestsChannel(Server server) {
-        ServerTextChannel channel = null;
+    public static TextChannel getRequestsChannel(Guild server) {
+        TextChannel channel = null;
         boolean apiFailed;
 
         try {
-            Guild guild = new Guild(server.getIdAsString());
+            com.sidpatchy.clairebot.API.Guild guild = new com.sidpatchy.clairebot.API.Guild(server.getId());
             guild.getGuild();
-            channel = Main.getApi().getServerTextChannelById(guild.getRequestsChannelID()).orElse(null);
+            String channelID = guild.getRequestsChannelID();
+            if (channelID != null && channelID.matches("\\d+")) {
+                channel = Main.getApi().getTextChannelById(channelID);
+            }
             apiFailed = false;
         } catch (IOException e) {
             apiFailed = true;
         }
 
         if (apiFailed || channel == null) {
-            var byName = server.getTextChannelsByName("requests");
+            var byName = server.getTextChannelsByName("requests", true);
             channel = byName.isEmpty() ? null : byName.get(0);
         }
 

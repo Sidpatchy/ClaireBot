@@ -3,7 +3,7 @@ package com.sidpatchy.clairebot.Embed;
 import com.sidpatchy.clairebot.Lang.ContextManager;
 import com.sidpatchy.clairebot.Lang.LanguageManager;
 import com.sidpatchy.clairebot.Main;
-import org.javacord.api.entity.message.embed.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
