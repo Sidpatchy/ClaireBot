@@ -21,7 +21,7 @@ public class SantaEmbed {
     public static EmbedBuilder getConfirmationEmbed(LanguageManager languageManager, User author) {
         return new EmbedBuilder()
                 .setColor(Main.getColor(author.getId()))
-                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
+                .setAuthor("SecretClaire", null, "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
                 .setDescription(languageManager.getLocalizedString(basePath, "Confirmation"));
     }
 
@@ -43,7 +43,7 @@ public class SantaEmbed {
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(author.getId()))
-                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
+                .setAuthor("SecretClaire", null, "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
 
         String footerText = SantaUtils.getSantaID(server.getId(), author.getId(), role.getId());
         if (server.getIconUrl() != null) {
@@ -87,7 +87,7 @@ public class SantaEmbed {
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(author.getId()))
-                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
+                .setAuthor("SecretClaire", null, "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true")
                 .setFooter(languageManager.getLocalizedString(basePath, "SentByAuthor") + " " + author.getName(), author.getEffectiveAvatarUrl());
 
         if (!theme.isEmpty()) {
@@ -139,7 +139,7 @@ public class SantaEmbed {
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(author.getId()))
-                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
+                .setAuthor("SecretClaire", null, "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
 
         String footerText = SantaUtils.getSantaID(server.getId(), author.getId(), role.getId());
         if (server.getIconUrl() != null) {
@@ -171,7 +171,7 @@ public class SantaEmbed {
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setColor(Main.getColor(author.getId()))
-                .setAuthor("SecretClaire", "", "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
+                .setAuthor("SecretClaire", null, "https://github.com/Sidpatchy/ClaireBot/blob/main/img/ClaireBot-SantaHat.png?raw=true");
 
         String footerText = SantaUtils.getSantaID(server.getId(), author.getId(), role.getId());
         if (server.getIconUrl() != null) {
