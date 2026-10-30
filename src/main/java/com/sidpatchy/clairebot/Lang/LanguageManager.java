@@ -17,6 +17,7 @@ import java.util.Locale;
 public class LanguageManager {
 
     private final static Logger logger = Main.getLogger();
+    private static final Locale DEFAULT_LOCALE = Locale.forLanguageTag("en-US");
 
     private final String pathToLanguageFiles;
     private final Locale fallbackLocale;
@@ -36,9 +37,9 @@ public class LanguageManager {
     public LanguageManager(String pathToLanguageFiles,
                            Locale fallbackLocale,
                            ContextManager context) {
-        this.pathToLanguageFiles = Main.getTranslationsPath();
+        this.pathToLanguageFiles = pathToLanguageFiles;
         this.context = context;
-        this.fallbackLocale = fallbackLocale;
+        this.fallbackLocale = normalizeFallbackLocale(fallbackLocale);
 
         this.server = context.server();
         this.user = context.user();
@@ -60,7 +61,7 @@ public class LanguageManager {
     public LanguageManager(Locale fallbackLocale, ContextManager context) {
         this.pathToLanguageFiles = Main.getTranslationsPath();
         this.context = context;
-        this.fallbackLocale = fallbackLocale;
+        this.fallbackLocale = normalizeFallbackLocale(fallbackLocale);
 
         this.server = context.server();
         this.user = context.user();
@@ -78,7 +79,8 @@ public class LanguageManager {
         Locale locale = resolveEffectiveLocale(server, user);
         // Load primary and fallback separately to support per-key fallback
         RobinConfiguration primary = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml"));
-        RobinConfiguration fallback = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml"));
+        RobinConfiguration fallback = locale.equals(fallbackLocale) ? primary
+                : tryLoadConfig(new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml"));
 
         String localized = null;
         if (primary != null) {
@@ -112,7 +114,8 @@ public class LanguageManager {
     public List<String> getLocalizedList(String key) {
         Locale locale = resolveEffectiveLocale(server, user);
         RobinConfiguration primary = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml"));
-        RobinConfiguration fallback = tryLoadConfig(new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml"));
+        RobinConfiguration fallback = locale.equals(fallbackLocale) ? primary
+                : tryLoadConfig(new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml"));
 
         List<String> localizedList = null;
         if (primary != null) {
@@ -144,17 +147,7 @@ public class LanguageManager {
             } else {
                 APIUser apiUser = new APIUser(user.getIdAsString());
                 apiUser.getUser();
-                String rawLang = apiUser.getLanguage();
-
-                if (rawLang == null || rawLang.isBlank()) {
-                    locale = fallbackLocale;
-                } else {
-                    String normalizedTag = rawLang.replace('_', '-');
-                    locale = Locale.forLanguageTag(normalizedTag);
-                    if (locale == null || locale.toLanguageTag().equals("und")) {
-                        locale = fallbackLocale;
-                    }
-                }
+                locale = normalizeLocale(apiUser.getLanguage(), fallbackLocale);
             }
 
             if (server != null) {
@@ -162,22 +155,9 @@ public class LanguageManager {
                 guild.getGuild();
 
                 if (guild.isEnforceSeverLanguage()) {
-                    String guildLocaleTag = guild.getLocale();
-                    if (guildLocaleTag != null && !guildLocaleTag.isBlank()) {
-                        String normalized = guildLocaleTag.replace('_', '-');
-                        Locale parsed = Locale.forLanguageTag(normalized);
-                        if (parsed != null && !"und".equals(parsed.toLanguageTag())) {
-                            locale = parsed;
-                        } else if (server.getPreferredLocale() != null) {
-                            locale = server.getPreferredLocale();
-                        } else {
-                            locale = fallbackLocale;
-                        }
-                    } else if (server.getPreferredLocale() != null) {
-                        locale = server.getPreferredLocale();
-                    } else {
-                        locale = fallbackLocale;
-                    }
+                    Locale preferred = server.getPreferredLocale() != null
+                            ? server.getPreferredLocale() : fallbackLocale;
+                    locale = normalizeLocale(guild.getLocale(), preferred);
                 }
             }
         } catch (IOException e) {
@@ -194,6 +174,19 @@ public class LanguageManager {
         return resolveEffectiveLocale(server, user);
     }
 
+    private static Locale normalizeFallbackLocale(Locale fallback) {
+        return fallback == null || "und".equals(fallback.toLanguageTag())
+                || "null".equalsIgnoreCase(fallback.toLanguageTag()) ? DEFAULT_LOCALE : fallback;
+    }
+
+    static Locale normalizeLocale(String rawTag, Locale fallback) {
+        if (rawTag == null || rawTag.isBlank() || "null".equalsIgnoreCase(rawTag.trim())) {
+            return fallback;
+        }
+        Locale parsed = Locale.forLanguageTag(rawTag.trim().replace('_', '-'));
+        return "und".equals(parsed.toLanguageTag()) ? fallback : parsed;
+    }
+
     private RobinConfiguration parseUserAndServerOptions(Server server, User user) {
         Locale locale;
         try {
@@ -204,19 +197,7 @@ public class LanguageManager {
             } else {
                 APIUser apiUser = new APIUser(user.getIdAsString());
                 apiUser.getUser();
-                String rawLang = apiUser.getLanguage();
-
-                // Normalize ClaireData language strings (e.g., en_US -> en-US). If empty/null, use fallback.
-                if (rawLang == null || rawLang.isBlank()) {
-                    locale = fallbackLocale;
-                } else {
-                    String normalizedTag = rawLang.replace('_', '-');
-                    locale = Locale.forLanguageTag(normalizedTag);
-                    // Guard against Locale.ROOT ("und") resulting from invalid tags
-                    if (locale == null || locale.toLanguageTag().equals("und")) {
-                        locale = fallbackLocale;
-                    }
-                }
+                locale = normalizeLocale(apiUser.getLanguage(), fallbackLocale);
             }
 
             // todo, pending ClaireData update: allow server admins to specify a custom language string.
@@ -227,23 +208,9 @@ public class LanguageManager {
 
                 if (guild.isEnforceSeverLanguage()) {
                     // Respect stored guild locale when enforcement is enabled.
-                    String guildLocaleTag = guild.getLocale();
-                    if (guildLocaleTag != null && !guildLocaleTag.isBlank()) {
-                        String normalized = guildLocaleTag.replace('_', '-');
-                        Locale parsed = Locale.forLanguageTag(normalized);
-                        if (parsed != null && !"und".equals(parsed.toLanguageTag())) {
-                            locale = parsed;
-                        } else if (server.getPreferredLocale() != null) {
-                            locale = server.getPreferredLocale();
-                        } else {
-                            locale = fallbackLocale;
-                        }
-                    } else if (server.getPreferredLocale() != null) {
-                        // Fallback to Discord server preferred locale if guild setting is absent
-                        locale = server.getPreferredLocale();
-                    } else {
-                        locale = fallbackLocale;
-                    }
+                    Locale preferred = server.getPreferredLocale() != null
+                            ? server.getPreferredLocale() : fallbackLocale;
+                    locale = normalizeLocale(guild.getLocale(), preferred);
                 }
             }
         } catch (IOException e) {
@@ -262,6 +229,7 @@ public class LanguageManager {
      * @return Returns a localized language file or the fallback file if a suitable translation doesn't exist.
      */
     public RobinConfiguration getLangFileByLocale(Locale locale) {
+        locale = locale == null ? fallbackLocale : normalizeLocale(locale.toLanguageTag(), fallbackLocale);
         File targetFile = new File(pathToLanguageFiles, "lang_" + locale.toLanguageTag() + ".yml");
         File fallbackFile = new File(pathToLanguageFiles, "lang_" + fallbackLocale.toLanguageTag() + ".yml");
 
@@ -284,6 +252,9 @@ public class LanguageManager {
     }
 
     private RobinConfiguration tryLoadConfig(File file) {
+        if (!file.isFile()) {
+            return null;
+        }
         try {
             RobinConfiguration config = new RobinConfiguration(file.getAbsolutePath());
             config.load();
