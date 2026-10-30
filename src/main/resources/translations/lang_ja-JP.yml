@@ -271,7 +271,7 @@ ClaireLang:
           GenericDescription: "おっと、エラーが発生したようです！もう一度コマンドを実行してみてください。それでもうまくいかない場合は、私の[Discordサーバー]({cb.supportserver})に参加して、問題についてお知らせください。\n\n以下のエラーコードを含めてください: {cb.errorcode}"
         WelcomeEmbed:
           Title: "🎉 ClaireBot 3へようこそ！"
-          Motto: "燃え尽きずして、どうして立ち上がれようか？"
+          Motto: "ClaireBot 4：Discordが何度もあれこれぶっ壊すから、やるべきことをやるしかない。"
           UsageTitle: "使い方"
           UsageDesc: "`{cb.command.help.name}` を実行して始めましょう。コマンドについてさらに情報が必要な場合は、`/{cb.command.help.name} <コマンド名>` (例: `/{cb.command.help.name} user`) を実行してください。"
           SupportTitle: "サポート"
